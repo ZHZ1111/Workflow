@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools==84.0.0", "wheel==0.48.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "test-workflow"
+version = "0.1.0"
+description = "A synchronous multi-agent testing workflow built on AgentDev"
+readme = "README.md"
+requires-python = ">=3.13,<3.14"
+dependencies = ["testgen-agent==0.1.0", "pydantic==2.13.5"]
+
+[project.scripts]
+test-workflow = "test_workflow.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"test_workflow.demo" = ["data/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"

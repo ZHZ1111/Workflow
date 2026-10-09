@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="TestGen Agent 本地测试生成与验证工作台" />
+    <title>TestGen Studio</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230d1526'/%3E%3Cpath d='M18 20h28M32 20v27M23 47h18' stroke='%235ee0bc' stroke-width='6' stroke-linecap='round'/%3E%3Ccircle cx='46' cy='20' r='5' fill='%23ffb86b'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="ambient ambient-a"></div>
+    <div class="ambient ambient-b"></div>
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="TestGen Studio 首页">
+        <span class="brand-mark" aria-hidden="true">T</span>
+        <span>TestGen <b>Studio</b></span>
+      </a>
+      <div class="topbar-meta">
+        <span class="local-pill"><span class="pulse"></span>本地工作台</span>
+        <span id="config-status" class="config-status">正在检查配置…</span>
+      </div>
+    </header>
+
+    <main class="shell">
+      <section class="workspace" aria-label="任务编辑区">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">NEW RUN</span>
+            <h1>让 Agent 为代码找到缺口</h1>
+          </div>
+          <button id="reset-button" class="ghost-button" type="button">重置任务</button>
+        </div>
+
+        <div class="editor-card">
+          <div class="editor-tabs" role="tablist">
+            <button class="editor-tab active" id="source-tab" data-panel="source" role="tab" aria-selected="true">Python 源码</button>
+            <button class="editor-tab" id="spec-tab" data-panel="spec" role="tab" aria-selected="false">行为规格</button>
+            <span class="file-name" id="file-name">subject.py</span>
+          </div>
+          <div class="editor-frame active" id="source-panel" role="tabpanel" aria-labelledby="source-tab">
+            <div class="line-gutter" aria-hidden="true" id="source-lines">1</div>
+            <textarea id="source-input" spellcheck="false" aria-label="Python 源码"></textarea>
+          </div>
+          <div class="editor-frame" id="spec-panel" role="tabpanel" aria-labelledby="spec-tab">
+            <div class="line-gutter" aria-hidden="true" id="spec-lines">1</div>
+            <textarea id="spec-input" spellcheck="false" aria-label="行为规格"></textarea>
+          </div>
+        </div>
+
+        <div class="run-controls simple">
+          <p>提交后，Agent 会自动分析函数关系、规划测试类型并决定后续轮次。</p>
+          <button id="run-button" class="run-button" type="button">
+            <span class="run-icon" aria-hidden="true"></span>
+            <span id="run-label">开始生成测试</span>
+          </button>
+        </div>
+        <p class="safety-note">仅运行你信任的本地 Python 代码。真实生成会使用当前项目的模型配置并可能产生费用。</p>
+      </section>
+
+      <aside class="result-panel" aria-label="运行结果">
+        <div class="result-header">
+          <div>
+            <span class="eyebrow">AGENT TRACE</span>
+            <h2>运行结果</h2>
+          </div>
+          <span id="run-status" class="status-badge idle">待运行</span>
+        </div>
+
+        <div id="empty-state" class="empty-state">
+          <div class="orbit" aria-hidden="true"><span></span><i></i></div>
+          <h3>准备好后，从一次真实分析开始</h3>
+          <p>Agent 会读取函数关系，生成 pytest，执行测试，并根据覆盖缺口决定是否继续。</p>
+          <div class="flow-preview" aria-label="分析流程">
+            <span>分析源码</span><b></b><span>生成测试</span><b></b><span>验证覆盖</span>
+          </div>
+        </div>
+
+        <div id="result-content" class="result-content hidden">
+          <div class="metric-grid">
+            <div class="metric-card primary">
+              <span>状态</span><strong id="metric-status">—</strong><small id="metric-reason">等待结果</small>
+            </div>
+            <div class="metric-card"><span>行覆盖</span><strong id="metric-line">—</strong><small id="metric-line-detail">尚未执行</small></div>
+            <div class="metric-card"><span>分支覆盖</span><strong id="metric-branch">—</strong><small id="metric-branch-detail">尚未执行</small></div>
+            <div class="metric-card"><span>轮次 / 请求</span><strong id="metric-rounds">—</strong><small id="metric-api">尚未调用</small></div>
+          </div>
+
+          <div id="report-section" class="result-section report-cta hidden">
+            <div>
+              <span class="report-kicker">FINAL REPORT</span>
+              <h3>运行报告已生成</h3>
+              <p>查看最终结论、测试数据、覆盖率、场景明细和适用范围。</p>
+            </div>
+            <button id="view-report-button" class="report-button" type="button">查看完整报告</button>
+          </div>
+
+          <div class="result-section trace-section">
+            <div class="result-section-title"><h3>执行轨迹</h3><span id="trace-count">0 个事件</span></div>
+            <ol id="trace-list" class="trace-list"></ol>
+          </div>
+
+          <div id="issues-section" class="result-section hidden">
+            <div class="result-section-title"><h3>需要复核</h3><span id="issue-count"></span></div>
+            <div id="issues-list" class="issues-list"></div>
+          </div>
+
+          <div id="test-section" class="result-section hidden">
+            <div class="result-section-title"><h3>生成的测试</h3><button id="copy-button" type="button">复制代码</button></div>
+            <pre class="code-output"><code id="test-code"></code></pre>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <div id="report-modal" class="report-modal hidden" role="dialog" aria-modal="true" aria-labelledby="report-modal-title">
+      <div class="report-dialog">
+        <div class="report-dialog-header">
+          <div>
+            <span class="eyebrow">RUN REPORT</span>
+            <h2 id="report-modal-title">自动测试生成报告</h2>
+          </div>
+          <button id="close-report-button" class="report-close" type="button" aria-label="关闭报告">关闭</button>
+        </div>
+        <pre id="report-content" class="report-content" tabindex="0"></pre>
+      </div>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="/app.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,57 @@
+{
+  "plan": {
+    "schema_version": "1.1",
+    "target_functions": [
+      "classify_score"
+    ],
+    "oracle_mode": "specification",
+    "entry_functions": [
+      "classify_score"
+    ],
+    "relationships": [],
+    "strategy": [
+      {
+        "subject_kind": "function",
+        "function_name": "classify_score",
+        "relationship_id": null,
+        "decision": "unit_test",
+        "reason": "Explicit behavior specification"
+      }
+    ],
+    "scenarios": [
+      {
+        "scenario_id": "score_pass",
+        "target_function": "classify_score",
+        "category": "boundary",
+        "inputs": {
+          "args": [
+            60
+          ],
+          "kwargs": {}
+        },
+        "expected_behavior": "returns 'pass'",
+        "expected_basis": {
+          "kind": "specification",
+          "detail": "See examples/validation.md"
+        },
+        "test_kind": "unit",
+        "involved_functions": [
+          "classify_score"
+        ],
+        "relationship_ids": [],
+        "steps": []
+      }
+    ]
+  },
+  "code": "import pytest\nfrom subject import classify_score\n\ndef test_score_pass():\n    assert classify_score(60) == 'pass'\n",
+  "mappings": [
+    {
+      "test_function": "test_score_pass",
+      "scenario_ids": [
+        "score_pass"
+      ]
+    }
+  ],
+  "assumptions": [],
+  "questions": []
+}

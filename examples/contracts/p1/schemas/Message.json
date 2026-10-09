@@ -1,0 +1,158 @@
+{
+  "$defs": {
+    "AgentAction": {
+      "enum": [
+        "analyze_source",
+        "generate_tests",
+        "run_tests",
+        "repair_generated_test",
+        "add_missing_cases",
+        "request_review",
+        "finish"
+      ],
+      "title": "AgentAction",
+      "type": "string"
+    },
+    "ArtifactRef": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "minLength": 1,
+          "title": "Path",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "candidate",
+            "tests",
+            "demo_observation",
+            "execution",
+            "coverage",
+            "report"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "round": {
+          "maximum": 3,
+          "minimum": 1,
+          "title": "Round",
+          "type": "integer"
+        },
+        "candidate_id": {
+          "minLength": 1,
+          "title": "Candidate Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "kind",
+        "sha256",
+        "round",
+        "candidate_id"
+      ],
+      "title": "ArtifactRef",
+      "type": "object"
+    },
+    "MessagePayload": {
+      "additionalProperties": false,
+      "properties": {
+        "candidate_id": {
+          "minLength": 1,
+          "title": "Candidate Id",
+          "type": "string"
+        },
+        "artifact": {
+          "$ref": "#/$defs/ArtifactRef"
+        },
+        "reason": {
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        },
+        "recommended_action": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AgentAction"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "candidate_id",
+        "artifact",
+        "reason"
+      ],
+      "title": "MessagePayload",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "message_id": {
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+      "title": "Message Id",
+      "type": "string"
+    },
+    "run_id": {
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+      "title": "Run Id",
+      "type": "string"
+    },
+    "round": {
+      "maximum": 3,
+      "minimum": 1,
+      "title": "Round",
+      "type": "integer"
+    },
+    "sender": {
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+      "title": "Sender",
+      "type": "string"
+    },
+    "receiver": {
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+      "title": "Receiver",
+      "type": "string"
+    },
+    "type": {
+      "enum": [
+        "candidate_ready",
+        "execution_feedback",
+        "demo_observation"
+      ],
+      "title": "Type",
+      "type": "string"
+    },
+    "payload": {
+      "$ref": "#/$defs/MessagePayload"
+    }
+  },
+  "required": [
+    "message_id",
+    "run_id",
+    "round",
+    "sender",
+    "receiver",
+    "type",
+    "payload"
+  ],
+  "title": "Message",
+  "type": "object"
+}

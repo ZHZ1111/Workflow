@@ -1,0 +1,24 @@
+# Validated: Windows x64, CPython 3.13.9 (2026-09-26).
+# Direct, transitive and build dependencies; local project and pip excluded.
+# Install with: python -m pip install -r requirements.lock
+annotated-types==0.8.0
+anyio==4.15.1
+certifi==2026.7.22
+colorama==0.4.6
+coverage==7.16.1
+h11==0.16.0
+httpcore==1.0.9
+httpx==0.28.1
+idna==3.20
+iniconfig==2.3.0
+packaging==26.3
+pluggy==1.6.0
+pydantic==2.13.5
+pydantic-core==2.46.5
+pygments==2.21.0
+pytest==9.1.1
+python-dotenv==1.2.3
+setuptools==84.0.0
+typing-extensions==4.16.0
+typing-inspection==0.4.4
+wheel==0.48.0

@@ -1,0 +1,1399 @@
+{
+  "$defs": {
+    "AgentAction": {
+      "enum": [
+        "analyze_source",
+        "generate_tests",
+        "run_tests",
+        "repair_generated_test",
+        "add_missing_cases",
+        "request_review",
+        "finish"
+      ],
+      "title": "AgentAction",
+      "type": "string"
+    },
+    "ArtifactRef": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "minLength": 1,
+          "title": "Path",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "candidate",
+            "tests",
+            "demo_observation",
+            "execution",
+            "coverage",
+            "report"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "round": {
+          "maximum": 3,
+          "minimum": 1,
+          "title": "Round",
+          "type": "integer"
+        },
+        "candidate_id": {
+          "minLength": 1,
+          "title": "Candidate Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "kind",
+        "sha256",
+        "round",
+        "candidate_id"
+      ],
+      "title": "ArtifactRef",
+      "type": "object"
+    },
+    "BranchArc": {
+      "additionalProperties": false,
+      "description": "Coverage arcs may use negative line numbers for code-object exits.",
+      "properties": {
+        "start": {
+          "title": "Start",
+          "type": "integer"
+        },
+        "end": {
+          "title": "End",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "start",
+        "end"
+      ],
+      "title": "BranchArc",
+      "type": "object"
+    },
+    "CandidateRound": {
+      "additionalProperties": false,
+      "properties": {
+        "number": {
+          "maximum": 3,
+          "minimum": 1,
+          "title": "Number",
+          "type": "integer"
+        },
+        "generated": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/GeneratedTests"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "test_path": {
+          "anyOf": [
+            {
+              "format": "path",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Test Path"
+        },
+        "validation_error": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Validation Error"
+        },
+        "execution": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ExecutionResult"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "coverage": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CoverageResult"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "number"
+      ],
+      "title": "CandidateRound",
+      "type": "object"
+    },
+    "CoverageResult": {
+      "additionalProperties": false,
+      "properties": {
+        "target_file": {
+          "format": "path",
+          "title": "Target File",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "available",
+            "unavailable"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "covered_lines": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Covered Lines"
+        },
+        "total_lines": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Total Lines"
+        },
+        "covered_branches": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Covered Branches"
+        },
+        "total_branches": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Total Branches"
+        },
+        "missing_lines": {
+          "default": [],
+          "items": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "title": "Missing Lines",
+          "type": "array"
+        },
+        "missing_branches": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/BranchArc"
+          },
+          "title": "Missing Branches",
+          "type": "array"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error"
+        }
+      },
+      "required": [
+        "target_file",
+        "status"
+      ],
+      "title": "CoverageResult",
+      "type": "object"
+    },
+    "ExecutionKind": {
+      "enum": [
+        "passed",
+        "assertion_failed",
+        "execution_error",
+        "collection_error",
+        "internal_error",
+        "usage_error",
+        "interrupted",
+        "no_tests",
+        "timeout",
+        "launch_error",
+        "result_error"
+      ],
+      "title": "ExecutionKind",
+      "type": "string"
+    },
+    "ExecutionResult": {
+      "additionalProperties": false,
+      "description": "Tool observations. Null counters mean unknown, not an observed zero.",
+      "properties": {
+        "kind": {
+          "$ref": "#/$defs/ExecutionKind"
+        },
+        "exit_code": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Exit Code"
+        },
+        "collected": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Collected"
+        },
+        "executed": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Executed"
+        },
+        "passed": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Passed"
+        },
+        "failed": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Failed"
+        },
+        "errors": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Errors"
+        },
+        "skipped": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Skipped"
+        },
+        "xfailed": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Xfailed"
+        },
+        "xpassed": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Xpassed"
+        },
+        "stdout": {
+          "default": "",
+          "title": "Stdout",
+          "type": "string"
+        },
+        "stderr": {
+          "default": "",
+          "title": "Stderr",
+          "type": "string"
+        },
+        "timed_out": {
+          "default": false,
+          "title": "Timed Out",
+          "type": "boolean"
+        },
+        "stdout_truncated": {
+          "default": false,
+          "title": "Stdout Truncated",
+          "type": "boolean"
+        },
+        "stderr_truncated": {
+          "default": false,
+          "title": "Stderr Truncated",
+          "type": "boolean"
+        },
+        "duration_seconds": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Duration Seconds"
+        },
+        "failures": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/FailureObservation"
+          },
+          "title": "Failures",
+          "type": "array"
+        }
+      },
+      "required": [
+        "kind",
+        "exit_code"
+      ],
+      "title": "ExecutionResult",
+      "type": "object"
+    },
+    "ExpectedBasis": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "specification",
+            "docstring",
+            "implementation_assumption"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "detail": {
+          "minLength": 1,
+          "title": "Detail",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "detail"
+      ],
+      "title": "ExpectedBasis",
+      "type": "object"
+    },
+    "FailureObservation": {
+      "additionalProperties": false,
+      "description": "Structured pytest exception facts, never supplied by generation output.",
+      "properties": {
+        "nodeid": {
+          "minLength": 1,
+          "title": "Nodeid",
+          "type": "string"
+        },
+        "phase": {
+          "enum": [
+            "collection",
+            "setup",
+            "call",
+            "teardown"
+          ],
+          "title": "Phase",
+          "type": "string"
+        },
+        "exception_type": {
+          "minLength": 1,
+          "title": "Exception Type",
+          "type": "string"
+        },
+        "path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Path"
+        },
+        "line": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Line"
+        },
+        "missing_module": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Missing Module"
+        }
+      },
+      "required": [
+        "nodeid",
+        "phase",
+        "exception_type"
+      ],
+      "title": "FailureObservation",
+      "type": "object"
+    },
+    "GeneratedTests": {
+      "additionalProperties": false,
+      "description": "The only LLM generation payload: no paths, execution counts or coverage.",
+      "properties": {
+        "plan": {
+          "$ref": "#/$defs/TestPlan"
+        },
+        "code": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Code"
+        },
+        "mappings": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/TestCaseMapping"
+          },
+          "title": "Mappings",
+          "type": "array"
+        },
+        "assumptions": {
+          "default": [],
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Assumptions",
+          "type": "array"
+        },
+        "questions": {
+          "default": [],
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Questions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "plan",
+        "code"
+      ],
+      "title": "GeneratedTests",
+      "type": "object"
+    },
+    "Issue": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "suspected_source_defect",
+            "ambiguous_specification",
+            "generation_error",
+            "environment_error",
+            "coverage_unavailable",
+            "other"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "summary": {
+          "minLength": 1,
+          "title": "Summary",
+          "type": "string"
+        },
+        "evidence": {
+          "default": [],
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "round_number": {
+          "anyOf": [
+            {
+              "maximum": 3,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Round Number"
+        },
+        "scenario_id": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Scenario Id"
+        }
+      },
+      "required": [
+        "kind",
+        "summary"
+      ],
+      "title": "Issue",
+      "type": "object"
+    },
+    "JsonValue": {},
+    "Message": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "message_id": {
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+          "title": "Message Id",
+          "type": "string"
+        },
+        "run_id": {
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "round": {
+          "maximum": 3,
+          "minimum": 1,
+          "title": "Round",
+          "type": "integer"
+        },
+        "sender": {
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+          "title": "Sender",
+          "type": "string"
+        },
+        "receiver": {
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+          "title": "Receiver",
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "candidate_ready",
+            "execution_feedback",
+            "demo_observation"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/MessagePayload"
+        }
+      },
+      "required": [
+        "message_id",
+        "run_id",
+        "round",
+        "sender",
+        "receiver",
+        "type",
+        "payload"
+      ],
+      "title": "Message",
+      "type": "object"
+    },
+    "MessagePayload": {
+      "additionalProperties": false,
+      "properties": {
+        "candidate_id": {
+          "minLength": 1,
+          "title": "Candidate Id",
+          "type": "string"
+        },
+        "artifact": {
+          "$ref": "#/$defs/ArtifactRef"
+        },
+        "reason": {
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        },
+        "recommended_action": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AgentAction"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "candidate_id",
+        "artifact",
+        "reason"
+      ],
+      "title": "MessagePayload",
+      "type": "object"
+    },
+    "OracleMode": {
+      "enum": [
+        "specification",
+        "characterization"
+      ],
+      "title": "OracleMode",
+      "type": "string"
+    },
+    "RelationshipAnalysis": {
+      "additionalProperties": false,
+      "properties": {
+        "relation_id": {
+          "minLength": 1,
+          "title": "Relation Id",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "direct_call",
+            "data_flow",
+            "shared_state",
+            "unknown"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "involved_functions": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 5,
+          "minItems": 1,
+          "title": "Involved Functions",
+          "type": "array"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/RelationshipEvidence"
+          },
+          "minItems": 1,
+          "title": "Evidence",
+          "type": "array"
+        },
+        "confidence": {
+          "enum": [
+            "confirmed",
+            "candidate",
+            "unknown"
+          ],
+          "title": "Confidence",
+          "type": "string"
+        },
+        "unresolved_questions": {
+          "default": [],
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Unresolved Questions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "relation_id",
+        "kind",
+        "involved_functions",
+        "evidence",
+        "confidence"
+      ],
+      "title": "RelationshipAnalysis",
+      "type": "object"
+    },
+    "RelationshipEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "source",
+            "specification",
+            "docstring"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "detail": {
+          "minLength": 1,
+          "title": "Detail",
+          "type": "string"
+        },
+        "line": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Line"
+        },
+        "call_site_ids": {
+          "default": [],
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Call Site Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "kind",
+        "detail"
+      ],
+      "title": "RelationshipEvidence",
+      "type": "object"
+    },
+    "ScenarioInput": {
+      "additionalProperties": false,
+      "properties": {
+        "args": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "title": "Args",
+          "type": "array"
+        },
+        "kwargs": {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "propertyNames": {
+            "minLength": 1
+          },
+          "title": "Kwargs",
+          "type": "object"
+        }
+      },
+      "title": "ScenarioInput",
+      "type": "object"
+    },
+    "ScenarioStep": {
+      "additionalProperties": false,
+      "properties": {
+        "step_id": {
+          "minLength": 1,
+          "title": "Step Id",
+          "type": "string"
+        },
+        "function": {
+          "minLength": 1,
+          "title": "Function",
+          "type": "string"
+        },
+        "args": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/StepValue"
+          },
+          "title": "Args",
+          "type": "array"
+        },
+        "kwargs": {
+          "additionalProperties": {
+            "$ref": "#/$defs/StepValue"
+          },
+          "propertyNames": {
+            "minLength": 1
+          },
+          "title": "Kwargs",
+          "type": "object"
+        }
+      },
+      "required": [
+        "step_id",
+        "function"
+      ],
+      "title": "ScenarioStep",
+      "type": "object"
+    },
+    "StatePatch": {
+      "additionalProperties": false,
+      "properties": {
+        "candidate": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CandidateRound"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "issues": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Issue"
+          },
+          "title": "Issues",
+          "type": "array"
+        },
+        "next_action": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AgentAction"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "api_calls_delta": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Api Calls Delta",
+          "type": "integer"
+        },
+        "token_usage": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TokenUsage"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "StatePatch",
+      "type": "object"
+    },
+    "StepValue": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "literal",
+            "step_result"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/JsonValue"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "step_id": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Step Id"
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "title": "StepValue",
+      "type": "object"
+    },
+    "StrategyDecision": {
+      "additionalProperties": false,
+      "properties": {
+        "subject_kind": {
+          "enum": [
+            "function",
+            "relationship"
+          ],
+          "title": "Subject Kind",
+          "type": "string"
+        },
+        "function_name": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Function Name"
+        },
+        "relationship_id": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Relationship Id"
+        },
+        "decision": {
+          "enum": [
+            "unit_test",
+            "collaboration_test",
+            "not_selected"
+          ],
+          "title": "Decision",
+          "type": "string"
+        },
+        "reason": {
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "subject_kind",
+        "decision",
+        "reason"
+      ],
+      "title": "StrategyDecision",
+      "type": "object"
+    },
+    "TestCaseMapping": {
+      "additionalProperties": false,
+      "properties": {
+        "test_function": {
+          "minLength": 1,
+          "title": "Test Function",
+          "type": "string"
+        },
+        "scenario_ids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Scenario Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "test_function",
+        "scenario_ids"
+      ],
+      "title": "TestCaseMapping",
+      "type": "object"
+    },
+    "TestPlan": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "default": "1.0",
+          "enum": [
+            "1.0",
+            "1.1"
+          ],
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "target_functions": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 5,
+          "minItems": 1,
+          "title": "Target Functions",
+          "type": "array"
+        },
+        "oracle_mode": {
+          "$ref": "#/$defs/OracleMode"
+        },
+        "entry_functions": {
+          "default": [],
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Entry Functions",
+          "type": "array"
+        },
+        "relationships": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/RelationshipAnalysis"
+          },
+          "title": "Relationships",
+          "type": "array"
+        },
+        "strategy": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/StrategyDecision"
+          },
+          "title": "Strategy",
+          "type": "array"
+        },
+        "scenarios": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/TestScenario"
+          },
+          "title": "Scenarios",
+          "type": "array"
+        }
+      },
+      "required": [
+        "target_functions",
+        "oracle_mode"
+      ],
+      "title": "TestPlan",
+      "type": "object"
+    },
+    "TestScenario": {
+      "additionalProperties": false,
+      "properties": {
+        "scenario_id": {
+          "minLength": 1,
+          "title": "Scenario Id",
+          "type": "string"
+        },
+        "target_function": {
+          "minLength": 1,
+          "title": "Target Function",
+          "type": "string"
+        },
+        "category": {
+          "enum": [
+            "normal",
+            "boundary",
+            "exception",
+            "branch"
+          ],
+          "title": "Category",
+          "type": "string"
+        },
+        "inputs": {
+          "$ref": "#/$defs/ScenarioInput"
+        },
+        "expected_behavior": {
+          "minLength": 1,
+          "title": "Expected Behavior",
+          "type": "string"
+        },
+        "expected_basis": {
+          "$ref": "#/$defs/ExpectedBasis"
+        },
+        "test_kind": {
+          "default": "unit",
+          "enum": [
+            "unit",
+            "collaboration"
+          ],
+          "title": "Test Kind",
+          "type": "string"
+        },
+        "involved_functions": {
+          "default": [],
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Involved Functions",
+          "type": "array"
+        },
+        "relationship_ids": {
+          "default": [],
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Relationship Ids",
+          "type": "array"
+        },
+        "steps": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ScenarioStep"
+          },
+          "title": "Steps",
+          "type": "array"
+        }
+      },
+      "required": [
+        "scenario_id",
+        "target_function",
+        "category",
+        "inputs",
+        "expected_behavior",
+        "expected_basis"
+      ],
+      "title": "TestScenario",
+      "type": "object"
+    },
+    "TokenUsage": {
+      "additionalProperties": false,
+      "properties": {
+        "prompt_tokens": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Prompt Tokens"
+        },
+        "completion_tokens": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Completion Tokens"
+        },
+        "total_tokens": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Total Tokens"
+        }
+      },
+      "title": "TokenUsage",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "run_id": {
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+      "title": "Run Id",
+      "type": "string"
+    },
+    "round": {
+      "maximum": 3,
+      "minimum": 1,
+      "title": "Round",
+      "type": "integer"
+    },
+    "agent_id": {
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+      "title": "Agent Id",
+      "type": "string"
+    },
+    "status": {
+      "default": "ok",
+      "enum": [
+        "ok",
+        "error"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "patch": {
+      "$ref": "#/$defs/StatePatch"
+    },
+    "messages": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Message"
+      },
+      "title": "Messages",
+      "type": "array"
+    },
+    "artifacts": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ArtifactRef"
+      },
+      "title": "Artifacts",
+      "type": "array"
+    },
+    "error_code": {
+      "anyOf": [
+        {
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Error Code"
+    }
+  },
+  "required": [
+    "run_id",
+    "round",
+    "agent_id"
+  ],
+  "title": "AgentResult",
+  "type": "object"
+}

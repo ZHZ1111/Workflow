@@ -1,0 +1,240 @@
+{
+  "schema_version": "1.0",
+  "run_id": "run-078712e92bd9443c9fbf64024107a8b9",
+  "run_dir": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\p1\\run-078712e92bd9443c9fbf64024107a8b9",
+  "workflow_status": "finished",
+  "task_status": null,
+  "current_node": null,
+  "current_round": 1,
+  "config": {
+    "mode": "demo",
+    "max_rounds": 3,
+    "execution_timeout_seconds": 30,
+    "model": null
+  },
+  "agent_state": {
+    "schema_version": "1.1",
+    "run_id": "run-078712e92bd9443c9fbf64024107a8b9",
+    "request": {
+      "source_path": "E:\\File-Document\\SE\\hw2\\Workflow\\examples\\calculation.py",
+      "model": {
+        "provider": "deepseek",
+        "model": "offline-fixture-model",
+        "base_url": "https://example.com",
+        "request_timeout_seconds": 60
+      },
+      "spec_path": "E:\\File-Document\\SE\\hw2\\Workflow\\examples\\calculation.md",
+      "output_dir": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\p1\\run-078712e92bd9443c9fbf64024107a8b9\\agent_workspace",
+      "max_rounds": 3,
+      "execution_timeout_seconds": 30
+    },
+    "oracle_mode": "specification",
+    "behavior_specification": "# 正常计算：calculate_total\n\n## 行为约定\n\n- `unit_price` 为非负整数单价，`quantity` 为非负整数数量，均不包含 `bool`。\n- 返回整数 `unit_price * quantity`，不收取额外费用，也不限制结果上限。\n- 单价或数量为 0 时返回 0。\n- 输入域是前置条件；负数、浮点数、字符串、布尔值等域外输入的行为未定义，不要求抛出某种异常。\n- 函数不修改输入，不读写文件，不访问网络。\n\n## 可核验场景\n\n| unit_price | quantity | 预期结果 |\n|---:|---:|---:|\n| 12 | 3 | 36 |\n| 0 | 5 | 0 |\n| 12 | 0 | 0 |\n| 0 | 0 | 0 |\n| 1 | 1 | 1 |\n| 1000000 | 1000000 | 1000000000000 |\n\n上述值用于建立有效断言；无条件分支时分支覆盖率应显示为不适用。\n",
+    "source_info": {
+      "source_path": "E:\\File-Document\\SE\\hw2\\Workflow\\examples\\calculation.py",
+      "source_code": "\"\"\"正常计算样例：输入域见相邻 calculation.md。\"\"\"\n\n\ndef calculate_total(unit_price: int, quantity: int) -> int:\n    \"\"\"返回单价乘以数量；输入为非负整数，零单价或零数量返回 0。\n\n    输入域是调用方前置条件，不包含 bool；域外行为未定义。\n    \"\"\"\n    return unit_price * quantity\n",
+      "functions": [
+        {
+          "name": "calculate_total",
+          "signature": "(unit_price: int, quantity: int)",
+          "start_line": 4,
+          "end_line": 9,
+          "docstring": "返回单价乘以数量；输入为非负整数，零单价或零数量返回 0。\n\n输入域是调用方前置条件，不包含 bool；域外行为未定义。"
+        }
+      ],
+      "encoding": "utf-8",
+      "imports": [],
+      "branches": [],
+      "call_sites": [],
+      "direct_calls": [],
+      "unresolved_calls": []
+    },
+    "current_round": 1,
+    "history": [
+      {
+        "number": 1,
+        "generated": {
+          "plan": {
+            "schema_version": "1.1",
+            "target_functions": [
+              "calculate_total"
+            ],
+            "oracle_mode": "specification",
+            "entry_functions": [
+              "calculate_total"
+            ],
+            "relationships": [],
+            "strategy": [
+              {
+                "subject_kind": "function",
+                "function_name": "calculate_total",
+                "relationship_id": null,
+                "decision": "unit_test",
+                "reason": "Explicit behavior specification"
+              }
+            ],
+            "scenarios": [
+              {
+                "scenario_id": "total_normal",
+                "target_function": "calculate_total",
+                "category": "boundary",
+                "inputs": {
+                  "args": [
+                    12,
+                    3
+                  ],
+                  "kwargs": {}
+                },
+                "expected_behavior": "returns 36",
+                "expected_basis": {
+                  "kind": "specification",
+                  "detail": "See examples/calculation.md"
+                },
+                "test_kind": "unit",
+                "involved_functions": [
+                  "calculate_total"
+                ],
+                "relationship_ids": [],
+                "steps": []
+              },
+              {
+                "scenario_id": "total_zero_price",
+                "target_function": "calculate_total",
+                "category": "boundary",
+                "inputs": {
+                  "args": [
+                    0,
+                    5
+                  ],
+                  "kwargs": {}
+                },
+                "expected_behavior": "returns 0",
+                "expected_basis": {
+                  "kind": "specification",
+                  "detail": "See examples/calculation.md"
+                },
+                "test_kind": "unit",
+                "involved_functions": [
+                  "calculate_total"
+                ],
+                "relationship_ids": [],
+                "steps": []
+              },
+              {
+                "scenario_id": "total_zero_quantity",
+                "target_function": "calculate_total",
+                "category": "boundary",
+                "inputs": {
+                  "args": [
+                    12,
+                    0
+                  ],
+                  "kwargs": {}
+                },
+                "expected_behavior": "returns 0",
+                "expected_basis": {
+                  "kind": "specification",
+                  "detail": "See examples/calculation.md"
+                },
+                "test_kind": "unit",
+                "involved_functions": [
+                  "calculate_total"
+                ],
+                "relationship_ids": [],
+                "steps": []
+              }
+            ]
+          },
+          "code": "import pytest\nfrom subject import calculate_total\n\ndef test_total_normal():\n    assert calculate_total(12, 3) == 36\n\ndef test_total_zero_price():\n    assert calculate_total(0, 5) == 0\n\ndef test_total_zero_quantity():\n    assert calculate_total(12, 0) == 0\n",
+          "mappings": [
+            {
+              "test_function": "test_total_normal",
+              "scenario_ids": [
+                "total_normal"
+              ]
+            },
+            {
+              "test_function": "test_total_zero_price",
+              "scenario_ids": [
+                "total_zero_price"
+              ]
+            },
+            {
+              "test_function": "test_total_zero_quantity",
+              "scenario_ids": [
+                "total_zero_quantity"
+              ]
+            }
+          ],
+          "assumptions": [],
+          "questions": []
+        },
+        "test_path": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\p1\\run-078712e92bd9443c9fbf64024107a8b9\\demo_artifacts\\01\\test_subject.py",
+        "validation_error": null,
+        "execution": null,
+        "coverage": null
+      }
+    ],
+    "best_available_round": null,
+    "next_action": null,
+    "stop_reason": null,
+    "issues": [],
+    "api_calls": 0,
+    "token_usage": null
+  },
+  "selected_round": null,
+  "stop_reason": null,
+  "last_event_seq": 7,
+  "messages": [
+    {
+      "schema_version": "1.0",
+      "message_id": "msg-candidate-01",
+      "run_id": "run-078712e92bd9443c9fbf64024107a8b9",
+      "round": 1,
+      "sender": "test_generation",
+      "receiver": "test_execution",
+      "type": "candidate_ready",
+      "payload": {
+        "candidate_id": "run-078712e92bd9443c9fbf64024107a8b9:1",
+        "artifact": {
+          "path": "demo_artifacts/01/candidate.json",
+          "kind": "candidate",
+          "sha256": "3cda62aee356430eb75933a4e137de232bbd0698fe4cb84914cebcff7ebd6472",
+          "round": 1,
+          "candidate_id": "run-078712e92bd9443c9fbf64024107a8b9:1"
+        },
+        "reason": "Offline fixture candidate; pytest has not run.",
+        "recommended_action": null
+      }
+    }
+  ],
+  "consumed_message_ids": [
+    "msg-candidate-01"
+  ],
+  "artifacts": [
+    {
+      "path": "demo_artifacts/01/candidate.json",
+      "kind": "candidate",
+      "sha256": "3cda62aee356430eb75933a4e137de232bbd0698fe4cb84914cebcff7ebd6472",
+      "round": 1,
+      "candidate_id": "run-078712e92bd9443c9fbf64024107a8b9:1"
+    },
+    {
+      "path": "demo_artifacts/01/test_subject.py",
+      "kind": "tests",
+      "sha256": "eca629798abeff150b469e3821233967f93c44321aa1b36af70035f0c813448d",
+      "round": 1,
+      "candidate_id": "run-078712e92bd9443c9fbf64024107a8b9:1"
+    },
+    {
+      "path": "demo_artifacts/01/observation.json",
+      "kind": "demo_observation",
+      "sha256": "64dc0286defaa38790901c16ea668e0dabb23072f01ccad9130d7a9632dd7e1a",
+      "round": 1,
+      "candidate_id": "run-078712e92bd9443c9fbf64024107a8b9:1"
+    }
+  ],
+  "started_at": "2026-10-09T03:04:20.166455Z",
+  "finished_at": "2026-10-09T03:04:20.227328Z",
+  "error_code": null
+}

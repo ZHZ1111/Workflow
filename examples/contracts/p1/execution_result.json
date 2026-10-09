@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "run_id": "run-078712e92bd9443c9fbf64024107a8b9",
+  "round": 1,
+  "agent_id": "test_execution",
+  "status": "ok",
+  "patch": {
+    "candidate": null,
+    "issues": [],
+    "next_action": null,
+    "api_calls_delta": 0,
+    "token_usage": null
+  },
+  "messages": [],
+  "artifacts": [
+    {
+      "path": "demo_artifacts/01/observation.json",
+      "kind": "demo_observation",
+      "sha256": "64dc0286defaa38790901c16ea668e0dabb23072f01ccad9130d7a9632dd7e1a",
+      "round": 1,
+      "candidate_id": "run-078712e92bd9443c9fbf64024107a8b9:1"
+    }
+  ],
+  "error_code": null
+}

@@ -1,0 +1,201 @@
+{
+  "schema_version": "1.0",
+  "checked_at": "2026-10-09T10:30:23.412021+08:00",
+  "purpose": "AgentDev P0 baseline, not Workflow acceptance",
+  "python": "3.13.9",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "interpreter": ".venv/Scripts/python.exe",
+  "dependencies": {
+    "httpx": "0.28.1",
+    "pydantic": "2.13.5",
+    "python-dotenv": "1.2.3",
+    "pytest": "9.1.1",
+    "coverage": "7.16.1",
+    "setuptools": "84.0.0",
+    "wheel": "0.48.0"
+  },
+  "checks": {
+    "pip_check": {
+      "exit_code": 0,
+      "duration_seconds": 1.169,
+      "command": ".venv/Scripts/python.exe -m pip check",
+      "log": "outputs/p0/20261009-103023-93744e/pip_check.txt",
+      "summary": [
+        "No broken requirements found."
+      ]
+    },
+    "compileall": {
+      "exit_code": 0,
+      "duration_seconds": 1.382,
+      "command": ".venv/Scripts/python.exe -m compileall -q vendor/agentdev/src vendor/agentdev/tests scripts",
+      "log": "outputs/p0/20261009-103023-93744e/compileall.txt",
+      "summary": []
+    },
+    "agentdev_tests": {
+      "exit_code": 1,
+      "duration_seconds": 139.117,
+      "command": ".venv/Scripts/python.exe -m pytest vendor/agentdev/tests -q -W error --basetemp .\\outputs\\p0\\20261009-103023-93744e\\pytest-tmp -o cache_dir=.\\outputs\\p0\\20261009-103023-93744e\\pytest-cache",
+      "log": "outputs/p0/20261009-103023-93744e/agentdev_tests.txt",
+      "summary": [
+        "1 failed, 422 passed in 137.23s (0:02:17)"
+      ],
+      "retained_log": "evaluation/p0_initial_tests.txt",
+      "recheck": {
+        "test": "test_agent_loop.py::test_duplicate_with_comment_changes_stops_before_second_execution",
+        "exit_code": 0,
+        "summary": "1 passed in 4.40s",
+        "log": "evaluation/p0_recheck.txt",
+        "junit": "evaluation/p0_recheck.xml",
+        "cause_observed": "PermissionError [WinError 5] replacing pytest_result.tmp with pytest_result.json in _pytest_results.py",
+        "source_modified": false
+      },
+      "aggregate_status": "422 passed initially; the one failed test passed on focused recheck"
+    }
+  },
+  "samples": {
+    "offline_normal": {
+      "task_status": "completed",
+      "stop_reason": "coverage_target_met",
+      "selected_round": 1,
+      "api_calls": 1,
+      "external_model_requests": 0,
+      "duration_seconds": 1.817,
+      "source_unchanged": true,
+      "report": "outputs/p0/20261009-103023-93744e/offline_normal/report.md",
+      "rounds": [
+        {
+          "round": 1,
+          "validation_error": null,
+          "execution_kind": "passed",
+          "passed": 3,
+          "failed": 0,
+          "coverage_status": "available",
+          "line_percent": 100.0,
+          "branch_percent": null
+        }
+      ],
+      "issue_kinds": [],
+      "feedback_received": false,
+      "expected_status": "completed",
+      "expectation_met": true
+    },
+    "offline_feedback": {
+      "task_status": "completed",
+      "stop_reason": "coverage_target_met",
+      "selected_round": 2,
+      "api_calls": 2,
+      "external_model_requests": 0,
+      "duration_seconds": 4.94,
+      "source_unchanged": true,
+      "report": "outputs/p0/20261009-103023-93744e/offline_feedback/report.md",
+      "rounds": [
+        {
+          "round": 1,
+          "validation_error": null,
+          "execution_kind": "passed",
+          "passed": 1,
+          "failed": 0,
+          "coverage_status": "available",
+          "line_percent": 60.0,
+          "branch_percent": 50.0
+        },
+        {
+          "round": 2,
+          "validation_error": null,
+          "execution_kind": "passed",
+          "passed": 12,
+          "failed": 0,
+          "coverage_status": "available",
+          "line_percent": 100.0,
+          "branch_percent": 100.0
+        }
+      ],
+      "issue_kinds": [],
+      "feedback_received": true,
+      "expected_status": "completed",
+      "expectation_met": true
+    },
+    "offline_defect": {
+      "task_status": "needs_review",
+      "stop_reason": "suspected_source_defect",
+      "selected_round": 1,
+      "api_calls": 1,
+      "external_model_requests": 0,
+      "duration_seconds": 1.395,
+      "source_unchanged": true,
+      "report": "outputs/p0/20261009-103023-93744e/offline_defect/report.md",
+      "rounds": [
+        {
+          "round": 1,
+          "validation_error": null,
+          "execution_kind": "assertion_failed",
+          "passed": 0,
+          "failed": 1,
+          "coverage_status": "available",
+          "line_percent": 62.5,
+          "branch_percent": 50.0
+        }
+      ],
+      "issue_kinds": [
+        "suspected_source_defect"
+      ],
+      "feedback_received": false,
+      "expected_status": "needs_review",
+      "expectation_met": true
+    }
+  },
+  "real_model": {
+    "status": "blocked_pending_authorization",
+    "external_model_requests": 0,
+    "reason": "Automatic approval review rejected reading AgentDev credentials and sending sample source/specification to DeepSeek without explicit data-transfer authorization."
+  },
+  "input_audit": [
+    {
+      "sample": "calculation",
+      "bytes": 341,
+      "functions": [
+        "calculate_total"
+      ],
+      "spec_nonblank": true,
+      "source_sha256": "4043de06a34f5aa75919fa484db107bf05d5a78f95ac7cadcdd94cac60e429bf",
+      "direct_calls": []
+    },
+    {
+      "sample": "validation",
+      "bytes": 664,
+      "functions": [
+        "classify_score"
+      ],
+      "spec_nonblank": true,
+      "source_sha256": "283e7c1ba21bfbb01d82d0473631f500f552f27f1c801069291b5e0f3777dd7c",
+      "direct_calls": []
+    },
+    {
+      "sample": "discount",
+      "bytes": 638,
+      "functions": [
+        "calculate_discount"
+      ],
+      "spec_nonblank": true,
+      "source_sha256": "aabd7f536284dad04b0478446d78f7c377dc09d5548d09ae24b4cab7cede0b2e",
+      "direct_calls": []
+    },
+    {
+      "sample": "relationships",
+      "bytes": 406,
+      "functions": [
+        "calculate_total",
+        "checkout"
+      ],
+      "spec_nonblank": true,
+      "source_sha256": "5de320c9eaf8194e0a1b105781dcca0767b261bf13b5ca66b3be8b423dce9049",
+      "direct_calls": [
+        [
+          "checkout",
+          "calculate_total"
+        ]
+      ]
+    }
+  ],
+  "offline_baseline_passed": true
+}
