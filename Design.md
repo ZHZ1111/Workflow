@@ -1,6 +1,6 @@
 # 多 Agent 测试 Workflow 工程设计
 
-版本：P1 / 2026-10-09。**已实现新包、节点契约、注册表、顺序流程定义、状态与日志，以及两个假节点交接；真实生成与执行、反馈路由、最终报告仍为 P2–P6 的实现约定。** 测试生成与执行能力来自 AgentDev，本项目新增节点边界、结构化交接、状态所有权和统一路由。
+版本：P2 / 2026-10-09。**已实现节点契约、注册表、顺序定义、状态与日志，以及单步首轮/修订生成节点；执行与评估 Agent、自动反馈路由和最终报告仍为 P3–P6 的实现约定。** 测试生成与执行能力来自 AgentDev，本项目新增节点边界、结构化交接、状态所有权和统一路由。
 
 ## 架构与职责
 
@@ -85,7 +85,17 @@ Workflow 轨迹和 AgentDev 工具轨迹分开写入，各自唯一写入者。�
 | 不增加覆盖率阈值参数 | 原模型固定 90%/80%，统一门禁和报告 | P3/P5 |
 | 无模型 ResultSummaryNode 作为扩展示例 | 证明注册/流程定义扩展，不虚报第三个 Agent | P6 |
 
-P1 已完成协议、状态、注册、固定顺序调度和假节点 CLI；P2 接首轮/修订；P3 接执行/归因；P4 扩充路由/预算/正式 CLI；P5 验收；P6 完善报告与扩展证明；P7 干净安装与提交。已实现契约见 [docs/protocol.md](docs/protocol.md)，阶段证据见 [evaluation/p1.md](evaluation/p1.md)。
+P1 已完成协议、状态、注册、固定顺序调度和假节点 CLI；P2 已接首轮/修订；P3 接执行/归因；P4 扩充路由/预算/正式 CLI；P5 验收；P6 完善报告与扩展证明；P7 干净安装与提交。已实现契约见 [docs/protocol.md](docs/protocol.md) 和 [docs/generation.md](docs/generation.md)，阶段证据见 evaluation/p1.md 与 evaluation/p2.md。
+
+## P2 生成边界与路径映射
+
+`TestGenerationAgent.run()` 先检查输入事实、目标轮次、工作区与已保存历史，再调用注入客户端一次。首轮使用 `generate_initial_candidate()`；修订先核对来源消息和 `choose_action()`，再复用 `build_action_context()` 与 `stage_revision_candidate()`。客户端内部有有限 HTTP 重试/格式修复，外层没有重试循环；节点没有执行工具调用。
+
+原 vendor `CandidateRound.test_path` 是内层相对路径，Workflow 候选使用绝对路径以保持 P1 约定。原候选 JSON 不修改；适配器在 `handoffs/<round>/candidate.json` 写入 Workflow 版本，再以任务相对 ArtifactRef 交接。计划、原候选、LLM 结果、源码副本和测试文件均有摘要。候选校验失败仍保存证据并返回 `status=ok`（单步处理完成），但不发 `candidate_ready`；传输、配置、预算和工作区错误返回 `status=error`。
+
+`AgentResult.generation` 是独立遥测：client_mode、client_calls、request_attempts、有限请求上限、格式修复数、用量与安全错误分类。失败提供不了次数时使用 null；离线/mock 外部请求数为 0。StatePatch 的 api_calls_delta 在新 Workflow 中计真实外部尝试，token_usage 是累计可得用量；token_usage_reported 允许把不可得累计量明确置空。
+
+P2 验收脚本手动在节点外取得执行证据并构建下一轮反馈。该脚本不承担产品反馈调度；P4 再把这一交接接入主流程。执行节点当前仍是假实现，不声明 P3 已完成。
 
 ## P1 的实际运行结构
 

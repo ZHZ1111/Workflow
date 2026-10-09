@@ -1,1 +1,1 @@
-"""Single-step AgentDev adapters are implemented during P2/P3."""
+"""Single-step AgentDev generation reuse; execution adaptation follows in P3."""

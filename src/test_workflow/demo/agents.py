@@ -74,6 +74,7 @@ class FakeExecutionAgent:
                                       test_sha256=test_ref.sha256)
         relative = f"demo_artifacts/{context.round:02d}/observation.json"
         path = task_path(context.run_dir, relative, must_exist=False)
+        path.parent.mkdir(parents=True, exist_ok=True)
         atomic_write(path, observation.canonical_json(indent=2) + "\n")
         artifact = ArtifactRef(path=relative, kind="demo_observation", sha256=file_digest(path),
                                round=context.round, candidate_id=message.payload.candidate_id)

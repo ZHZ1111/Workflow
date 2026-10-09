@@ -1,0 +1,365 @@
+{
+  "plan": {
+    "schema_version": "1.1",
+    "target_functions": [
+      "classify_score"
+    ],
+    "oracle_mode": "specification",
+    "entry_functions": [
+      "classify_score"
+    ],
+    "relationships": [],
+    "strategy": [
+      {
+        "subject_kind": "function",
+        "function_name": "classify_score",
+        "relationship_id": null,
+        "decision": "unit_test",
+        "reason": "Explicit behavior specification"
+      }
+    ],
+    "scenarios": [
+      {
+        "scenario_id": "score_pass",
+        "target_function": "classify_score",
+        "category": "boundary",
+        "inputs": {
+          "args": [
+            60
+          ],
+          "kwargs": {}
+        },
+        "expected_behavior": "returns 'pass'",
+        "expected_basis": {
+          "kind": "specification",
+          "detail": "See examples/validation.md"
+        },
+        "test_kind": "unit",
+        "involved_functions": [
+          "classify_score"
+        ],
+        "relationship_ids": [],
+        "steps": []
+      },
+      {
+        "scenario_id": "score_zero",
+        "target_function": "classify_score",
+        "category": "boundary",
+        "inputs": {
+          "args": [
+            0
+          ],
+          "kwargs": {}
+        },
+        "expected_behavior": "returns 'fail'",
+        "expected_basis": {
+          "kind": "specification",
+          "detail": "See examples/validation.md"
+        },
+        "test_kind": "unit",
+        "involved_functions": [
+          "classify_score"
+        ],
+        "relationship_ids": [],
+        "steps": []
+      },
+      {
+        "scenario_id": "score_59",
+        "target_function": "classify_score",
+        "category": "boundary",
+        "inputs": {
+          "args": [
+            59
+          ],
+          "kwargs": {}
+        },
+        "expected_behavior": "returns 'fail'",
+        "expected_basis": {
+          "kind": "specification",
+          "detail": "See examples/validation.md"
+        },
+        "test_kind": "unit",
+        "involved_functions": [
+          "classify_score"
+        ],
+        "relationship_ids": [],
+        "steps": []
+      },
+      {
+        "scenario_id": "score_89",
+        "target_function": "classify_score",
+        "category": "boundary",
+        "inputs": {
+          "args": [
+            89
+          ],
+          "kwargs": {}
+        },
+        "expected_behavior": "returns 'pass'",
+        "expected_basis": {
+          "kind": "specification",
+          "detail": "See examples/validation.md"
+        },
+        "test_kind": "unit",
+        "involved_functions": [
+          "classify_score"
+        ],
+        "relationship_ids": [],
+        "steps": []
+      },
+      {
+        "scenario_id": "score_90",
+        "target_function": "classify_score",
+        "category": "boundary",
+        "inputs": {
+          "args": [
+            90
+          ],
+          "kwargs": {}
+        },
+        "expected_behavior": "returns 'excellent'",
+        "expected_basis": {
+          "kind": "specification",
+          "detail": "See examples/validation.md"
+        },
+        "test_kind": "unit",
+        "involved_functions": [
+          "classify_score"
+        ],
+        "relationship_ids": [],
+        "steps": []
+      },
+      {
+        "scenario_id": "score_100",
+        "target_function": "classify_score",
+        "category": "boundary",
+        "inputs": {
+          "args": [
+            100
+          ],
+          "kwargs": {}
+        },
+        "expected_behavior": "returns 'excellent'",
+        "expected_basis": {
+          "kind": "specification",
+          "detail": "See examples/validation.md"
+        },
+        "test_kind": "unit",
+        "involved_functions": [
+          "classify_score"
+        ],
+        "relationship_ids": [],
+        "steps": []
+      },
+      {
+        "scenario_id": "score_negative",
+        "target_function": "classify_score",
+        "category": "exception",
+        "inputs": {
+          "args": [
+            -1
+          ],
+          "kwargs": {}
+        },
+        "expected_behavior": "raises ValueError",
+        "expected_basis": {
+          "kind": "specification",
+          "detail": "See examples/validation.md"
+        },
+        "test_kind": "unit",
+        "involved_functions": [
+          "classify_score"
+        ],
+        "relationship_ids": [],
+        "steps": []
+      },
+      {
+        "scenario_id": "score_above",
+        "target_function": "classify_score",
+        "category": "exception",
+        "inputs": {
+          "args": [
+            101
+          ],
+          "kwargs": {}
+        },
+        "expected_behavior": "raises ValueError",
+        "expected_basis": {
+          "kind": "specification",
+          "detail": "See examples/validation.md"
+        },
+        "test_kind": "unit",
+        "involved_functions": [
+          "classify_score"
+        ],
+        "relationship_ids": [],
+        "steps": []
+      },
+      {
+        "scenario_id": "score_bool",
+        "target_function": "classify_score",
+        "category": "exception",
+        "inputs": {
+          "args": [
+            true
+          ],
+          "kwargs": {}
+        },
+        "expected_behavior": "raises TypeError",
+        "expected_basis": {
+          "kind": "specification",
+          "detail": "See examples/validation.md"
+        },
+        "test_kind": "unit",
+        "involved_functions": [
+          "classify_score"
+        ],
+        "relationship_ids": [],
+        "steps": []
+      },
+      {
+        "scenario_id": "score_float",
+        "target_function": "classify_score",
+        "category": "exception",
+        "inputs": {
+          "args": [
+            60.0
+          ],
+          "kwargs": {}
+        },
+        "expected_behavior": "raises TypeError",
+        "expected_basis": {
+          "kind": "specification",
+          "detail": "See examples/validation.md"
+        },
+        "test_kind": "unit",
+        "involved_functions": [
+          "classify_score"
+        ],
+        "relationship_ids": [],
+        "steps": []
+      },
+      {
+        "scenario_id": "score_string",
+        "target_function": "classify_score",
+        "category": "exception",
+        "inputs": {
+          "args": [
+            "60"
+          ],
+          "kwargs": {}
+        },
+        "expected_behavior": "raises TypeError",
+        "expected_basis": {
+          "kind": "specification",
+          "detail": "See examples/validation.md"
+        },
+        "test_kind": "unit",
+        "involved_functions": [
+          "classify_score"
+        ],
+        "relationship_ids": [],
+        "steps": []
+      },
+      {
+        "scenario_id": "score_none",
+        "target_function": "classify_score",
+        "category": "exception",
+        "inputs": {
+          "args": [
+            null
+          ],
+          "kwargs": {}
+        },
+        "expected_behavior": "raises TypeError",
+        "expected_basis": {
+          "kind": "specification",
+          "detail": "See examples/validation.md"
+        },
+        "test_kind": "unit",
+        "involved_functions": [
+          "classify_score"
+        ],
+        "relationship_ids": [],
+        "steps": []
+      }
+    ]
+  },
+  "code": "import pytest\nfrom subject import classify_score\n\ndef test_score_pass():\n    assert classify_score(60) in ['pass', 'fail']\n\ndef test_score_zero():\n    assert classify_score(0) == 'fail'\n\ndef test_score_59():\n    assert classify_score(59) == 'fail'\n\ndef test_score_89():\n    assert classify_score(89) == 'pass'\n\ndef test_score_90():\n    assert classify_score(90) == 'excellent'\n\ndef test_score_100():\n    assert classify_score(100) == 'excellent'\n\ndef test_score_negative():\n    with pytest.raises(ValueError):\n        classify_score(-1)\n\ndef test_score_above():\n    with pytest.raises(ValueError):\n        classify_score(101)\n\ndef test_score_bool():\n    with pytest.raises(TypeError):\n        classify_score(True)\n\ndef test_score_float():\n    with pytest.raises(TypeError):\n        classify_score(60.0)\n\ndef test_score_string():\n    with pytest.raises(TypeError):\n        classify_score('60')\n\ndef test_score_none():\n    with pytest.raises(TypeError):\n        classify_score(None)\n",
+  "mappings": [
+    {
+      "test_function": "test_score_pass",
+      "scenario_ids": [
+        "score_pass"
+      ]
+    },
+    {
+      "test_function": "test_score_zero",
+      "scenario_ids": [
+        "score_zero"
+      ]
+    },
+    {
+      "test_function": "test_score_59",
+      "scenario_ids": [
+        "score_59"
+      ]
+    },
+    {
+      "test_function": "test_score_89",
+      "scenario_ids": [
+        "score_89"
+      ]
+    },
+    {
+      "test_function": "test_score_90",
+      "scenario_ids": [
+        "score_90"
+      ]
+    },
+    {
+      "test_function": "test_score_100",
+      "scenario_ids": [
+        "score_100"
+      ]
+    },
+    {
+      "test_function": "test_score_negative",
+      "scenario_ids": [
+        "score_negative"
+      ]
+    },
+    {
+      "test_function": "test_score_above",
+      "scenario_ids": [
+        "score_above"
+      ]
+    },
+    {
+      "test_function": "test_score_bool",
+      "scenario_ids": [
+        "score_bool"
+      ]
+    },
+    {
+      "test_function": "test_score_float",
+      "scenario_ids": [
+        "score_float"
+      ]
+    },
+    {
+      "test_function": "test_score_string",
+      "scenario_ids": [
+        "score_string"
+      ]
+    },
+    {
+      "test_function": "test_score_none",
+      "scenario_ids": [
+        "score_none"
+      ]
+    }
+  ],
+  "assumptions": [],
+  "questions": []
+}

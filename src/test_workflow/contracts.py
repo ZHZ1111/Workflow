@@ -5,7 +5,7 @@ from __future__ import annotations
 from pathlib import Path, PureWindowsPath
 from typing import Annotated, Literal, TYPE_CHECKING
 
-from pydantic import Field, StringConstraints, field_validator, model_validator
+from pydantic import Field, StrictBool, StrictInt, StringConstraints, computed_field, field_validator, model_validator
 from testgen_agent.models import (
     AgentAction, CandidateRound, ContractModel, Count, Issue, RoundNumber,
     Text, TokenUsage,
@@ -30,7 +30,8 @@ def relative_path(value: str) -> str:
 
 class ArtifactRef(ContractModel):
     path: Text
-    kind: Literal["candidate", "tests", "demo_observation", "execution", "coverage", "report"]
+    kind: Literal["candidate", "tests", "demo_observation", "execution", "coverage", "report",
+                  "agentdev_candidate", "plan", "llm_result", "subject"]
     sha256: Digest
     round: RoundNumber
     candidate_id: Text
@@ -77,6 +78,28 @@ class StatePatch(ContractModel):
     next_action: AgentAction | None = None
     api_calls_delta: Count = 0
     token_usage: TokenUsage | None = None
+    token_usage_reported: StrictBool = False
+
+
+class GenerationTelemetry(ContractModel):
+    """One generation action; offline/model transport counts remain distinct."""
+
+    client_mode: Literal["offline", "mock", "real"]
+    client_calls: Annotated[StrictInt, Field(ge=0, le=1)] = 0
+    request_attempts: Count | None = 0
+    max_request_attempts: Annotated[StrictInt, Field(ge=1, le=7)] = 5
+    format_repairs: Annotated[StrictInt, Field(ge=0, le=2)] | None = 0
+    total_usage: TokenUsage | None = None
+    error_category: Literal["transient", "authentication", "configuration", "format",
+                            "workspace", "budget", "contract", "internal"] | None = None
+    provider_code: str | None = None
+    retryable: StrictBool = False
+    status_code: Annotated[StrictInt, Field(ge=100, le=599)] | None = None
+
+    @computed_field
+    @property
+    def external_requests(self) -> int | None:
+        return self.request_attempts if self.client_mode == "real" else 0
 
 
 class AgentResult(ContractModel):
@@ -89,6 +112,7 @@ class AgentResult(ContractModel):
     messages: tuple[Message, ...] = ()
     artifacts: tuple[ArtifactRef, ...] = ()
     error_code: StableId | None = None
+    generation: GenerationTelemetry | None = None
 
     @model_validator(mode="after")
     def consistent_error(self):

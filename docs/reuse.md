@@ -101,6 +101,10 @@ P0 的 `scripts/p0_baseline.py` 允许调用完整 `run_agent()` 来验证旧系
 
 discount 样例用独立测试 `assert calculate_discount(100) == 90`，规格中有 `100 → 90` 两列表格，符合现有保守识别路径。不修改原实现的 `amount > 100`，不为了通过把预期改成 100。
 
-## 适配尚待实施
+## P2 适配已完成，后续边界
 
-P2 将首轮、修订上下文、单次客户端请求和保存封装成生成节点。P3 将 coverage 工具、失败分类和动作建议封装成执行节点。P4 新编排层负责历史提交、预算验证、消息交接和候选导出。旧 `_export_results()` 是私有入口，P0 仅记录；后续优先使用公开 reporting/模型组合输出，必要快照修改必须在此补记差异与回归结果。
+P2 已将首轮、修订上下文、一次客户端调用和保存封装到 `test_workflow.agents.test_generation.TestGenerationAgent`。`adapters/agentdev.py` 使用 `generate_initial_candidate()`、`build_action_context()`、`choose_action()` 与 `stage_revision_candidate()`；没有调用旧完整闭环或执行工具。choose_action 在修订前用于核对反馈动作是否仍被证据允许，不触发下一轮。
+
+原候选文件不修改；相对 test_path 映射为 Workflow 绝对 test_path 后另存 `handoffs/<round>/candidate.json`。原始计划、候选、LLM 结果和测试文件继续保留，并注册相对文件引用及摘要。原工具结果直接放入原 CandidateRound 模型，不复制执行/coverage 模型。失败次数、用量保留旧客户端可提供的证据；未知字段为空，外层不重试。新代码和协议增加集中在 Workflow 包，vendor 和旧 hw1 工程未修改。
+
+P2 相关生成、客户端、提示词回归共 74 项通过，证据见 `evaluation/p2_vendor_tests.xml` 和 `evaluation/p2_vendor_tests.txt`。P3 将 coverage 工具、失败分类和建议封装成执行节点；P4 负责完整历史提交、路由和导出。旧 `_export_results()` 是私有入口，P0 仅记录；后续优先使用公开 reporting/模型组合输出，必要快照修改必须在此补记差异与回归结果。

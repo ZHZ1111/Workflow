@@ -1,0 +1,217 @@
+{
+  "schema_version": "1.0",
+  "run_id": "run-22ee7f3e20b34422bd8f0a55cb870800",
+  "round": 1,
+  "agent_id": "test_generation",
+  "status": "ok",
+  "patch": {
+    "candidate": {
+      "number": 1,
+      "generated": {
+        "plan": {
+          "schema_version": "1.1",
+          "target_functions": [
+            "calculate_total"
+          ],
+          "oracle_mode": "specification",
+          "entry_functions": [
+            "calculate_total"
+          ],
+          "relationships": [],
+          "strategy": [
+            {
+              "subject_kind": "function",
+              "function_name": "calculate_total",
+              "relationship_id": null,
+              "decision": "unit_test",
+              "reason": "Explicit behavior specification"
+            }
+          ],
+          "scenarios": [
+            {
+              "scenario_id": "total_normal",
+              "target_function": "calculate_total",
+              "category": "boundary",
+              "inputs": {
+                "args": [
+                  12,
+                  3
+                ],
+                "kwargs": {}
+              },
+              "expected_behavior": "returns 36",
+              "expected_basis": {
+                "kind": "specification",
+                "detail": "See examples/calculation.md"
+              },
+              "test_kind": "unit",
+              "involved_functions": [
+                "calculate_total"
+              ],
+              "relationship_ids": [],
+              "steps": []
+            },
+            {
+              "scenario_id": "total_zero_price",
+              "target_function": "calculate_total",
+              "category": "boundary",
+              "inputs": {
+                "args": [
+                  0,
+                  5
+                ],
+                "kwargs": {}
+              },
+              "expected_behavior": "returns 0",
+              "expected_basis": {
+                "kind": "specification",
+                "detail": "See examples/calculation.md"
+              },
+              "test_kind": "unit",
+              "involved_functions": [
+                "calculate_total"
+              ],
+              "relationship_ids": [],
+              "steps": []
+            },
+            {
+              "scenario_id": "total_zero_quantity",
+              "target_function": "calculate_total",
+              "category": "boundary",
+              "inputs": {
+                "args": [
+                  12,
+                  0
+                ],
+                "kwargs": {}
+              },
+              "expected_behavior": "returns 0",
+              "expected_basis": {
+                "kind": "specification",
+                "detail": "See examples/calculation.md"
+              },
+              "test_kind": "unit",
+              "involved_functions": [
+                "calculate_total"
+              ],
+              "relationship_ids": [],
+              "steps": []
+            }
+          ]
+        },
+        "code": "import pytest\nfrom subject import calculate_total\n\ndef test_total_normal():\n    assert calculate_total(12, 3) == 36\n\ndef test_total_zero_price():\n    assert calculate_total(0, 5) == 0\n\ndef test_total_zero_quantity():\n    assert calculate_total(12, 0) == 0\n",
+        "mappings": [
+          {
+            "test_function": "test_total_normal",
+            "scenario_ids": [
+              "total_normal"
+            ]
+          },
+          {
+            "test_function": "test_total_zero_price",
+            "scenario_ids": [
+              "total_zero_price"
+            ]
+          },
+          {
+            "test_function": "test_total_zero_quantity",
+            "scenario_ids": [
+              "total_zero_quantity"
+            ]
+          }
+        ],
+        "assumptions": [],
+        "questions": []
+      },
+      "test_path": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\p2\\run-22ee7f3e20b34422bd8f0a55cb870800\\agent_workspace\\rounds\\01\\test_subject.py",
+      "validation_error": null,
+      "execution": null,
+      "coverage": null
+    },
+    "issues": [],
+    "next_action": "run_tests",
+    "api_calls_delta": 0,
+    "token_usage": null,
+    "token_usage_reported": true
+  },
+  "messages": [
+    {
+      "schema_version": "1.0",
+      "message_id": "msg-candidate-01",
+      "run_id": "run-22ee7f3e20b34422bd8f0a55cb870800",
+      "round": 1,
+      "sender": "test_generation",
+      "receiver": "test_execution",
+      "type": "candidate_ready",
+      "payload": {
+        "candidate_id": "run-22ee7f3e20b34422bd8f0a55cb870800:1",
+        "artifact": {
+          "path": "handoffs/01/candidate.json",
+          "kind": "candidate",
+          "sha256": "965f6ba1ab1852f3ca99c3d75af38b66179acb5e48423e237117cd4391449810",
+          "round": 1,
+          "candidate_id": "run-22ee7f3e20b34422bd8f0a55cb870800:1"
+        },
+        "reason": "Candidate passed host validation; execution has not started.",
+        "recommended_action": "run_tests"
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "handoffs/01/candidate.json",
+      "kind": "candidate",
+      "sha256": "965f6ba1ab1852f3ca99c3d75af38b66179acb5e48423e237117cd4391449810",
+      "round": 1,
+      "candidate_id": "run-22ee7f3e20b34422bd8f0a55cb870800:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/candidate.json",
+      "kind": "agentdev_candidate",
+      "sha256": "f4df9591706e158862f70ad7f58b13ed21ca32aee693cb761d2b8cf21aa5cd27",
+      "round": 1,
+      "candidate_id": "run-22ee7f3e20b34422bd8f0a55cb870800:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/plan.json",
+      "kind": "plan",
+      "sha256": "2f8c7d995a30a94c10452b7ac242c8fe77deb08952e6dff11b4c6d950755dca4",
+      "round": 1,
+      "candidate_id": "run-22ee7f3e20b34422bd8f0a55cb870800:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/llm_result.json",
+      "kind": "llm_result",
+      "sha256": "55679f290b75f9f63b96daa0a4072203098dc9602abb0304bbc0af7ccf67f704",
+      "round": 1,
+      "candidate_id": "run-22ee7f3e20b34422bd8f0a55cb870800:1"
+    },
+    {
+      "path": "agent_workspace/subject.py",
+      "kind": "subject",
+      "sha256": "4043de06a34f5aa75919fa484db107bf05d5a78f95ac7cadcdd94cac60e429bf",
+      "round": 1,
+      "candidate_id": "run-22ee7f3e20b34422bd8f0a55cb870800:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/test_subject.py",
+      "kind": "tests",
+      "sha256": "d9bdae8ceedfd5db31fb98de50e1dee3bee21d95e3ec2c34ecdecf434c14660e",
+      "round": 1,
+      "candidate_id": "run-22ee7f3e20b34422bd8f0a55cb870800:1"
+    }
+  ],
+  "error_code": null,
+  "generation": {
+    "client_mode": "offline",
+    "client_calls": 1,
+    "request_attempts": 1,
+    "max_request_attempts": 1,
+    "format_repairs": 0,
+    "total_usage": null,
+    "error_category": null,
+    "provider_code": null,
+    "retryable": false,
+    "status_code": null
+  }
+}

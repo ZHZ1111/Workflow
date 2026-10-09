@@ -1,6 +1,6 @@
 # 测试与验收计划
 
-版本：P1 / 2026-10-09。本表是新 Workflow 的完整验收计划；旧项目基线见 `evaluation/baseline.md`，P1 协议、状态与假节点交接已有 48 项通过证据，见 `evaluation/p1.md`。真实节点与完整路由仍待实施。验收以行为和证据为准，不以方法名字或旧项目测试通过代替。
+版本：P2 / 2026-10-09。本表是新 Workflow 的完整验收计划；旧项目基线见 `evaluation/baseline.md`，P1 历史证据见 `evaluation/p1.md`，P2 生成节点与当前 89 项 Workflow 测试、74 项复用回归证据见 `evaluation/p2.md`。执行节点与完整路由仍待实施。验收以行为和证据为准，不以方法名字或旧项目测试通过代替。
 
 ## 测试分层
 
@@ -47,5 +47,7 @@
 ## 运行与回归策略
 
 P0：`python scripts/p0_baseline.py`（使用 README 中虚拟环境解释器）。P1：`python scripts/p1_baseline.py`，或仅执行 `python -m pytest tests -q`；根 pyproject 的默认测试范围是新 `tests/`，不包含 vendor 全量基线。P2/P3 修改适配器后跑相关节点测试与受影响 vendor 测试；P4 后跑新 Workflow 集成矩阵；P7 做最终全量回归和干净安装。
+
+P2：`python scripts/p2_baseline.py` 手动提供真实首轮执行证据，证明单步修订与通过测试保护，不视为 W02 自动路由已完成。新测试包含 MockTransport 客户端有限重试、格式修复、鉴权错误、未知次数/用量，均无外部请求。复用回归范围是 vendor 的 `test_generation.py`、`test_llm_client.py`、`test_prompts.py`。
 
 只为有风险的协议、路由、历史保护和跨节点行为写测试；文案、简单 getter 等低影响改动不写镜像测试。检查通过后不无理由重复跑全量测试。

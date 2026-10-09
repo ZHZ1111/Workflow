@@ -64,3 +64,9 @@ P1 假执行节点进一步验证测试文件内容等于候选中的生成代�
 `examples/contracts/p1/` 保存生成/执行 Context 与 Result、交接 Message、最终 WorkflowState；`schemas/` 保存四个顶层契约的验证 Schema。运行 `scripts/p1_baseline.py` 会重新生成样例，再运行包括样例恢复校验在内的自动测试。
 
 样例中的任务绝对路径是本次运行事实；它们不作为跨机器执行入口。文件交接使用 ArtifactRef 的相对路径，随实际 run_dir 解析。现阶段正式 Schema 来源是代码，P3/P4 扩充反馈负载时应同步升级样例与文档。
+
+## P2 的兼容增加
+
+ArtifactRef 增加 `agentdev_candidate`、`plan`、`llm_result`、`subject` 类型；AgentResult 增加可选 `generation` 遥测，错误结果也可携带该安全遥测，仍不得携带成功状态补丁或交接消息。StatePatch 增加 `token_usage_reported`，用于区分“没有用量更新”和“累计量无法完整获得、应置空”。P1 已保存示例仍可恢复；其 Schema 是 P1 历史产物，当前 Schema 另存 `examples/contracts/p2/schemas/`。
+
+`WorkflowRunner.apply_result()` 是公开的提案校验入口，返回新快照而不写磁盘；协调者负责保存。P2 验收脚本使用它提交单步结果，不绕过历史与文件校验。生成节点只在候选通过门禁且没有阻塞疑问时发出 `candidate_ready`。无效候选在结果与文件中保留，但不交给旧假执行节点执行；修复、复核、停止分支的正式调度属于 P4。

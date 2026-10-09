@@ -1,0 +1,402 @@
+{
+  "schema_version": "1.0",
+  "run_id": "run-ec9eb1d3ea2a41d5a4dbfea6af3a5b37",
+  "round": 2,
+  "agent_id": "test_generation",
+  "status": "ok",
+  "patch": {
+    "candidate": {
+      "number": 2,
+      "generated": {
+        "plan": {
+          "schema_version": "1.1",
+          "target_functions": [
+            "classify_score"
+          ],
+          "oracle_mode": "specification",
+          "entry_functions": [
+            "classify_score"
+          ],
+          "relationships": [],
+          "strategy": [
+            {
+              "subject_kind": "function",
+              "function_name": "classify_score",
+              "relationship_id": null,
+              "decision": "unit_test",
+              "reason": "Explicit behavior specification"
+            }
+          ],
+          "scenarios": [
+            {
+              "scenario_id": "score_zero",
+              "target_function": "classify_score",
+              "category": "boundary",
+              "inputs": {
+                "args": [
+                  0
+                ],
+                "kwargs": {}
+              },
+              "expected_behavior": "returns 'fail'",
+              "expected_basis": {
+                "kind": "specification",
+                "detail": "See examples/validation.md"
+              },
+              "test_kind": "unit",
+              "involved_functions": [
+                "classify_score"
+              ],
+              "relationship_ids": [],
+              "steps": []
+            },
+            {
+              "scenario_id": "score_59",
+              "target_function": "classify_score",
+              "category": "boundary",
+              "inputs": {
+                "args": [
+                  59
+                ],
+                "kwargs": {}
+              },
+              "expected_behavior": "returns 'fail'",
+              "expected_basis": {
+                "kind": "specification",
+                "detail": "See examples/validation.md"
+              },
+              "test_kind": "unit",
+              "involved_functions": [
+                "classify_score"
+              ],
+              "relationship_ids": [],
+              "steps": []
+            },
+            {
+              "scenario_id": "score_89",
+              "target_function": "classify_score",
+              "category": "boundary",
+              "inputs": {
+                "args": [
+                  89
+                ],
+                "kwargs": {}
+              },
+              "expected_behavior": "returns 'pass'",
+              "expected_basis": {
+                "kind": "specification",
+                "detail": "See examples/validation.md"
+              },
+              "test_kind": "unit",
+              "involved_functions": [
+                "classify_score"
+              ],
+              "relationship_ids": [],
+              "steps": []
+            },
+            {
+              "scenario_id": "score_90",
+              "target_function": "classify_score",
+              "category": "boundary",
+              "inputs": {
+                "args": [
+                  90
+                ],
+                "kwargs": {}
+              },
+              "expected_behavior": "returns 'excellent'",
+              "expected_basis": {
+                "kind": "specification",
+                "detail": "See examples/validation.md"
+              },
+              "test_kind": "unit",
+              "involved_functions": [
+                "classify_score"
+              ],
+              "relationship_ids": [],
+              "steps": []
+            },
+            {
+              "scenario_id": "score_100",
+              "target_function": "classify_score",
+              "category": "boundary",
+              "inputs": {
+                "args": [
+                  100
+                ],
+                "kwargs": {}
+              },
+              "expected_behavior": "returns 'excellent'",
+              "expected_basis": {
+                "kind": "specification",
+                "detail": "See examples/validation.md"
+              },
+              "test_kind": "unit",
+              "involved_functions": [
+                "classify_score"
+              ],
+              "relationship_ids": [],
+              "steps": []
+            },
+            {
+              "scenario_id": "score_negative",
+              "target_function": "classify_score",
+              "category": "exception",
+              "inputs": {
+                "args": [
+                  -1
+                ],
+                "kwargs": {}
+              },
+              "expected_behavior": "raises ValueError",
+              "expected_basis": {
+                "kind": "specification",
+                "detail": "See examples/validation.md"
+              },
+              "test_kind": "unit",
+              "involved_functions": [
+                "classify_score"
+              ],
+              "relationship_ids": [],
+              "steps": []
+            },
+            {
+              "scenario_id": "score_above",
+              "target_function": "classify_score",
+              "category": "exception",
+              "inputs": {
+                "args": [
+                  101
+                ],
+                "kwargs": {}
+              },
+              "expected_behavior": "raises ValueError",
+              "expected_basis": {
+                "kind": "specification",
+                "detail": "See examples/validation.md"
+              },
+              "test_kind": "unit",
+              "involved_functions": [
+                "classify_score"
+              ],
+              "relationship_ids": [],
+              "steps": []
+            },
+            {
+              "scenario_id": "score_bool",
+              "target_function": "classify_score",
+              "category": "exception",
+              "inputs": {
+                "args": [
+                  true
+                ],
+                "kwargs": {}
+              },
+              "expected_behavior": "raises TypeError",
+              "expected_basis": {
+                "kind": "specification",
+                "detail": "See examples/validation.md"
+              },
+              "test_kind": "unit",
+              "involved_functions": [
+                "classify_score"
+              ],
+              "relationship_ids": [],
+              "steps": []
+            },
+            {
+              "scenario_id": "score_float",
+              "target_function": "classify_score",
+              "category": "exception",
+              "inputs": {
+                "args": [
+                  60.0
+                ],
+                "kwargs": {}
+              },
+              "expected_behavior": "raises TypeError",
+              "expected_basis": {
+                "kind": "specification",
+                "detail": "See examples/validation.md"
+              },
+              "test_kind": "unit",
+              "involved_functions": [
+                "classify_score"
+              ],
+              "relationship_ids": [],
+              "steps": []
+            },
+            {
+              "scenario_id": "score_string",
+              "target_function": "classify_score",
+              "category": "exception",
+              "inputs": {
+                "args": [
+                  "60"
+                ],
+                "kwargs": {}
+              },
+              "expected_behavior": "raises TypeError",
+              "expected_basis": {
+                "kind": "specification",
+                "detail": "See examples/validation.md"
+              },
+              "test_kind": "unit",
+              "involved_functions": [
+                "classify_score"
+              ],
+              "relationship_ids": [],
+              "steps": []
+            },
+            {
+              "scenario_id": "score_none",
+              "target_function": "classify_score",
+              "category": "exception",
+              "inputs": {
+                "args": [
+                  null
+                ],
+                "kwargs": {}
+              },
+              "expected_behavior": "raises TypeError",
+              "expected_basis": {
+                "kind": "specification",
+                "detail": "See examples/validation.md"
+              },
+              "test_kind": "unit",
+              "involved_functions": [
+                "classify_score"
+              ],
+              "relationship_ids": [],
+              "steps": []
+            }
+          ]
+        },
+        "code": "import pytest\nfrom subject import classify_score\n\ndef test_score_zero():\n    assert classify_score(0) == 'fail'\n\ndef test_score_59():\n    assert classify_score(59) == 'fail'\n\ndef test_score_89():\n    assert classify_score(89) == 'pass'\n\ndef test_score_90():\n    assert classify_score(90) == 'excellent'\n\ndef test_score_100():\n    assert classify_score(100) == 'excellent'\n\ndef test_score_negative():\n    with pytest.raises(ValueError):\n        classify_score(-1)\n\ndef test_score_above():\n    with pytest.raises(ValueError):\n        classify_score(101)\n\ndef test_score_bool():\n    with pytest.raises(TypeError):\n        classify_score(True)\n\ndef test_score_float():\n    with pytest.raises(TypeError):\n        classify_score(60.0)\n\ndef test_score_string():\n    with pytest.raises(TypeError):\n        classify_score('60')\n\ndef test_score_none():\n    with pytest.raises(TypeError):\n        classify_score(None)\n",
+        "mappings": [
+          {
+            "test_function": "test_score_zero",
+            "scenario_ids": [
+              "score_zero"
+            ]
+          },
+          {
+            "test_function": "test_score_59",
+            "scenario_ids": [
+              "score_59"
+            ]
+          },
+          {
+            "test_function": "test_score_89",
+            "scenario_ids": [
+              "score_89"
+            ]
+          },
+          {
+            "test_function": "test_score_90",
+            "scenario_ids": [
+              "score_90"
+            ]
+          },
+          {
+            "test_function": "test_score_100",
+            "scenario_ids": [
+              "score_100"
+            ]
+          },
+          {
+            "test_function": "test_score_negative",
+            "scenario_ids": [
+              "score_negative"
+            ]
+          },
+          {
+            "test_function": "test_score_above",
+            "scenario_ids": [
+              "score_above"
+            ]
+          },
+          {
+            "test_function": "test_score_bool",
+            "scenario_ids": [
+              "score_bool"
+            ]
+          },
+          {
+            "test_function": "test_score_float",
+            "scenario_ids": [
+              "score_float"
+            ]
+          },
+          {
+            "test_function": "test_score_string",
+            "scenario_ids": [
+              "score_string"
+            ]
+          },
+          {
+            "test_function": "test_score_none",
+            "scenario_ids": [
+              "score_none"
+            ]
+          }
+        ],
+        "assumptions": [],
+        "questions": []
+      },
+      "test_path": null,
+      "validation_error": "preserve_tests：必须保留已通过测试 test_score_pass 的函数体、断言及装饰器；新增场景请另建测试函数。",
+      "execution": null,
+      "coverage": null
+    },
+    "issues": [],
+    "next_action": "repair_generated_test",
+    "api_calls_delta": 0,
+    "token_usage": null,
+    "token_usage_reported": true
+  },
+  "messages": [],
+  "artifacts": [
+    {
+      "path": "handoffs/02/candidate.json",
+      "kind": "candidate",
+      "sha256": "b719769576b8956189e57a405ebd95754773fc0895bbc93fca5ee5fdbdccaf58",
+      "round": 2,
+      "candidate_id": "run-ec9eb1d3ea2a41d5a4dbfea6af3a5b37:2"
+    },
+    {
+      "path": "agent_workspace/rounds/02/candidate.json",
+      "kind": "agentdev_candidate",
+      "sha256": "3e3c2cdb3bb71a5dd4249939e68b1bd3d8f96cfb7692656626b7e122401e338f",
+      "round": 2,
+      "candidate_id": "run-ec9eb1d3ea2a41d5a4dbfea6af3a5b37:2"
+    },
+    {
+      "path": "agent_workspace/rounds/02/plan.json",
+      "kind": "plan",
+      "sha256": "a5f3541b1c1ffc442f33497b99a30babb3557d297507ecf176dcdd6265fa7599",
+      "round": 2,
+      "candidate_id": "run-ec9eb1d3ea2a41d5a4dbfea6af3a5b37:2"
+    },
+    {
+      "path": "agent_workspace/rounds/02/llm_result.json",
+      "kind": "llm_result",
+      "sha256": "4ceeba9b28ff37546703de0f12aa611cb7f61ab6f3c0c9abd0774ad3efd43bc1",
+      "round": 2,
+      "candidate_id": "run-ec9eb1d3ea2a41d5a4dbfea6af3a5b37:2"
+    }
+  ],
+  "error_code": null,
+  "generation": {
+    "client_mode": "offline",
+    "client_calls": 1,
+    "request_attempts": 1,
+    "max_request_attempts": 1,
+    "format_repairs": 0,
+    "total_usage": null,
+    "error_category": null,
+    "provider_code": null,
+    "retryable": false,
+    "status_code": null
+  }
+}

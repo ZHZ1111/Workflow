@@ -84,11 +84,12 @@ class WorkflowRunner:
             issues=(*business.issues, *patch.issues),
             next_action=patch.next_action if patch.next_action is not None else business.next_action,
             api_calls=business.api_calls + patch.api_calls_delta,
-            token_usage=patch.token_usage if patch.token_usage is not None else business.token_usage,
+            token_usage=patch.token_usage if patch.token_usage_reported or patch.token_usage is not None else business.token_usage,
         )
 
-    def _validate_result(self, state: WorkflowState, result: AgentResult,
-                         consumed: tuple[str, ...]) -> WorkflowState:
+    def apply_result(self, state: WorkflowState, result: AgentResult,
+                     consumed: tuple[str, ...] = ()) -> WorkflowState:
+        """Validate a node proposal and return a new state; the coordinator persists it."""
         # Never trust model_copy(update=...) or a node returning an untyped dict.
         if not isinstance(result, AgentResult):
             raise HandoffError("node must return an AgentResult")
@@ -176,7 +177,7 @@ class WorkflowRunner:
                                        agent_id=node.agent_id, run_dir=state.run_dir,
                                        snapshot_json=state.canonical_json(), inbox=inbox)
                 result = self.registry.get(node.agent_id).run(context)
-                proposed = self._validate_result(state, result, tuple(item.message_id for item in inbox))
+                proposed = self.apply_result(state, result, tuple(item.message_id for item in inbox))
                 # Validate the whole proposal before writing its handoff journal.
                 for message in result.messages:
                     messages.append(message)

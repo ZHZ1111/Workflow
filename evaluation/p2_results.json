@@ -1,0 +1,87 @@
+{
+  "phase": "P2",
+  "mode": "offline",
+  "date": "2026-10-09",
+  "external_model_requests": 0,
+  "generation_subprocess_calls": 0,
+  "harness_pytest_executions": 3,
+  "samples": {
+    "valid_initial": {
+      "run_dir": "outputs/p2/run-22ee7f3e20b34422bd8f0a55cb870800",
+      "candidate_round": 1,
+      "validation_error": null,
+      "ready_messages": 1,
+      "client_calls": 1,
+      "external_model_requests": 0,
+      "generation_subprocess_calls": 0,
+      "harness_pytest_executions": 0,
+      "protected_tests": [],
+      "source_unchanged": true,
+      "prior_execution_kind": null,
+      "prior_line_percent": null
+    },
+    "invalid_syntax": {
+      "run_dir": "outputs/p2/run-3271a743c70e466289507385b4fbbae1",
+      "candidate_round": 1,
+      "validation_error": "test_syntax（第 3 行）：invalid syntax",
+      "ready_messages": 0,
+      "client_calls": 1,
+      "external_model_requests": 0,
+      "generation_subprocess_calls": 0,
+      "harness_pytest_executions": 0,
+      "protected_tests": [],
+      "source_unchanged": true,
+      "prior_execution_kind": null,
+      "prior_line_percent": null
+    },
+    "valid_revision": {
+      "run_dir": "outputs/p2/run-d3cac257781a42ce8d45ccb41968acc6",
+      "candidate_round": 2,
+      "validation_error": null,
+      "ready_messages": 1,
+      "client_calls": 2,
+      "external_model_requests": 0,
+      "generation_subprocess_calls": 0,
+      "harness_pytest_executions": 1,
+      "protected_tests": [
+        "test_score_pass"
+      ],
+      "source_unchanged": true,
+      "prior_execution_kind": "passed",
+      "prior_line_percent": 60.0
+    },
+    "removed_passing_test": {
+      "run_dir": "outputs/p2/run-ec9eb1d3ea2a41d5a4dbfea6af3a5b37",
+      "candidate_round": 2,
+      "validation_error": "preserve_tests：必须保留已通过测试 test_score_pass 的函数体、断言及装饰器；新增场景请另建测试函数。",
+      "ready_messages": 0,
+      "client_calls": 2,
+      "external_model_requests": 0,
+      "generation_subprocess_calls": 0,
+      "harness_pytest_executions": 1,
+      "protected_tests": [
+        "test_score_pass"
+      ],
+      "source_unchanged": true,
+      "prior_execution_kind": "passed",
+      "prior_line_percent": 60.0
+    },
+    "weakened_passing_test": {
+      "run_dir": "outputs/p2/run-014fca5672e84fd4ad3d29051b7f211e",
+      "candidate_round": 2,
+      "validation_error": "preserve_tests：必须保留已通过测试 test_score_pass 的函数体、断言及装饰器；新增场景请另建测试函数。",
+      "ready_messages": 0,
+      "client_calls": 2,
+      "external_model_requests": 0,
+      "generation_subprocess_calls": 0,
+      "harness_pytest_executions": 1,
+      "protected_tests": [
+        "test_score_pass"
+      ],
+      "source_unchanged": true,
+      "prior_execution_kind": "passed",
+      "prior_line_percent": 60.0
+    }
+  },
+  "note": "Harness supplies measurements manually; execution Agent and P4 routing are pending."
+}
