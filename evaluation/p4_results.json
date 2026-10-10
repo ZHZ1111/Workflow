@@ -1,0 +1,573 @@
+{
+  "phase": "P4",
+  "date": "2026-10-10T11:11:33.108484+08:00",
+  "python": "3.13.9",
+  "generation_mode": "offline",
+  "execution_mode": "real",
+  "automatic_feedback_scheduler": true,
+  "external_model_requests": 0,
+  "pytest_processes": 17,
+  "vendor_files_unchanged": 57,
+  "checks": {
+    "tests": {
+      "tests": 175,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "exit_code": 0
+    },
+    "vendor_tests": {
+      "tests": 52,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "exit_code": 0
+    }
+  },
+  "samples": {
+    "passed": {
+      "run_id": "run-c2c58fec06244ed7b1dbc4b07b186bf3",
+      "run_dir": "outputs/p4/acceptance-9263e108f7/passed",
+      "cli_exit_code": 0,
+      "workflow_status": "finished",
+      "task_status": "completed",
+      "stop_reason": "coverage_target_met",
+      "selected_round": 1,
+      "selection_reason": "Passing candidates first, then target/available coverage, branch and line coverage, and passed count; ties keep the earlier round.",
+      "selected_all_passed": true,
+      "latest_all_passed": true,
+      "generation_calls": 1,
+      "external_requests": 0,
+      "pytest_processes": 1,
+      "source_unchanged": true,
+      "spec_unchanged": true,
+      "rounds": [
+        {
+          "round": 1,
+          "validation_error": null,
+          "execution_kind": "passed",
+          "passed": 3,
+          "failed": 0,
+          "line_percent": 100.0,
+          "branch_percent": null,
+          "action": "finish",
+          "stop_reason": "coverage_target_met"
+        }
+      ],
+      "report": "outputs/p4/acceptance-9263e108f7/passed/report.md"
+    },
+    "feedback": {
+      "run_id": "run-bcda6a29007c4b24bb593b7a6e1fd059",
+      "run_dir": "outputs/p4/acceptance-9263e108f7/feedback",
+      "cli_exit_code": 0,
+      "workflow_status": "finished",
+      "task_status": "completed",
+      "stop_reason": "coverage_target_met",
+      "selected_round": 2,
+      "selection_reason": "Passing candidates first, then target/available coverage, branch and line coverage, and passed count; ties keep the earlier round.",
+      "selected_all_passed": true,
+      "latest_all_passed": true,
+      "generation_calls": 2,
+      "external_requests": 0,
+      "pytest_processes": 2,
+      "source_unchanged": true,
+      "spec_unchanged": true,
+      "rounds": [
+        {
+          "round": 1,
+          "validation_error": null,
+          "execution_kind": "passed",
+          "passed": 1,
+          "failed": 0,
+          "line_percent": 60.0,
+          "branch_percent": 50.0,
+          "action": "add_missing_cases",
+          "stop_reason": null
+        },
+        {
+          "round": 2,
+          "validation_error": null,
+          "execution_kind": "passed",
+          "passed": 12,
+          "failed": 0,
+          "line_percent": 100.0,
+          "branch_percent": 100.0,
+          "action": "finish",
+          "stop_reason": "coverage_target_met"
+        }
+      ],
+      "report": "outputs/p4/acceptance-9263e108f7/feedback/report.md"
+    },
+    "syntax_repaired": {
+      "run_id": "run-b284033d7bd4470581554330cfd6d982",
+      "run_dir": "outputs/p4/acceptance-9263e108f7/syntax_repaired",
+      "cli_exit_code": 0,
+      "workflow_status": "finished",
+      "task_status": "completed",
+      "stop_reason": "coverage_target_met",
+      "selected_round": 2,
+      "selection_reason": "Passing candidates first, then target/available coverage, branch and line coverage, and passed count; ties keep the earlier round.",
+      "selected_all_passed": true,
+      "latest_all_passed": true,
+      "generation_calls": 2,
+      "external_requests": 0,
+      "pytest_processes": 1,
+      "source_unchanged": true,
+      "spec_unchanged": true,
+      "rounds": [
+        {
+          "round": 1,
+          "validation_error": "test_syntax（第 3 行）：invalid syntax",
+          "execution_kind": null,
+          "passed": null,
+          "failed": null,
+          "line_percent": null,
+          "branch_percent": null,
+          "action": "repair_generated_test",
+          "stop_reason": null
+        },
+        {
+          "round": 2,
+          "validation_error": null,
+          "execution_kind": "passed",
+          "passed": 3,
+          "failed": 0,
+          "line_percent": 100.0,
+          "branch_percent": null,
+          "action": "finish",
+          "stop_reason": "coverage_target_met"
+        }
+      ],
+      "report": "outputs/p4/acceptance-9263e108f7/syntax_repaired/report.md"
+    },
+    "name_repaired": {
+      "run_id": "run-fbb295e0411a463daf02d09cd93cd8b3",
+      "run_dir": "outputs/p4/acceptance-9263e108f7/name_repaired",
+      "cli_exit_code": 0,
+      "workflow_status": "finished",
+      "task_status": "completed",
+      "stop_reason": "coverage_target_met",
+      "selected_round": 2,
+      "selection_reason": "Passing candidates first, then target/available coverage, branch and line coverage, and passed count; ties keep the earlier round.",
+      "selected_all_passed": true,
+      "latest_all_passed": true,
+      "generation_calls": 2,
+      "external_requests": 0,
+      "pytest_processes": 2,
+      "source_unchanged": true,
+      "spec_unchanged": true,
+      "rounds": [
+        {
+          "round": 1,
+          "validation_error": null,
+          "execution_kind": "execution_error",
+          "passed": 2,
+          "failed": 0,
+          "line_percent": 100.0,
+          "branch_percent": null,
+          "action": "repair_generated_test",
+          "stop_reason": null
+        },
+        {
+          "round": 2,
+          "validation_error": null,
+          "execution_kind": "passed",
+          "passed": 3,
+          "failed": 0,
+          "line_percent": 100.0,
+          "branch_percent": null,
+          "action": "finish",
+          "stop_reason": "coverage_target_met"
+        }
+      ],
+      "report": "outputs/p4/acceptance-9263e108f7/name_repaired/report.md"
+    },
+    "three_round_limit": {
+      "run_id": "run-9c7729c5d1cc4c55a9a8098e9e3c7789",
+      "run_dir": "outputs/p4/acceptance-9263e108f7/three_round_limit",
+      "cli_exit_code": 1,
+      "workflow_status": "finished",
+      "task_status": "failed",
+      "stop_reason": "round_limit_reached",
+      "selected_round": null,
+      "selection_reason": "No executed runnable candidate is available.",
+      "selected_all_passed": null,
+      "latest_all_passed": null,
+      "generation_calls": 3,
+      "external_requests": 0,
+      "pytest_processes": 0,
+      "source_unchanged": true,
+      "spec_unchanged": true,
+      "rounds": [
+        {
+          "round": 1,
+          "validation_error": "test_syntax（第 3 行）：invalid syntax",
+          "execution_kind": null,
+          "passed": null,
+          "failed": null,
+          "line_percent": null,
+          "branch_percent": null,
+          "action": "repair_generated_test",
+          "stop_reason": null
+        },
+        {
+          "round": 2,
+          "validation_error": "test_syntax（第 3 行）：invalid syntax",
+          "execution_kind": null,
+          "passed": null,
+          "failed": null,
+          "line_percent": null,
+          "branch_percent": null,
+          "action": "repair_generated_test",
+          "stop_reason": null
+        },
+        {
+          "round": 3,
+          "validation_error": "test_syntax（第 3 行）：invalid syntax",
+          "execution_kind": null,
+          "passed": null,
+          "failed": null,
+          "line_percent": null,
+          "branch_percent": null,
+          "action": "finish",
+          "stop_reason": "round_limit_reached"
+        }
+      ],
+      "report": "outputs/p4/acceptance-9263e108f7/three_round_limit/report.md"
+    },
+    "partial_limit": {
+      "run_id": "run-ac67263f9d614769849e970aa6490a93",
+      "run_dir": "outputs/p4/acceptance-9263e108f7/partial_limit",
+      "cli_exit_code": 1,
+      "workflow_status": "finished",
+      "task_status": "partial",
+      "stop_reason": "round_limit_reached",
+      "selected_round": 1,
+      "selection_reason": "Passing candidates first, then target/available coverage, branch and line coverage, and passed count; ties keep the earlier round.",
+      "selected_all_passed": true,
+      "latest_all_passed": true,
+      "generation_calls": 1,
+      "external_requests": 0,
+      "pytest_processes": 1,
+      "source_unchanged": true,
+      "spec_unchanged": true,
+      "rounds": [
+        {
+          "round": 1,
+          "validation_error": null,
+          "execution_kind": "passed",
+          "passed": 1,
+          "failed": 0,
+          "line_percent": 60.0,
+          "branch_percent": 50.0,
+          "action": "finish",
+          "stop_reason": "round_limit_reached"
+        }
+      ],
+      "report": "outputs/p4/acceptance-9263e108f7/partial_limit/report.md"
+    },
+    "duplicate": {
+      "run_id": "run-7c53b9886cee4e0c8a8457ac34f82d4d",
+      "run_dir": "outputs/p4/acceptance-9263e108f7/duplicate",
+      "cli_exit_code": 1,
+      "workflow_status": "finished",
+      "task_status": "partial",
+      "stop_reason": "no_progress",
+      "selected_round": 1,
+      "selection_reason": "Passing candidates first, then target/available coverage, branch and line coverage, and passed count; ties keep the earlier round.",
+      "selected_all_passed": true,
+      "latest_all_passed": null,
+      "generation_calls": 2,
+      "external_requests": 0,
+      "pytest_processes": 1,
+      "source_unchanged": true,
+      "spec_unchanged": true,
+      "rounds": [
+        {
+          "round": 1,
+          "validation_error": null,
+          "execution_kind": "passed",
+          "passed": 1,
+          "failed": 0,
+          "line_percent": 60.0,
+          "branch_percent": 50.0,
+          "action": "add_missing_cases",
+          "stop_reason": null
+        },
+        {
+          "round": 2,
+          "validation_error": "duplicate_candidate：候选代码与历史有效候选重复，停止无进展迭代。",
+          "execution_kind": null,
+          "passed": null,
+          "failed": null,
+          "line_percent": null,
+          "branch_percent": null,
+          "action": "finish",
+          "stop_reason": "no_progress"
+        }
+      ],
+      "report": "outputs/p4/acceptance-9263e108f7/duplicate/report.md"
+    },
+    "no_coverage_progress": {
+      "run_id": "run-daa81be99f2c42e6b20ee8a5d504f259",
+      "run_dir": "outputs/p4/acceptance-9263e108f7/no_coverage_progress",
+      "cli_exit_code": 1,
+      "workflow_status": "finished",
+      "task_status": "partial",
+      "stop_reason": "no_progress",
+      "selected_round": 2,
+      "selection_reason": "Passing candidates first, then target/available coverage, branch and line coverage, and passed count; ties keep the earlier round.",
+      "selected_all_passed": true,
+      "latest_all_passed": true,
+      "generation_calls": 2,
+      "external_requests": 0,
+      "pytest_processes": 2,
+      "source_unchanged": true,
+      "spec_unchanged": true,
+      "rounds": [
+        {
+          "round": 1,
+          "validation_error": null,
+          "execution_kind": "passed",
+          "passed": 1,
+          "failed": 0,
+          "line_percent": 60.0,
+          "branch_percent": 50.0,
+          "action": "add_missing_cases",
+          "stop_reason": null
+        },
+        {
+          "round": 2,
+          "validation_error": null,
+          "execution_kind": "passed",
+          "passed": 2,
+          "failed": 0,
+          "line_percent": 60.0,
+          "branch_percent": 50.0,
+          "action": "finish",
+          "stop_reason": "no_progress"
+        }
+      ],
+      "report": "outputs/p4/acceptance-9263e108f7/no_coverage_progress/report.md"
+    },
+    "removed_passing_test": {
+      "run_id": "run-18c7352b3a4e4b26a418a743c1877667",
+      "run_dir": "outputs/p4/acceptance-9263e108f7/removed_passing_test",
+      "cli_exit_code": 1,
+      "workflow_status": "finished",
+      "task_status": "partial",
+      "stop_reason": "round_limit_reached",
+      "selected_round": 1,
+      "selection_reason": "Passing candidates first, then target/available coverage, branch and line coverage, and passed count; ties keep the earlier round.",
+      "selected_all_passed": true,
+      "latest_all_passed": null,
+      "generation_calls": 2,
+      "external_requests": 0,
+      "pytest_processes": 1,
+      "source_unchanged": true,
+      "spec_unchanged": true,
+      "rounds": [
+        {
+          "round": 1,
+          "validation_error": null,
+          "execution_kind": "passed",
+          "passed": 1,
+          "failed": 0,
+          "line_percent": 60.0,
+          "branch_percent": 50.0,
+          "action": "add_missing_cases",
+          "stop_reason": null
+        },
+        {
+          "round": 2,
+          "validation_error": "preserve_tests：必须保留已通过测试 test_score_pass 的函数体、断言及装饰器；新增场景请另建测试函数。",
+          "execution_kind": null,
+          "passed": null,
+          "failed": null,
+          "line_percent": null,
+          "branch_percent": null,
+          "action": "finish",
+          "stop_reason": "round_limit_reached"
+        }
+      ],
+      "report": "outputs/p4/acceptance-9263e108f7/removed_passing_test/report.md"
+    },
+    "weakened_passing_test": {
+      "run_id": "run-718cc6631bc04428bd47997337efb6eb",
+      "run_dir": "outputs/p4/acceptance-9263e108f7/weakened_passing_test",
+      "cli_exit_code": 1,
+      "workflow_status": "finished",
+      "task_status": "partial",
+      "stop_reason": "round_limit_reached",
+      "selected_round": 1,
+      "selection_reason": "Passing candidates first, then target/available coverage, branch and line coverage, and passed count; ties keep the earlier round.",
+      "selected_all_passed": true,
+      "latest_all_passed": null,
+      "generation_calls": 2,
+      "external_requests": 0,
+      "pytest_processes": 1,
+      "source_unchanged": true,
+      "spec_unchanged": true,
+      "rounds": [
+        {
+          "round": 1,
+          "validation_error": null,
+          "execution_kind": "passed",
+          "passed": 1,
+          "failed": 0,
+          "line_percent": 60.0,
+          "branch_percent": 50.0,
+          "action": "add_missing_cases",
+          "stop_reason": null
+        },
+        {
+          "round": 2,
+          "validation_error": "preserve_tests：必须保留已通过测试 test_score_pass 的函数体、断言及装饰器；新增场景请另建测试函数。",
+          "execution_kind": null,
+          "passed": null,
+          "failed": null,
+          "line_percent": null,
+          "branch_percent": null,
+          "action": "finish",
+          "stop_reason": "round_limit_reached"
+        }
+      ],
+      "report": "outputs/p4/acceptance-9263e108f7/weakened_passing_test/report.md"
+    },
+    "later_execution_error": {
+      "run_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90",
+      "run_dir": "outputs/p4/acceptance-9263e108f7/later_execution_error",
+      "cli_exit_code": 1,
+      "workflow_status": "finished",
+      "task_status": "partial",
+      "stop_reason": "round_limit_reached",
+      "selected_round": 1,
+      "selection_reason": "Passing candidates first, then target/available coverage, branch and line coverage, and passed count; ties keep the earlier round.",
+      "selected_all_passed": true,
+      "latest_all_passed": false,
+      "generation_calls": 2,
+      "external_requests": 0,
+      "pytest_processes": 2,
+      "source_unchanged": true,
+      "spec_unchanged": true,
+      "rounds": [
+        {
+          "round": 1,
+          "validation_error": null,
+          "execution_kind": "passed",
+          "passed": 1,
+          "failed": 0,
+          "line_percent": 60.0,
+          "branch_percent": 50.0,
+          "action": "add_missing_cases",
+          "stop_reason": null
+        },
+        {
+          "round": 2,
+          "validation_error": null,
+          "execution_kind": "execution_error",
+          "passed": 1,
+          "failed": 0,
+          "line_percent": 60.0,
+          "branch_percent": 50.0,
+          "action": "finish",
+          "stop_reason": "round_limit_reached"
+        }
+      ],
+      "report": "outputs/p4/acceptance-9263e108f7/later_execution_error/report.md"
+    },
+    "suspected_defect": {
+      "run_id": "run-7e144050e84a40bd92a92936d0033608",
+      "run_dir": "outputs/p4/acceptance-9263e108f7/suspected_defect",
+      "cli_exit_code": 1,
+      "workflow_status": "finished",
+      "task_status": "needs_review",
+      "stop_reason": "suspected_source_defect",
+      "selected_round": 1,
+      "selection_reason": "Passing candidates first, then target/available coverage, branch and line coverage, and passed count; ties keep the earlier round.",
+      "selected_all_passed": false,
+      "latest_all_passed": false,
+      "generation_calls": 1,
+      "external_requests": 0,
+      "pytest_processes": 1,
+      "source_unchanged": true,
+      "spec_unchanged": true,
+      "rounds": [
+        {
+          "round": 1,
+          "validation_error": null,
+          "execution_kind": "assertion_failed",
+          "passed": 0,
+          "failed": 1,
+          "line_percent": 62.5,
+          "branch_percent": 50.0,
+          "action": "request_review",
+          "stop_reason": "suspected_source_defect"
+        }
+      ],
+      "report": "outputs/p4/acceptance-9263e108f7/suspected_defect/report.md"
+    },
+    "ambiguous_assertion": {
+      "run_id": "run-03a6752c9fec4599a86b80cd0ceb4ee2",
+      "run_dir": "outputs/p4/acceptance-9263e108f7/ambiguous_assertion",
+      "cli_exit_code": 1,
+      "workflow_status": "finished",
+      "task_status": "needs_review",
+      "stop_reason": "ambiguous_specification",
+      "selected_round": 1,
+      "selection_reason": "Passing candidates first, then target/available coverage, branch and line coverage, and passed count; ties keep the earlier round.",
+      "selected_all_passed": false,
+      "latest_all_passed": false,
+      "generation_calls": 1,
+      "external_requests": 0,
+      "pytest_processes": 1,
+      "source_unchanged": true,
+      "spec_unchanged": true,
+      "rounds": [
+        {
+          "round": 1,
+          "validation_error": null,
+          "execution_kind": "assertion_failed",
+          "passed": 2,
+          "failed": 1,
+          "line_percent": 100.0,
+          "branch_percent": null,
+          "action": "request_review",
+          "stop_reason": "ambiguous_specification"
+        }
+      ],
+      "report": "outputs/p4/acceptance-9263e108f7/ambiguous_assertion/report.md"
+    },
+    "timeout": {
+      "run_id": "run-3c358eb65d684ae7ad97ec03aed341b0",
+      "run_dir": "outputs/p4/acceptance-9263e108f7/timeout",
+      "cli_exit_code": 1,
+      "workflow_status": "finished",
+      "task_status": "failed",
+      "stop_reason": "execution_timeout",
+      "selected_round": null,
+      "selection_reason": "No executed runnable candidate is available.",
+      "selected_all_passed": null,
+      "latest_all_passed": false,
+      "generation_calls": 1,
+      "external_requests": 0,
+      "pytest_processes": 1,
+      "source_unchanged": true,
+      "spec_unchanged": true,
+      "rounds": [
+        {
+          "round": 1,
+          "validation_error": null,
+          "execution_kind": "timeout",
+          "passed": 0,
+          "failed": 0,
+          "line_percent": null,
+          "branch_percent": null,
+          "action": "finish",
+          "stop_reason": "execution_timeout"
+        }
+      ],
+      "report": "outputs/p4/acceptance-9263e108f7/timeout/report.md"
+    }
+  }
+}

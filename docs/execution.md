@@ -8,7 +8,7 @@
 
 历史已有执行观察、当前轮已有 evaluations/NN 或 execution 运行目录时拒绝再次启动。即使使用旧 Context 重试，也不能覆盖同轮证据；异常后保留诊断目录，需要新建任务重跑。
 
-未通过生成校验的候选没有 candidate_ready。协调者可以显式把该候选交给评估节点；节点仅生成 assessment 和修复/复核/停止建议，tool_calls=0、pytest_started=false、execution/coverage=null。尚未实现的 P4 调度会负责这一分支。宿主在执行前再次调用 validate_generated_tests，校验失败同样不会启动 pytest。
+未通过生成校验的候选没有 candidate_ready。P4 Workflow 会将该候选交给评估节点；节点仅生成 assessment 和修复/复核/停止建议，tool_calls=0、pytest_started=false、execution/coverage=null。宿主在执行前再次调用 validate_generated_tests，校验失败同样不会启动 pytest。
 
 ## 一次实测与证据
 
@@ -33,7 +33,7 @@
 
 ExecutionFeedback 使用原 ExecutionResult/CoverageResult，增加 validation_error、issues、protected_tests。source_hints_json 保存 JSON 对象的文本，每次解码得到独立结构，避免共享 vendor 嵌套字典；其中包含 coverage_source_hints、affected_functions、caller_chain_functions、direct_call_evidence、prior_strategy 等原策略信息。修复和补充建议发出 execution_feedback，消息负载内含完整反馈，并引用同轮 assessment 文件。
 
-EVALUATION_WORKFLOW 的 feedback_routes 仅声明合法发送方向 test_execution → test_generation。apply_result 校验消息、落盘 assessment、候选观察、动作和证据一致；没有新增循环调度。验收脚本手动传递一次低覆盖反馈，证明 P2 能消费真实 P3 消息并保护 test_score_pass，自动预算与路由仍属于 P4。
+EVALUATION_WORKFLOW 的 feedback_routes 声明合法发送方向 test_execution → test_generation。apply_result 校验消息、落盘 assessment、候选观察、动作和证据一致。P3 验收脚本手动传递一次低覆盖反馈；P4 TESTING_WORKFLOW 通过同一边自动反馈，并校验预算、路由和最终业务结论，详见 [workflow.md](workflow.md)。
 
 ## 已验证的边界
 

@@ -71,6 +71,15 @@ class WorkflowState(ContractModel):
             raise ValueError("error states require an error code")
         if self.config.mode == "demo" and self.task_status is not None:
             raise ValueError("demo handoff cannot claim a measured test conclusion")
+        if self.config.mode != "demo" and self.workflow_status in {"finished", "error"}:
+            if self.task_status is None or self.stop_reason is None or self.stop_reason != business.stop_reason:
+                raise ValueError("terminal testing workflows require a consistent business conclusion")
+            if self.task_status == TaskStatus.COMPLETED:
+                latest = business.history[-1] if business.history else None
+                if (self.workflow_status != "finished" or self.stop_reason != StopReason.COVERAGE_TARGET_MET
+                        or latest is None or latest.execution is None or not latest.execution.all_passed
+                        or latest.coverage is None or not latest.coverage.meets_target):
+                    raise ValueError("completion requires the latest real passing and target coverage evidence")
         return self
 
 

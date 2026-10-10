@@ -1,0 +1,708 @@
+{
+  "$defs": {
+    "AgentAction": {
+      "enum": [
+        "analyze_source",
+        "generate_tests",
+        "run_tests",
+        "repair_generated_test",
+        "add_missing_cases",
+        "request_review",
+        "finish"
+      ],
+      "title": "AgentAction",
+      "type": "string"
+    },
+    "ArtifactRef": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "minLength": 1,
+          "title": "Path",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "candidate",
+            "tests",
+            "demo_observation",
+            "execution",
+            "coverage",
+            "report",
+            "agentdev_candidate",
+            "plan",
+            "llm_result",
+            "subject",
+            "assessment",
+            "execution_evidence"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "round": {
+          "maximum": 3,
+          "minimum": 1,
+          "title": "Round",
+          "type": "integer"
+        },
+        "candidate_id": {
+          "minLength": 1,
+          "title": "Candidate Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "kind",
+        "sha256",
+        "round",
+        "candidate_id"
+      ],
+      "title": "ArtifactRef",
+      "type": "object"
+    },
+    "BranchArc": {
+      "additionalProperties": false,
+      "description": "Coverage arcs may use negative line numbers for code-object exits.",
+      "properties": {
+        "start": {
+          "title": "Start",
+          "type": "integer"
+        },
+        "end": {
+          "title": "End",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "start",
+        "end"
+      ],
+      "title": "BranchArc",
+      "type": "object"
+    },
+    "CoverageResult": {
+      "additionalProperties": false,
+      "properties": {
+        "target_file": {
+          "format": "path",
+          "title": "Target File",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "available",
+            "unavailable"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "covered_lines": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Covered Lines"
+        },
+        "total_lines": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Total Lines"
+        },
+        "covered_branches": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Covered Branches"
+        },
+        "total_branches": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Total Branches"
+        },
+        "missing_lines": {
+          "default": [],
+          "items": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "title": "Missing Lines",
+          "type": "array"
+        },
+        "missing_branches": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/BranchArc"
+          },
+          "title": "Missing Branches",
+          "type": "array"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error"
+        }
+      },
+      "required": [
+        "target_file",
+        "status"
+      ],
+      "title": "CoverageResult",
+      "type": "object"
+    },
+    "ExecutionFeedback": {
+      "additionalProperties": false,
+      "properties": {
+        "candidate_id": {
+          "minLength": 1,
+          "title": "Candidate Id",
+          "type": "string"
+        },
+        "execution": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ExecutionResult"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "coverage": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CoverageResult"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "validation_error": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Validation Error"
+        },
+        "issues": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Issue"
+          },
+          "title": "Issues",
+          "type": "array"
+        },
+        "protected_tests": {
+          "default": [],
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Protected Tests",
+          "type": "array"
+        },
+        "source_hints_json": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Hints Json"
+        }
+      },
+      "required": [
+        "candidate_id"
+      ],
+      "title": "ExecutionFeedback",
+      "type": "object"
+    },
+    "ExecutionKind": {
+      "enum": [
+        "passed",
+        "assertion_failed",
+        "execution_error",
+        "collection_error",
+        "internal_error",
+        "usage_error",
+        "interrupted",
+        "no_tests",
+        "timeout",
+        "launch_error",
+        "result_error"
+      ],
+      "title": "ExecutionKind",
+      "type": "string"
+    },
+    "ExecutionResult": {
+      "additionalProperties": false,
+      "description": "Tool observations. Null counters mean unknown, not an observed zero.",
+      "properties": {
+        "kind": {
+          "$ref": "#/$defs/ExecutionKind"
+        },
+        "exit_code": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Exit Code"
+        },
+        "collected": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Collected"
+        },
+        "executed": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Executed"
+        },
+        "passed": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Passed"
+        },
+        "failed": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Failed"
+        },
+        "errors": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Errors"
+        },
+        "skipped": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Skipped"
+        },
+        "xfailed": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Xfailed"
+        },
+        "xpassed": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Xpassed"
+        },
+        "stdout": {
+          "default": "",
+          "title": "Stdout",
+          "type": "string"
+        },
+        "stderr": {
+          "default": "",
+          "title": "Stderr",
+          "type": "string"
+        },
+        "timed_out": {
+          "default": false,
+          "title": "Timed Out",
+          "type": "boolean"
+        },
+        "stdout_truncated": {
+          "default": false,
+          "title": "Stdout Truncated",
+          "type": "boolean"
+        },
+        "stderr_truncated": {
+          "default": false,
+          "title": "Stderr Truncated",
+          "type": "boolean"
+        },
+        "duration_seconds": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Duration Seconds"
+        },
+        "failures": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/FailureObservation"
+          },
+          "title": "Failures",
+          "type": "array"
+        }
+      },
+      "required": [
+        "kind",
+        "exit_code"
+      ],
+      "title": "ExecutionResult",
+      "type": "object"
+    },
+    "FailureObservation": {
+      "additionalProperties": false,
+      "description": "Structured pytest exception facts, never supplied by generation output.",
+      "properties": {
+        "nodeid": {
+          "minLength": 1,
+          "title": "Nodeid",
+          "type": "string"
+        },
+        "phase": {
+          "enum": [
+            "collection",
+            "setup",
+            "call",
+            "teardown"
+          ],
+          "title": "Phase",
+          "type": "string"
+        },
+        "exception_type": {
+          "minLength": 1,
+          "title": "Exception Type",
+          "type": "string"
+        },
+        "path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Path"
+        },
+        "line": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Line"
+        },
+        "missing_module": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Missing Module"
+        }
+      },
+      "required": [
+        "nodeid",
+        "phase",
+        "exception_type"
+      ],
+      "title": "FailureObservation",
+      "type": "object"
+    },
+    "Issue": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "suspected_source_defect",
+            "ambiguous_specification",
+            "generation_error",
+            "environment_error",
+            "coverage_unavailable",
+            "other"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "summary": {
+          "minLength": 1,
+          "title": "Summary",
+          "type": "string"
+        },
+        "evidence": {
+          "default": [],
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "round_number": {
+          "anyOf": [
+            {
+              "maximum": 3,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Round Number"
+        },
+        "scenario_id": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Scenario Id"
+        }
+      },
+      "required": [
+        "kind",
+        "summary"
+      ],
+      "title": "Issue",
+      "type": "object"
+    },
+    "MessagePayload": {
+      "additionalProperties": false,
+      "properties": {
+        "candidate_id": {
+          "minLength": 1,
+          "title": "Candidate Id",
+          "type": "string"
+        },
+        "artifact": {
+          "$ref": "#/$defs/ArtifactRef"
+        },
+        "reason": {
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        },
+        "recommended_action": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AgentAction"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "feedback": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ExecutionFeedback"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "candidate_id",
+        "artifact",
+        "reason"
+      ],
+      "title": "MessagePayload",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "message_id": {
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+      "title": "Message Id",
+      "type": "string"
+    },
+    "run_id": {
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+      "title": "Run Id",
+      "type": "string"
+    },
+    "round": {
+      "maximum": 3,
+      "minimum": 1,
+      "title": "Round",
+      "type": "integer"
+    },
+    "sender": {
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+      "title": "Sender",
+      "type": "string"
+    },
+    "receiver": {
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+      "title": "Receiver",
+      "type": "string"
+    },
+    "type": {
+      "enum": [
+        "candidate_ready",
+        "execution_feedback",
+        "demo_observation"
+      ],
+      "title": "Type",
+      "type": "string"
+    },
+    "payload": {
+      "$ref": "#/$defs/MessagePayload"
+    }
+  },
+  "required": [
+    "message_id",
+    "run_id",
+    "round",
+    "sender",
+    "receiver",
+    "type",
+    "payload"
+  ],
+  "title": "Message",
+  "type": "object"
+}

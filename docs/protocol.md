@@ -1,6 +1,6 @@
 # 节点协议与状态提交
 
-版本：1.0（P3 兼容增加）/ 2026-10-10。代码以 `src/test_workflow/` 为准，Pydantic 校验拒绝额外字段；JSON 保存采用旧 `ContractModel.canonical_json()`，恢复采用 `model_validate_json()`，避免 computed_field 反向输入错误。
+版本：1.0（P4 兼容增加）/ 2026-10-10。代码以 `src/test_workflow/` 为准，Pydantic 校验拒绝额外字段；JSON 保存采用旧 `ContractModel.canonical_json()`，恢复采用 `model_validate_json()`，避免 computed_field 反向输入错误。
 
 ## 接口与顺序定义
 
@@ -34,7 +34,7 @@ final = runner.run(initial_state)
 {"mode":"demo","max_rounds":3,"execution_timeout_seconds":30,"model":null}
 ```
 
-当前 CLI 使用该默认配置，未提供配置文件读取选项。模型为空时，旧 TaskInput 使用明确的离线模型标识以满足旧 Schema；这不是一次模型调用。
+P1 demo 子命令使用该默认配置。P4 `run --demo` 使用 mode=offline，真实 `run` 使用 mode=real 并通过 --env-file 配置模型；离线模式不读取配置文件。模型为空时，旧 TaskInput 使用明确的离线模型标识以满足旧 Schema；这不是一次模型调用。
 
 候选唯一标识为 `<run_id>:<round>`。消息的 round 代表来源轮次；未来反馈生成的目标轮次由编排器另行指定。消息文件采用 POSIX 形式的相对路径，拒绝绝对路径、盘符、反斜杠、`..` 和 Windows ADS；解析后再检查真实路径归属与摘要，能拒绝向任务外的 junction 引用。
 
@@ -77,6 +77,14 @@ AgentResult 增加可空 assessment 和默认空 diagnostic_paths；MessagePaylo
 
 ExecutionFeedback 直接复用原执行/覆盖模型，保存校验错误、issues、protected_tests 和独立序列化的 source_hints_json。没有执行不能有覆盖率，校验拒绝不能附执行。错误 Result 没有 patch/messages/artifacts/assessment 成功输出，但可提供任务内相对诊断目录。
 
-EVALUATION_WORKFLOW.feedback_routes 声明执行→生成的反馈边，不能连接未知节点、自连接或重复声明。apply_result 校验 assessment 文件、所有实测证据和消息负载一致，执行观察只能更新当前候选，不允许改写生成内容或重复执行历史。该定义只允许提案发送方向；固定 run() 未扩展为反馈循环。P3 协调验收脚本手动调用节点和保存状态，P4 再实现正式调度与最终状态提交。
+EVALUATION_WORKFLOW.feedback_routes 声明执行→生成的反馈边，不能连接未知节点、自连接或重复声明。apply_result 校验 assessment 文件、所有实测证据和消息负载一致，执行观察只能更新当前候选，不允许改写生成内容或重复执行历史。P3 协调验收脚本仍手动调用节点；P4 的 TESTING_WORKFLOW 使用同一反馈边，通过 run() 实现自动调度与最终状态提交。
 
 执行接口与错误约定详见 [execution.md](execution.md)。
+
+## P4 的兼容增加
+
+WorkflowConfig.mode 增加 offline，表示离线生成、真实测试执行；demo 继续表示 P1 假节点，不能提交业务结论。测量模式的终止状态要求 task_status 和一致的 stop_reason；completed 要求最新候选全通过及覆盖达标。Workflow 的 selected_round 与 AgentState.best_available_round 同步。
+
+Event 增加 node_failed、route_selected，以及可空 duration_seconds、action、stop_reason；旧事件依靠默认值继续有效。每次节点调用在 node_results/NN/<agent>/ 保存 Context/Result，评估建议经过 Workflow 校验后才决定循环或停止。
+
+当前契约示例与 Schema 在 examples/contracts/p4/，包括完成任务、两轮反馈、后轮执行错误的历史选择状态，以及第二轮生成 Context 和其来源反馈消息。P1–P3 的契约样例保留为历史证据。详见 [workflow.md](workflow.md)。

@@ -1,6 +1,6 @@
 # 多 Agent 测试 Workflow 工程设计
 
-版本：P3 / 2026-10-10。**已实现节点契约、注册表、顺序定义、状态与日志、单步首轮/修订生成，以及真实执行与评估节点；自动反馈调度和最终报告仍为 P4–P6 的实现约定。** 测试生成与执行能力来自 AgentDev，本项目新增节点边界、结构化交接、状态所有权和统一路由。
+版本：P4 / 2026-10-10。**已实现两个 Agent、结构化协议、状态持久化、顺序调度、最多三轮自动反馈、停止路由、历史选择与基本报告导出。** 测试生成与执行能力来自 AgentDev，本项目新增节点边界、结构化交接、状态所有权和统一路由。真实模型质量验收和报告扩展分别留在 P5/P6。
 
 ## 架构与职责
 
@@ -61,12 +61,15 @@ outputs/<run_id>/
   run.json, state.json                 Workflow 任务元数据与状态
   events.jsonl, messages.jsonl         Workflow 事件、消息
   report.md, summary.json              汇总结果
+  node_results/NN/<node>/              每次节点 Context/Result
+  handoffs/NN/candidate.json           外层候选交接
+  evaluations/NN/assessment.json       当前轮执行评估
+  final/test_subject.py, subject.py    可用时导出所选测试及源码副本
   agent_workspace/                    由生成适配器创建
     subject.py
     rounds/01/plan.json, candidate.json, llm_result.json, test_subject.py
     rounds/01/executions/run-*/         pytest、JUnit、coverage 证据
     rounds/02/...
-    test_subject.py                    选中的最终候选
 ```
 
 首轮前只创建外层目录，内层尚不存在。若使用旧 `prepared_run_id`，内层只能有 run.json 与 trace.jsonl，且标识必须匹配；P1 优先选不预建内层的简单方案。如需要统一旧工具轨迹，适配器使用同一 Workflow run_id 创建旧 TraceWriter，再将其标识传给首轮保存函数；不要为凑一致性调用旧完整循环。
@@ -85,7 +88,7 @@ Workflow 轨迹和 AgentDev 工具轨迹分开写入，各自唯一写入者。�
 | 不增加覆盖率阈值参数 | 原模型固定 90%/80%，统一门禁和报告 | P3/P5 |
 | 无模型 ResultSummaryNode 作为扩展示例 | 证明注册/流程定义扩展，不虚报第三个 Agent | P6 |
 
-P1 已完成协议、状态、注册、固定顺序调度和假节点 CLI；P2 已接首轮/修订；P3 已接执行/归因；P4 扩充路由/预算/正式 CLI；P5 验收；P6 完善报告与扩展证明；P7 干净安装与提交。已实现契约见 [docs/protocol.md](docs/protocol.md)、[docs/generation.md](docs/generation.md) 和 [docs/execution.md](docs/execution.md)，阶段证据见 evaluation/p1.md、evaluation/p2.md 和 evaluation/p3.md。
+P1–P4 已完成；P5 做系统与真实模型验收，P6 完善报告与扩展证明，P7 做干净安装与提交。已实现契约见 [docs/protocol.md](docs/protocol.md)、[docs/generation.md](docs/generation.md)、[docs/execution.md](docs/execution.md) 和 [docs/workflow.md](docs/workflow.md)，阶段证据见 evaluation/p1.md 至 evaluation/p4.md。
 
 ## P2 生成边界与路径映射
 

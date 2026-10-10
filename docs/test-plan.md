@@ -1,6 +1,6 @@
 # 测试与验收计划
 
-版本：P3 / 2026-10-10。本表是新 Workflow 的完整验收计划；旧项目基线见 `evaluation/baseline.md`，P1/P2 历史证据保留，当前 148 项 Workflow 测试、128 项相关复用回归和真实执行节点证据见 `evaluation/p3.md`。完整自动路由仍待实施。验收以行为和证据为准，不以方法名字或旧项目测试通过代替。
+版本：P4 / 2026-10-10。本表是新 Workflow 的完整验收计划；旧项目基线见 `evaluation/baseline.md`，P1–P3 历史证据保留，当前 175 项 Workflow 测试、52 项相关复用回归和 14 个正式 CLI 闭环证据见 `evaluation/p4.md`。自动路由已完成，真实模型质量和完整系统验收留在 P5。验收以行为和证据为准，不以方法名字或旧项目测试通过代替。
 
 ## 测试分层
 
@@ -53,3 +53,5 @@ P2：`python scripts/p2_baseline.py` 手动提供真实首轮执行证据，证�
 P3：`python scripts/p3_baseline.py` 用真实执行节点验证 12 类诊断与反馈案例，11 次 pytest 子进程全部结束；低覆盖的一次手动修订证明 P2 消费真实 P3 反馈。26 项执行适配测试覆盖零进程门禁、精确轮次/超时、目标覆盖、错误归因、进程停止、导出失败、执行后完整性变化和伪造证据；33 项新增契约样例验证纳入 148 项整体回归。相关 vendor 回归范围为 test_test_runner.py、test_coverage_runner.py、test_failure_analysis.py、test_agent.py，共 128 项。W01/W02 的最终状态和自动调度部分仍待 P4/P5。
 
 只为有风险的协议、路由、历史保护和跨节点行为写测试；文案、简单 getter 等低影响改动不写镜像测试。检查通过后不无理由重复跑全量测试。
+
+P4：`python scripts/p4_baseline.py` 通过正式 CLI 实测 14 个案例、17 次 pytest 执行。新增 27 项编排/CLI 集成测试覆盖顺序、反馈来源、修复、三轮预算、无进展、历史保护与选择、缺陷复核、超时、覆盖导出错误、节点/模型失败、报告失败、扩展接入、输出路径和模式配置。当前回归 175 passed；相关 vendor test_agent.py 与 test_generation.py 共 52 passed。真实 CLI 接线和结构化模型失败使用 Mock 或故障客户端，实际模型请求为 0；真实质量仍待 P5。

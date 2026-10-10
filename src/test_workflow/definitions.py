@@ -1,4 +1,4 @@
-"""Sequential nodes and permitted feedback edges; loop scheduling arrives in P4."""
+"""Sequential nodes and explicit permitted feedback edges."""
 
 from typing import Annotated
 
@@ -49,3 +49,5 @@ DEMO_WORKFLOW = WorkflowDefinition(name="p1_handoff", nodes=(
 EVALUATION_WORKFLOW = DEMO_WORKFLOW.updated(name="p3_evaluation", feedback_routes=(
     FeedbackRoute(sender="test_execution", receiver="test_generation"),
 ))
+
+TESTING_WORKFLOW = EVALUATION_WORKFLOW.updated(name="testing_workflow")

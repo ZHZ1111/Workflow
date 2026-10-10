@@ -1,0 +1,57 @@
+{
+  "plan": {
+    "schema_version": "1.1",
+    "target_functions": [
+      "calculate_discount"
+    ],
+    "oracle_mode": "specification",
+    "entry_functions": [
+      "calculate_discount"
+    ],
+    "relationships": [],
+    "strategy": [
+      {
+        "subject_kind": "function",
+        "function_name": "calculate_discount",
+        "relationship_id": null,
+        "decision": "unit_test",
+        "reason": "Explicit behavior specification"
+      }
+    ],
+    "scenarios": [
+      {
+        "scenario_id": "discount_at_100",
+        "target_function": "calculate_discount",
+        "category": "boundary",
+        "inputs": {
+          "args": [
+            100
+          ],
+          "kwargs": {}
+        },
+        "expected_behavior": "returns 90",
+        "expected_basis": {
+          "kind": "specification",
+          "detail": "See examples/discount.md"
+        },
+        "test_kind": "unit",
+        "involved_functions": [
+          "calculate_discount"
+        ],
+        "relationship_ids": [],
+        "steps": []
+      }
+    ]
+  },
+  "code": "import pytest\nfrom subject import calculate_discount\n\ndef test_discount_at_100():\n    assert calculate_discount(100) == 90\n",
+  "mappings": [
+    {
+      "test_function": "test_discount_at_100",
+      "scenario_ids": [
+        "discount_at_100"
+      ]
+    }
+  ],
+  "assumptions": [],
+  "questions": []
+}

@@ -20,11 +20,14 @@ class Event(ContractModel):
     schema_version: Literal["1.0"] = "1.0"
     seq: Annotated[StrictInt, Field(ge=1)]
     run_id: StableId
-    type: Literal["workflow_started", "node_started", "message_sent", "node_finished", "workflow_finished", "workflow_error"]
+    type: Literal["workflow_started", "node_started", "message_sent", "node_finished", "node_failed", "workflow_finished", "workflow_error", "route_selected"]
     node: StableId | None = None
     round: RoundNumber | None = None
     message_id: StableId | None = None
     error_code: StableId | None = None
+    duration_seconds: Annotated[float, Field(ge=0)] | None = None
+    action: StableId | None = None
+    stop_reason: StableId | None = None
     timestamp: datetime = Field(default_factory=utc_now)
 
 

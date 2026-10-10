@@ -1,0 +1,853 @@
+{
+  "schema_version": "1.0",
+  "run_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90",
+  "run_dir": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\p4\\acceptance-9263e108f7\\later_execution_error",
+  "workflow_status": "finished",
+  "task_status": "partial",
+  "current_node": null,
+  "current_round": 2,
+  "config": {
+    "mode": "offline",
+    "max_rounds": 2,
+    "execution_timeout_seconds": 30,
+    "model": null
+  },
+  "agent_state": {
+    "schema_version": "1.1",
+    "run_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90",
+    "request": {
+      "source_path": "E:\\File-Document\\SE\\hw2\\Workflow\\examples\\validation.py",
+      "model": {
+        "provider": "deepseek",
+        "model": "offline-fixture-model",
+        "base_url": "https://example.com",
+        "request_timeout_seconds": 60
+      },
+      "spec_path": "E:\\File-Document\\SE\\hw2\\Workflow\\examples\\validation.md",
+      "output_dir": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\p4\\acceptance-9263e108f7\\later_execution_error\\agent_workspace",
+      "max_rounds": 2,
+      "execution_timeout_seconds": 30
+    },
+    "oracle_mode": "specification",
+    "behavior_specification": "# 多分支校验：classify_score\n\n## 行为约定\n\n- 输入 `score` 必须为整数且不属于 `bool`；接受整数子类，布尔值除外。\n- 先检查类型：浮点数、字符串、`None`、布尔值等抛出 `TypeError`，不进行类型转换。\n- 类型合法后检查范围：小于 0 或大于 100 抛出 `ValueError`。\n- 范围合法时：0–59 返回字符串 `fail`；60–89 返回 `pass`；90–100 返回 `excellent`。\n- 不约束异常消息文本，只约束异常类型；函数无外部副作用。\n\n## 可核验场景\n\n| 输入 | 预期 |\n|---|---|\n| `0`, `59` | `\"fail\"` |\n| `60`, `89` | `\"pass\"` |\n| `90`, `100` | `\"excellent\"` |\n| `-1`, `101` | 抛出 `ValueError` |\n| `60.0`, `\"60\"`, `None` | 抛出 `TypeError` |\n| `True`, `False` | 抛出 `TypeError` |\n\n测试需要覆盖类别交界和两侧越界；仅验证一个正常成绩不能说明分支已充分覆盖。\n",
+    "source_info": {
+      "source_path": "E:\\File-Document\\SE\\hw2\\Workflow\\examples\\validation.py",
+      "source_code": "\"\"\"多分支校验样例：成绩分类及异常输入。\"\"\"\n\n\ndef classify_score(score: int) -> str:\n    \"\"\"将 0..100 的整数成绩分类，bool 不属于合法整数输入。\n\n    0..59 返回 fail，60..89 返回 pass，90..100 返回 excellent。\n    非整数或 bool 抛 TypeError；整数超出范围抛 ValueError。\n    \"\"\"\n    if isinstance(score, bool) or not isinstance(score, int):\n        raise TypeError(\"score must be an integer, excluding bool\")\n    if score < 0 or score > 100:\n        raise ValueError(\"score must be between 0 and 100\")\n    if score < 60:\n        return \"fail\"\n    if score < 90:\n        return \"pass\"\n    return \"excellent\"\n",
+      "functions": [
+        {
+          "name": "classify_score",
+          "signature": "(score: int)",
+          "start_line": 4,
+          "end_line": 18,
+          "docstring": "将 0..100 的整数成绩分类，bool 不属于合法整数输入。\n\n0..59 返回 fail，60..89 返回 pass，90..100 返回 excellent。\n非整数或 bool 抛 TypeError；整数超出范围抛 ValueError。"
+        }
+      ],
+      "encoding": "utf-8",
+      "imports": [],
+      "branches": [
+        {
+          "kind": "if",
+          "line": 10,
+          "source": "if isinstance(score, bool) or not isinstance(score, int)"
+        },
+        {
+          "kind": "raise",
+          "line": 11,
+          "source": "raise TypeError(\"score must be an integer, excluding bool\")"
+        },
+        {
+          "kind": "if",
+          "line": 12,
+          "source": "if score < 0 or score > 100"
+        },
+        {
+          "kind": "raise",
+          "line": 13,
+          "source": "raise ValueError(\"score must be between 0 and 100\")"
+        },
+        {
+          "kind": "if",
+          "line": 14,
+          "source": "if score < 60"
+        },
+        {
+          "kind": "if",
+          "line": 16,
+          "source": "if score < 90"
+        }
+      ],
+      "call_sites": [
+        {
+          "call_id": "call:classify_score:10:7:10:30",
+          "caller": "classify_score",
+          "expression": "isinstance(score, bool)",
+          "line": 10,
+          "source": "if isinstance(score, bool) or not isinstance(score, int):",
+          "argument_expressions": [
+            "score",
+            "bool"
+          ]
+        },
+        {
+          "call_id": "call:classify_score:10:38:10:60",
+          "caller": "classify_score",
+          "expression": "isinstance(score, int)",
+          "line": 10,
+          "source": "if isinstance(score, bool) or not isinstance(score, int):",
+          "argument_expressions": [
+            "score",
+            "int"
+          ]
+        },
+        {
+          "call_id": "call:classify_score:11:14:11:67",
+          "caller": "classify_score",
+          "expression": "TypeError(\"score must be an integer, excluding bool\")",
+          "line": 11,
+          "source": "raise TypeError(\"score must be an integer, excluding bool\")",
+          "argument_expressions": [
+            "\"score must be an integer, excluding bool\""
+          ]
+        },
+        {
+          "call_id": "call:classify_score:13:14:13:59",
+          "caller": "classify_score",
+          "expression": "ValueError(\"score must be between 0 and 100\")",
+          "line": 13,
+          "source": "raise ValueError(\"score must be between 0 and 100\")",
+          "argument_expressions": [
+            "\"score must be between 0 and 100\""
+          ]
+        }
+      ],
+      "direct_calls": [],
+      "unresolved_calls": []
+    },
+    "current_round": 2,
+    "history": [
+      {
+        "number": 1,
+        "generated": {
+          "plan": {
+            "schema_version": "1.1",
+            "target_functions": [
+              "classify_score"
+            ],
+            "oracle_mode": "specification",
+            "entry_functions": [
+              "classify_score"
+            ],
+            "relationships": [],
+            "strategy": [
+              {
+                "subject_kind": "function",
+                "function_name": "classify_score",
+                "relationship_id": null,
+                "decision": "unit_test",
+                "reason": "Explicit behavior specification"
+              }
+            ],
+            "scenarios": [
+              {
+                "scenario_id": "score_pass",
+                "target_function": "classify_score",
+                "category": "boundary",
+                "inputs": {
+                  "args": [
+                    60
+                  ],
+                  "kwargs": {}
+                },
+                "expected_behavior": "returns 'pass'",
+                "expected_basis": {
+                  "kind": "specification",
+                  "detail": "See examples/validation.md"
+                },
+                "test_kind": "unit",
+                "involved_functions": [
+                  "classify_score"
+                ],
+                "relationship_ids": [],
+                "steps": []
+              }
+            ]
+          },
+          "code": "import pytest\nfrom subject import classify_score\n\ndef test_score_pass():\n    assert classify_score(60) == 'pass'\n",
+          "mappings": [
+            {
+              "test_function": "test_score_pass",
+              "scenario_ids": [
+                "score_pass"
+              ]
+            }
+          ],
+          "assumptions": [],
+          "questions": []
+        },
+        "test_path": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\p4\\acceptance-9263e108f7\\later_execution_error\\agent_workspace\\rounds\\01\\test_subject.py",
+        "validation_error": null,
+        "execution": {
+          "kind": "passed",
+          "exit_code": 0,
+          "collected": 1,
+          "executed": 1,
+          "passed": 1,
+          "failed": 0,
+          "errors": 0,
+          "skipped": 0,
+          "xfailed": 0,
+          "xpassed": 0,
+          "stdout": ".                                                                        [100%]\r\n=================================== PASSES ====================================\r\n=========================== short test summary info ===========================\r\nPASSED rounds/01/test_subject.py::test_score_pass\r\n1 passed in 0.17s\r\n",
+          "stderr": "",
+          "timed_out": false,
+          "stdout_truncated": false,
+          "stderr_truncated": false,
+          "duration_seconds": 1.098353599998518,
+          "failures": []
+        },
+        "coverage": {
+          "target_file": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\p4\\acceptance-9263e108f7\\later_execution_error\\agent_workspace\\subject.py",
+          "status": "available",
+          "covered_lines": 6,
+          "total_lines": 10,
+          "covered_branches": 4,
+          "total_branches": 8,
+          "missing_lines": [
+            11,
+            13,
+            15,
+            18
+          ],
+          "missing_branches": [
+            {
+              "start": 10,
+              "end": 11
+            },
+            {
+              "start": 12,
+              "end": 13
+            },
+            {
+              "start": 14,
+              "end": 15
+            },
+            {
+              "start": 16,
+              "end": 18
+            }
+          ],
+          "error": null
+        }
+      },
+      {
+        "number": 2,
+        "generated": {
+          "plan": {
+            "schema_version": "1.1",
+            "target_functions": [
+              "classify_score"
+            ],
+            "oracle_mode": "specification",
+            "entry_functions": [
+              "classify_score"
+            ],
+            "relationships": [],
+            "strategy": [
+              {
+                "subject_kind": "function",
+                "function_name": "classify_score",
+                "relationship_id": null,
+                "decision": "unit_test",
+                "reason": "Explicit behavior specification"
+              }
+            ],
+            "scenarios": [
+              {
+                "scenario_id": "score_pass",
+                "target_function": "classify_score",
+                "category": "boundary",
+                "inputs": {
+                  "args": [
+                    60
+                  ],
+                  "kwargs": {}
+                },
+                "expected_behavior": "returns 'pass'",
+                "expected_basis": {
+                  "kind": "specification",
+                  "detail": "See examples/validation.md"
+                },
+                "test_kind": "unit",
+                "involved_functions": [
+                  "classify_score"
+                ],
+                "relationship_ids": [],
+                "steps": []
+              },
+              {
+                "scenario_id": "score_pass_again",
+                "target_function": "classify_score",
+                "category": "boundary",
+                "inputs": {
+                  "args": [
+                    60
+                  ],
+                  "kwargs": {}
+                },
+                "expected_behavior": "returns 'pass'",
+                "expected_basis": {
+                  "kind": "specification",
+                  "detail": "See examples/validation.md"
+                },
+                "test_kind": "unit",
+                "involved_functions": [
+                  "classify_score"
+                ],
+                "relationship_ids": [],
+                "steps": []
+              }
+            ]
+          },
+          "code": "import pytest\nfrom subject import classify_score\n\ndef test_score_pass():\n    assert classify_score(60) == 'pass'\n\ndef test_score_pass_again():\n    assert classify_score(60) == undefined_expected_score\n",
+          "mappings": [
+            {
+              "test_function": "test_score_pass",
+              "scenario_ids": [
+                "score_pass"
+              ]
+            },
+            {
+              "test_function": "test_score_pass_again",
+              "scenario_ids": [
+                "score_pass_again"
+              ]
+            }
+          ],
+          "assumptions": [],
+          "questions": []
+        },
+        "test_path": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\p4\\acceptance-9263e108f7\\later_execution_error\\agent_workspace\\rounds\\02\\test_subject.py",
+        "validation_error": null,
+        "execution": {
+          "kind": "execution_error",
+          "exit_code": 1,
+          "collected": 2,
+          "executed": 2,
+          "passed": 1,
+          "failed": 0,
+          "errors": 1,
+          "skipped": 0,
+          "xfailed": 0,
+          "xpassed": 0,
+          "stdout": ".F                                                                       [100%]\r\n================================== FAILURES ===================================\r\n____________________________ test_score_pass_again ____________________________\r\nrounds\\02\\test_subject.py:8: in test_score_pass_again\r\n    assert classify_score(60) == undefined_expected_score\r\n                                 ^^^^^^^^^^^^^^^^^^^^^^^^\r\nE   NameError: name 'undefined_expected_score' is not defined\r\n=================================== PASSES ====================================\r\n=========================== short test summary info ===========================\r\nPASSED rounds/02/test_subject.py::test_score_pass\r\nFAILED rounds/02/test_subject.py::test_score_pass_again - NameError: name 'un...\r\n1 failed, 1 passed in 0.24s\r\n",
+          "stderr": "rounds/02/test_subject.py::test_score_pass_again (call, rounds\\02\\test_subject.py:7)\nrounds\\02\\test_subject.py:8: in test_score_pass_again\n    assert classify_score(60) == undefined_expected_score\n                                 ^^^^^^^^^^^^^^^^^^^^^^^^\nE   NameError: name 'undefined_expected_score' is not defined",
+          "timed_out": false,
+          "stdout_truncated": false,
+          "stderr_truncated": false,
+          "duration_seconds": 1.1544460999939474,
+          "failures": [
+            {
+              "nodeid": "rounds/02/test_subject.py::test_score_pass_again",
+              "phase": "call",
+              "exception_type": "NameError",
+              "path": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\p4\\acceptance-9263e108f7\\later_execution_error\\agent_workspace\\rounds\\02\\test_subject.py",
+              "line": 8,
+              "missing_module": null
+            }
+          ]
+        },
+        "coverage": {
+          "target_file": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\p4\\acceptance-9263e108f7\\later_execution_error\\agent_workspace\\subject.py",
+          "status": "available",
+          "covered_lines": 6,
+          "total_lines": 10,
+          "covered_branches": 4,
+          "total_branches": 8,
+          "missing_lines": [
+            11,
+            13,
+            15,
+            18
+          ],
+          "missing_branches": [
+            {
+              "start": 10,
+              "end": 11
+            },
+            {
+              "start": 12,
+              "end": 13
+            },
+            {
+              "start": 14,
+              "end": 15
+            },
+            {
+              "start": 16,
+              "end": 18
+            }
+          ],
+          "error": null
+        }
+      }
+    ],
+    "best_available_round": 1,
+    "next_action": "finish",
+    "stop_reason": "round_limit_reached",
+    "issues": [
+      {
+        "kind": "generation_error",
+        "summary": "生成测试存在语法、名称或导入错误。",
+        "evidence": [
+          "rounds/02/test_subject.py::test_score_pass_again: call, NameError, E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\p4\\acceptance-9263e108f7\\later_execution_error\\agent_workspace\\rounds\\02\\test_subject.py:8"
+        ],
+        "round_number": 2,
+        "scenario_id": null
+      }
+    ],
+    "api_calls": 0,
+    "token_usage": null
+  },
+  "selected_round": 1,
+  "stop_reason": "round_limit_reached",
+  "last_event_seq": 15,
+  "messages": [
+    {
+      "schema_version": "1.0",
+      "message_id": "msg-candidate-01",
+      "run_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90",
+      "round": 1,
+      "sender": "test_generation",
+      "receiver": "test_execution",
+      "type": "candidate_ready",
+      "payload": {
+        "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:1",
+        "artifact": {
+          "path": "handoffs/01/candidate.json",
+          "kind": "candidate",
+          "sha256": "cf937b3e50d0eb3900b864a2b0738dfb98d1f7683e702b87c0d4ee684ce72d09",
+          "round": 1,
+          "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:1"
+        },
+        "reason": "Candidate passed host validation; execution has not started.",
+        "recommended_action": "run_tests",
+        "feedback": null
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "message_id": "msg-feedback-01",
+      "run_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90",
+      "round": 1,
+      "sender": "test_execution",
+      "receiver": "test_generation",
+      "type": "execution_feedback",
+      "payload": {
+        "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:1",
+        "artifact": {
+          "path": "evaluations/01/assessment.json",
+          "kind": "assessment",
+          "sha256": "c9dab7ff6b99ccb8b1c256c2c2314291352571ed05353a6e60a0bff80093a839",
+          "round": 1,
+          "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:1"
+        },
+        "reason": "测试通过但覆盖目标未达到；结合缺失函数与调用链选择补充场景。",
+        "recommended_action": "add_missing_cases",
+        "feedback": {
+          "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:1",
+          "execution": {
+            "kind": "passed",
+            "exit_code": 0,
+            "collected": 1,
+            "executed": 1,
+            "passed": 1,
+            "failed": 0,
+            "errors": 0,
+            "skipped": 0,
+            "xfailed": 0,
+            "xpassed": 0,
+            "stdout": ".                                                                        [100%]\r\n=================================== PASSES ====================================\r\n=========================== short test summary info ===========================\r\nPASSED rounds/01/test_subject.py::test_score_pass\r\n1 passed in 0.17s\r\n",
+            "stderr": "",
+            "timed_out": false,
+            "stdout_truncated": false,
+            "stderr_truncated": false,
+            "duration_seconds": 1.098353599998518,
+            "failures": []
+          },
+          "coverage": {
+            "target_file": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\p4\\acceptance-9263e108f7\\later_execution_error\\agent_workspace\\subject.py",
+            "status": "available",
+            "covered_lines": 6,
+            "total_lines": 10,
+            "covered_branches": 4,
+            "total_branches": 8,
+            "missing_lines": [
+              11,
+              13,
+              15,
+              18
+            ],
+            "missing_branches": [
+              {
+                "start": 10,
+                "end": 11
+              },
+              {
+                "start": 12,
+                "end": 13
+              },
+              {
+                "start": 14,
+                "end": 15
+              },
+              {
+                "start": 16,
+                "end": 18
+              }
+            ],
+            "error": null
+          },
+          "validation_error": null,
+          "issues": [],
+          "protected_tests": [
+            "test_score_pass"
+          ],
+          "source_hints_json": "{\"affected_functions\": [\"classify_score\"], \"caller_chain_functions\": [\"classify_score\"], \"coverage_source_hints\": {\"missing_branches\": [{\"end\": 11, \"end_location\": {\"function\": \"classify_score\", \"kind\": \"source_line\", \"line\": 11, \"source\": \"        raise TypeError(\\\"score must be an integer, excluding bool\\\")\"}, \"start\": 10, \"start_location\": {\"function\": \"classify_score\", \"kind\": \"source_line\", \"line\": 10, \"source\": \"    if isinstance(score, bool) or not isinstance(score, int):\"}}, {\"end\": 13, \"end_location\": {\"function\": \"classify_score\", \"kind\": \"source_line\", \"line\": 13, \"source\": \"        raise ValueError(\\\"score must be between 0 and 100\\\")\"}, \"start\": 12, \"start_location\": {\"function\": \"classify_score\", \"kind\": \"source_line\", \"line\": 12, \"source\": \"    if score < 0 or score > 100:\"}}, {\"end\": 15, \"end_location\": {\"function\": \"classify_score\", \"kind\": \"source_line\", \"line\": 15, \"source\": \"        return \\\"fail\\\"\"}, \"start\": 14, \"start_location\": {\"function\": \"classify_score\", \"kind\": \"source_line\", \"line\": 14, \"source\": \"    if score < 60:\"}}, {\"end\": 18, \"end_location\": {\"function\": \"classify_score\", \"kind\": \"source_line\", \"line\": 18, \"source\": \"    return \\\"excellent\\\"\"}, \"start\": 16, \"start_location\": {\"function\": \"classify_score\", \"kind\": \"source_line\", \"line\": 16, \"source\": \"    if score < 90:\"}}], \"missing_lines\": [{\"function\": \"classify_score\", \"kind\": \"source_line\", \"line\": 11, \"source\": \"        raise TypeError(\\\"score must be an integer, excluding bool\\\")\"}, {\"function\": \"classify_score\", \"kind\": \"source_line\", \"line\": 13, \"source\": \"        raise ValueError(\\\"score must be between 0 and 100\\\")\"}, {\"function\": \"classify_score\", \"kind\": \"source_line\", \"line\": 15, \"source\": \"        return \\\"fail\\\"\"}, {\"function\": \"classify_score\", \"kind\": \"source_line\", \"line\": 18, \"source\": \"    return \\\"excellent\\\"\"}], \"status\": \"available\", \"target_file\": \"E:\\\\File-Document\\\\SE\\\\hw2\\\\Workflow\\\\outputs\\\\p4\\\\acceptance-9263e108f7\\\\later_execution_error\\\\agent_workspace\\\\subject.py\"}, \"direct_call_evidence\": [], \"prior_strategy\": [{\"decision\": \"unit_test\", \"function_name\": \"classify_score\", \"reason\": \"Explicit behavior specification\", \"relationship_id\": null, \"subject_kind\": \"function\"}], \"test_selection_instruction\": \"结合缺失位置、真实调用链和已有策略，判断补充单元边界或入口协作行为，说明新增行为及预期依据；不要机械地为每条调用边添加测试。\"}"
+        }
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "message_id": "msg-candidate-02",
+      "run_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90",
+      "round": 2,
+      "sender": "test_generation",
+      "receiver": "test_execution",
+      "type": "candidate_ready",
+      "payload": {
+        "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:2",
+        "artifact": {
+          "path": "handoffs/02/candidate.json",
+          "kind": "candidate",
+          "sha256": "f803fcff41182448e74c994b2f405ee263ecd10bf7b1d4b8f8857c90efd29848",
+          "round": 2,
+          "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:2"
+        },
+        "reason": "Candidate passed host validation; execution has not started.",
+        "recommended_action": "run_tests",
+        "feedback": null
+      }
+    }
+  ],
+  "consumed_message_ids": [
+    "msg-candidate-01",
+    "msg-feedback-01",
+    "msg-candidate-02"
+  ],
+  "artifacts": [
+    {
+      "path": "handoffs/01/candidate.json",
+      "kind": "candidate",
+      "sha256": "cf937b3e50d0eb3900b864a2b0738dfb98d1f7683e702b87c0d4ee684ce72d09",
+      "round": 1,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/candidate.json",
+      "kind": "agentdev_candidate",
+      "sha256": "fb2d738183aa5d127ec02a1ea1431cb3174d5651c64163cc41639611c8a761a7",
+      "round": 1,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/plan.json",
+      "kind": "plan",
+      "sha256": "9fec9b45696cf54c0439eb03d5869def001ed0e46d2509e8e234a21f5b76dd71",
+      "round": 1,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/llm_result.json",
+      "kind": "llm_result",
+      "sha256": "de5173b22b74a2f2b8f259ebee7b3ec1ef8c0a82dea448ed30d826c438d37070",
+      "round": 1,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:1"
+    },
+    {
+      "path": "agent_workspace/subject.py",
+      "kind": "subject",
+      "sha256": "283e7c1ba21bfbb01d82d0473631f500f552f27f1c801069291b5e0f3777dd7c",
+      "round": 1,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/test_subject.py",
+      "kind": "tests",
+      "sha256": "65ef8e5ca210cdcfa40aefc7eb48bb73c1fb28bb8e8aa023828684e0972e9d7c",
+      "round": 1,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-3r_tjahi/.coverage",
+      "kind": "execution_evidence",
+      "sha256": "825965ce1462cd74c1b1dbef0ca08f1f2890045a1b33564f97d4430382aaab1d",
+      "round": 1,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-3r_tjahi/.coveragerc",
+      "kind": "execution_evidence",
+      "sha256": "34b98bb8504189b50c6874dac53eb05ce9074be35e6ea982a0c27e8d28a6c517",
+      "round": 1,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-3r_tjahi/coverage.json",
+      "kind": "execution_evidence",
+      "sha256": "d5347370daa25e84b374a8491fa175c521c780d8f50d088dc73af1390416de2b",
+      "round": 1,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-3r_tjahi/coverage_export.json",
+      "kind": "execution_evidence",
+      "sha256": "8601cbf781bab1772f6ae3a42638611b9c274cf9f898742ca99db2e2dafd8990",
+      "round": 1,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-3r_tjahi/coverage_export.stderr.txt",
+      "kind": "execution_evidence",
+      "sha256": "c8d043f97810c1e4f7dc336df48b2e09258c59980dc11e013a39426bac8e240b",
+      "round": 1,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-3r_tjahi/coverage_export.stdout.txt",
+      "kind": "execution_evidence",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "round": 1,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-3r_tjahi/coverage_result.json",
+      "kind": "coverage",
+      "sha256": "6d54ee543e19f077353b62ea3534ab229e4d75c9ab02d7215ccce42ba5037a9d",
+      "round": 1,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-3r_tjahi/coverage_source_hints.json",
+      "kind": "execution_evidence",
+      "sha256": "1514003191071afed6095618be59354d56e16c42e5d7bc3bc55272855a33cbdc",
+      "round": 1,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-3r_tjahi/execution.json",
+      "kind": "execution",
+      "sha256": "06d0575a36a6bc23e8c4379b1fd14fc628454704cfc356526f229f9ed704708c",
+      "round": 1,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-3r_tjahi/pytest.ini",
+      "kind": "execution_evidence",
+      "sha256": "bf86cec34582454295d6d58edcaa5238eb52160b89a3032263d679455e826480",
+      "round": 1,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-3r_tjahi/pytest.xml",
+      "kind": "execution_evidence",
+      "sha256": "c6f7ad442fa9bb5433cefd2388f2bddefd5bf057ca01c1d7300b713db4f33c25",
+      "round": 1,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-3r_tjahi/pytest_result.json",
+      "kind": "execution_evidence",
+      "sha256": "093ecea4f3711ec934f311edd8a4f4753d50ab0b0996ee41f3af95e6f55da052",
+      "round": 1,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-3r_tjahi/run_result.json",
+      "kind": "execution_evidence",
+      "sha256": "764d4f5c3e26c870e3f6ece01c9bf902fe9a4092351a316fe7d38b72c8aecd3a",
+      "round": 1,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-3r_tjahi/stderr.txt",
+      "kind": "execution_evidence",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "round": 1,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-3r_tjahi/stdout.txt",
+      "kind": "execution_evidence",
+      "sha256": "07500e5e3321b9f618eb03a117567e5a1a663f155bf430b0f18c9d8caf90e484",
+      "round": 1,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:1"
+    },
+    {
+      "path": "evaluations/01/assessment.json",
+      "kind": "assessment",
+      "sha256": "c9dab7ff6b99ccb8b1c256c2c2314291352571ed05353a6e60a0bff80093a839",
+      "round": 1,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:1"
+    },
+    {
+      "path": "handoffs/02/candidate.json",
+      "kind": "candidate",
+      "sha256": "f803fcff41182448e74c994b2f405ee263ecd10bf7b1d4b8f8857c90efd29848",
+      "round": 2,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:2"
+    },
+    {
+      "path": "agent_workspace/rounds/02/candidate.json",
+      "kind": "agentdev_candidate",
+      "sha256": "58c3ce796bbb6262c85337a8d83237fcf4fefd7657051ae8ce0966348b3d10b2",
+      "round": 2,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:2"
+    },
+    {
+      "path": "agent_workspace/rounds/02/plan.json",
+      "kind": "plan",
+      "sha256": "9ec0b473744c06c53f62ed2deeb475803c26ca6ad2c00b3b1493f9da8b2cec20",
+      "round": 2,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:2"
+    },
+    {
+      "path": "agent_workspace/rounds/02/llm_result.json",
+      "kind": "llm_result",
+      "sha256": "6dd9546b27ca102082a5d70fcdad16e9d258b1888432e7b9fd9d962ba4faf3a2",
+      "round": 2,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:2"
+    },
+    {
+      "path": "agent_workspace/rounds/02/test_subject.py",
+      "kind": "tests",
+      "sha256": "6ff739faef0d41e21e6d443eb1a51e6ea7b1b642525f1cf83e9c9c3ebeb9be40",
+      "round": 2,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:2"
+    },
+    {
+      "path": "agent_workspace/rounds/02/executions/run-8xftsgp8/.coverage",
+      "kind": "execution_evidence",
+      "sha256": "3633b3e8e4dd47ab771876baa1e5f5bff9f97ac8299c6a67938cfc49fd20847c",
+      "round": 2,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:2"
+    },
+    {
+      "path": "agent_workspace/rounds/02/executions/run-8xftsgp8/.coveragerc",
+      "kind": "execution_evidence",
+      "sha256": "34b98bb8504189b50c6874dac53eb05ce9074be35e6ea982a0c27e8d28a6c517",
+      "round": 2,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:2"
+    },
+    {
+      "path": "agent_workspace/rounds/02/executions/run-8xftsgp8/coverage.json",
+      "kind": "execution_evidence",
+      "sha256": "c6116111bb18433047aa7f2cf1ced16c2d0e50f9905e705d80e79f0202f29294",
+      "round": 2,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:2"
+    },
+    {
+      "path": "agent_workspace/rounds/02/executions/run-8xftsgp8/coverage_export.json",
+      "kind": "execution_evidence",
+      "sha256": "b7b355571d6cd07ea2bc1c83fe2153a41c21305f069abf4dbb3404f5a624444e",
+      "round": 2,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:2"
+    },
+    {
+      "path": "agent_workspace/rounds/02/executions/run-8xftsgp8/coverage_export.stderr.txt",
+      "kind": "execution_evidence",
+      "sha256": "5dee0e13656293be3a25465c4d10eaca7e94da46acca5b557ef28e309b2468b9",
+      "round": 2,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:2"
+    },
+    {
+      "path": "agent_workspace/rounds/02/executions/run-8xftsgp8/coverage_export.stdout.txt",
+      "kind": "execution_evidence",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "round": 2,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:2"
+    },
+    {
+      "path": "agent_workspace/rounds/02/executions/run-8xftsgp8/coverage_result.json",
+      "kind": "coverage",
+      "sha256": "6d54ee543e19f077353b62ea3534ab229e4d75c9ab02d7215ccce42ba5037a9d",
+      "round": 2,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:2"
+    },
+    {
+      "path": "agent_workspace/rounds/02/executions/run-8xftsgp8/coverage_source_hints.json",
+      "kind": "execution_evidence",
+      "sha256": "1514003191071afed6095618be59354d56e16c42e5d7bc3bc55272855a33cbdc",
+      "round": 2,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:2"
+    },
+    {
+      "path": "agent_workspace/rounds/02/executions/run-8xftsgp8/execution.json",
+      "kind": "execution",
+      "sha256": "18c0d2703ae0d4019d6737d37d019ed111d913dab4447ae6d13a031a7b9ab777",
+      "round": 2,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:2"
+    },
+    {
+      "path": "agent_workspace/rounds/02/executions/run-8xftsgp8/pytest.ini",
+      "kind": "execution_evidence",
+      "sha256": "bf86cec34582454295d6d58edcaa5238eb52160b89a3032263d679455e826480",
+      "round": 2,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:2"
+    },
+    {
+      "path": "agent_workspace/rounds/02/executions/run-8xftsgp8/pytest.xml",
+      "kind": "execution_evidence",
+      "sha256": "9e5dbf4675f3a2511fc634e07cd888d23f561aa8ee0aa9c9dab505d530df922b",
+      "round": 2,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:2"
+    },
+    {
+      "path": "agent_workspace/rounds/02/executions/run-8xftsgp8/pytest_result.json",
+      "kind": "execution_evidence",
+      "sha256": "900fb0ad80f079813b2a8b4000bb8699a2a38345b85c759030b92193e41b2acd",
+      "round": 2,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:2"
+    },
+    {
+      "path": "agent_workspace/rounds/02/executions/run-8xftsgp8/run_result.json",
+      "kind": "execution_evidence",
+      "sha256": "e09f2dbf517f87067d25447383a8d2fe5650fb6a919fbdc00571d0b21ec0b70f",
+      "round": 2,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:2"
+    },
+    {
+      "path": "agent_workspace/rounds/02/executions/run-8xftsgp8/stderr.txt",
+      "kind": "execution_evidence",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "round": 2,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:2"
+    },
+    {
+      "path": "agent_workspace/rounds/02/executions/run-8xftsgp8/stdout.txt",
+      "kind": "execution_evidence",
+      "sha256": "32fef5dee8cf328ceca9551137b830a1792bb375273e7381243288f55d5a214a",
+      "round": 2,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:2"
+    },
+    {
+      "path": "evaluations/02/assessment.json",
+      "kind": "assessment",
+      "sha256": "f0d1d03f47e40fec953894cb53e726ef9cd40d7191f3b9f9ed77739e710b5b0c",
+      "round": 2,
+      "candidate_id": "run-b2d8cdb53d4e4f61b907bb993b26eb90:2"
+    }
+  ],
+  "started_at": "2026-10-10T03:11:21.175066Z",
+  "finished_at": "2026-10-10T03:11:24.216115Z",
+  "error_code": null
+}

@@ -7,7 +7,7 @@ from testgen_agent.models import ContractModel, ModelInfo, RoundNumber
 
 
 class WorkflowConfig(ContractModel):
-    mode: Literal["demo", "real"] = "demo"
+    mode: Literal["demo", "offline", "real"] = "demo"
     max_rounds: RoundNumber = 3
     execution_timeout_seconds: Annotated[StrictInt, Field(ge=1, le=300)] = 30
     model: ModelInfo | None = None

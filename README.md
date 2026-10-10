@@ -2,7 +2,7 @@
 
 面向单文件 Python 代码的测试工作流项目。计划由测试生成 Agent 规划并生成 pytest 候选，测试执行与评估 Agent 执行、采集覆盖率和归因，Workflow 统一调度二者并执行有限反馈，最后导出测试和报告。
 
-**当前阶段：P3 已完成。** 已实现单步 `TestGenerationAgent` 和 `TestExecutionAgent`：候选门禁、真实 pytest/coverage、保守失败归因和结构化反馈均已验证。当前 Workflow 测试及阶段证据见 [P3 验收记录](evaluation/p3.md)。自动反馈调度、正式运行 CLI 和最终结果导出将在 P4 接入；现有 demo CLI 保持 P1 离线交接行为。`testgen_agent` 仍是复用项目的基线入口。
+**当前阶段：P4 已完成。** `WorkflowRunner` 自动调度两个 Agent，支持最多三轮反馈、停止分支、历史候选选择与最终导出。离线模式只替换生成客户端，pytest/coverage 真实执行。阶段证据见 [P4 验收记录](evaluation/p4.md)；真实模型质量验收属于 P5，现有 `demo` 子命令保留 P1 假节点交接行为。
 
 ## 环境与安装
 
@@ -18,6 +18,39 @@ python -m venv .venv
 ```
 
 锁定依赖直接沿用 AgentDev；`vendor/agentdev` 保持原包名 `testgen_agent`，新包名为 `test_workflow`。当前环境的安装与 `pip check` 已通过；完整干净目录交付验证属于 P7。
+
+## 运行完整 Workflow
+
+```powershell
+# 正常首轮完成；输出默认保存到 outputs/workflow/<run_id>/
+.\.venv\Scripts\python.exe -m test_workflow run --demo --source examples/calculation.py --spec examples/calculation.md
+# 确定发生两轮反馈，执行与覆盖均为真实观察
+.\.venv\Scripts\python.exe -m test_workflow run --demo --source examples/validation.py --spec examples/validation.md
+# 明确缺陷：保留失败断言，输出 needs_review
+.\.venv\Scripts\python.exe -m test_workflow run --demo --source examples/discount.py --spec examples/discount.md
+```
+
+`run --demo` 不读取 `.env` 或调用外部模型，状态为 `mode=offline`。默认候选随包提供，仅适用于对应样例；其他输入用重复的 `--fixture path.json` 指定每轮 `GeneratedTests` 响应。`run` 使用同一 Workflow 和两个真实节点；P1 的 `demo` 子命令只展示假节点交接。
+
+`--max-rounds` 为 1–3，默认 3；`--timeout` 为单轮 pytest 超时 1–300 秒，默认 30。`--output` 指定**新的完整任务目录**，任何已存在路径都会被拒绝；省略时自动创建唯一目录。`run_id` 独立于目录名称。输出包含业务结论、停止原因、选中轮次与报告路径。退出码：0 为 `completed`，1 为 `partial` / `needs_review` / `failed` 或节点错误，2 为输入、配置或无法持久化产物；参数语法错误也为 2。
+
+每次运行保存 `state.json`、节点 Context/Result、事件耗时、结构化消息、各轮原始测试与实测证据，以及 `summary.json` 和 `report.md`。可用候选按旧策略选择，原字节复制到 `final/test_subject.py`，同目录带 `subject.py`。报告分别列出选中与最新候选的通过状态；后轮失败不会被历史通过记录掩盖。无可用候选时没有 `final/`。
+
+真实模型模式去掉 `--demo`，使用现有 DeepSeek 配置适配器：
+
+```powershell
+.\.venv\Scripts\python.exe -m test_workflow run --source examples/calculation.py --spec examples/calculation.md --env-file .env --max-rounds 3 --timeout 30
+```
+
+该命令会向配置的服务发送源码、规格和反馈。本次 P4 未读取真实密钥或访问模型服务；真实 CLI 的接线通过 Mock 验证，真实模型端到端质量仍待 P5 验收。
+
+复现 P4 离线闭环与回归：
+
+```powershell
+.\.venv\Scripts\python.exe scripts/p4_baseline.py
+```
+
+脚本通过正式 CLI 运行 14 个确定案例，并保存 [evaluation/p4_results.json](evaluation/p4_results.json)、JUnit 与文本结果。详细路由和状态约定见 [docs/workflow.md](docs/workflow.md)。
 
 ## 运行 P1 节点交接
 
@@ -53,7 +86,7 @@ python -m venv .venv
 
 精简证据见 [evaluation/p2.md](evaluation/p2.md) 与 `evaluation/p2_results.json`；协议样例与更新后的 Schema 位于 `examples/contracts/p2/`。离线候选调用数和真实外部请求数分别记录，真实外部请求数为 0。需重建错误候选时运行 `scripts/build_p2_fixtures.py`。
 
-生成节点通过 Python 接口注入已有 `GenerationClient`，支持本地 fixture 和 `DeepSeekClient`。P2 验收没有读取 `.env` 或使用真实模型；正式模型 CLI 和完整路由留到后续阶段。接口与错误约定见 [docs/generation.md](docs/generation.md)。
+生成节点通过 Python 接口注入已有 `GenerationClient`，支持本地 fixture 和 `DeepSeekClient`。P2 验收没有读取 `.env` 或使用真实模型；正式 CLI 和自动路由由 P4 接入。接口与错误约定见 [docs/generation.md](docs/generation.md)。
 
 ## 运行 P3 执行与评估验收
 
@@ -62,7 +95,7 @@ python -m venv .venv
 .\.venv\Scripts\python.exe -m pytest tests -q
 ```
 
-验收使用离线生成候选和真实执行节点，检查通过、低覆盖后的单步修订、非法语法、空测试、断言失败、名称/导入/收集错误、疑似缺陷、超时及 coverage 导出失败。每个有效候选只启动一次 pytest；无效候选只生成评估反馈。脚本手动传递修订消息，P4 自动循环尚待实现。
+验收使用离线生成候选和真实执行节点，检查通过、低覆盖后的单步修订、非法语法、空测试、断言失败、名称/导入/收集错误、疑似缺陷、超时及 coverage 导出失败。每个有效候选只启动一次 pytest；无效候选只生成评估反馈。此 P3 脚本手动传递修订消息；P4 自动闭环使用新的 p4_baseline.py。
 
 完整产物保存在 `outputs/p3/<run_id>/`，执行证据位于内层 `rounds/NN/executions/run-*/`，外层 `evaluations/NN/assessment.json` 给出动作建议、问题、目标覆盖和证据引用。索引见 [evaluation/p3_results.json](evaluation/p3_results.json)，协议样例在 `examples/contracts/p3/`。整个验收不读取 `.env`，外部模型请求数为 0。需重建故障候选时运行 `scripts/build_p3_fixtures.py`。
 
@@ -110,6 +143,8 @@ Copy-Item .env.example .env
 | [evaluation/p1.md](evaluation/p1.md) | P1 离线阶段验收与边界 |
 | [docs/generation.md](docs/generation.md) | P2 单步生成/修订接口与错误、计数约定 |
 | [evaluation/p2.md](evaluation/p2.md) | P2 五组离线验收、测试与复用回归 |
+| [docs/workflow.md](docs/workflow.md) | P4 自动路由、轮次预算、状态与结果选择 |
+| [evaluation/p4.md](evaluation/p4.md) | P4 CLI 闭环、停止分支与回归证据 |
 | [TASK_CHECKLIST.md](TASK_CHECKLIST.md) | 60–70 小时全阶段清单 |
 
 ## 当前目录
@@ -118,9 +153,9 @@ Copy-Item .env.example .env
 docs/                       需求、复用、样例、测试计划、开发管理
 evaluation/                 基线报告、结果索引、快照哈希清单
 examples/                   四组源码与规格、离线候选 JSON
-scripts/                    P0/P1/P2 复现与准备脚本
-src/test_workflow/           协议、状态、顺序编排、生成适配器与假节点 CLI
-tests/                      新 Workflow 的协议、编排与生成节点测试
+scripts/                    P0–P4 复现与准备脚本
+src/test_workflow/           两 Agent、适配器、协议、有限反馈编排、CLI 与导出
+tests/                      新 Workflow 协议、节点、编排与 CLI 测试
 vendor/agentdev/             原运行源码、依赖、文档、样例、测试
 outputs/                    本地完整运行证据（Git 忽略）
 ```

@@ -1,9 +1,11 @@
-"""P1 sequential coordinator: validate handoffs, then commit state proposals."""
+"""Single-writer coordinator for sequential nodes and bounded feedback."""
 
 from pathlib import Path
+from time import perf_counter
 from uuid import uuid4
 
-from testgen_agent.models import AgentState, CandidateRound, ModelInfo, OracleMode, StopReason, TaskInput
+from testgen_agent.agent import choose_action, select_best_candidate
+from testgen_agent.models import AgentAction, AgentState, CandidateRound, ModelInfo, OracleMode, StopReason, TaskInput, TaskStatus
 from testgen_agent.tools import analyze_source
 
 from .config import WorkflowConfig
@@ -20,7 +22,7 @@ class HandoffError(ValueError):
 
 
 def create_run(*, source: Path, specification: Path, output: Path,
-               config: WorkflowConfig | None = None) -> WorkflowState:
+               config: WorkflowConfig | None = None, exact_output: bool = False) -> WorkflowState:
     config = config or WorkflowConfig()
     source = source.resolve(strict=True)
     specification = specification.resolve(strict=True)
@@ -30,7 +32,11 @@ def create_run(*, source: Path, specification: Path, output: Path,
     if not spec.strip():
         raise ValueError("a nonempty UTF-8 behavior specification is required")
     run_id = f"run-{uuid4().hex}"
-    root = output.resolve() / run_id
+    if output.is_symlink() or output.is_junction():
+        raise ValueError("output cannot be a link")
+    root = output.resolve() if exact_output else output.resolve() / run_id
+    if root.exists():
+        raise FileExistsError("run directory already exists")
     request = TaskInput(source_path=source, spec_path=specification,
                         output_dir=root / "agent_workspace", max_rounds=config.max_rounds,
                         execution_timeout_seconds=config.execution_timeout_seconds,
@@ -166,13 +172,20 @@ class WorkflowRunner:
 
     def run(self, initial: WorkflowState) -> WorkflowState:
         if initial.workflow_status != "pending":
-            raise ValueError("P1 starts new pending tasks; persisted tasks are read-only")
-        if initial.config.mode != "demo":
-            raise ValueError("P1 only supports offline handoff demonstrations")
+            raise ValueError("only new pending tasks can run; persisted tasks are read-only")
+        measured = initial.config.mode != "demo"
+        if measured and (
+            len(self.definition.nodes) < 2
+            or tuple(node.agent_id for node in self.definition.nodes[:2]) != ("test_generation", "test_execution")
+            or not any(route.sender == "test_execution" and route.receiver == "test_generation"
+                       for route in self.definition.feedback_routes)
+        ):
+            raise ValueError("testing requires generation, execution and a declared feedback edge")
         state = WorkflowState.model_validate_json(initial.canonical_json())
         store = StateStore(state.run_dir)
         events = EventWriter(state.run_dir, state.run_id)
         messages = MessageWriter(state.run_dir)
+        node_started = None
 
         def save_event(event_type, **fields):
             nonlocal state
@@ -180,41 +193,146 @@ class WorkflowRunner:
             state = state.updated(last_event_seq=events.seq)
             store.save(state)
 
+        def invoke(node):
+            nonlocal state, node_started
+            state = state.updated(current_node=node.agent_id)
+            save_event("node_started", node=node.agent_id, round=state.current_round)
+            started = perf_counter()
+            node_started = started
+            inbox = tuple(message for message in state.messages
+                          if message.receiver == node.agent_id
+                          and message.message_id not in state.consumed_message_ids)
+            revision = measured and node.agent_id == "test_generation" and state.current_round > 1
+            expected_sender = "test_execution" if revision else node.receives_from
+            expected_round = state.current_round - 1 if revision else state.current_round
+            blocked = (measured and node.agent_id == "test_execution" and state.agent_state.history
+                       and (state.agent_state.history[-1].validation_error
+                            or state.agent_state.history[-1].generated.questions))
+            if (expected_sender is not None and not inbox and not blocked) or (revision and len(inbox) != 1):
+                raise HandoffError("consumer did not receive its required handoff")
+            for message in inbox:
+                if message.sender != expected_sender or message.round != expected_round:
+                    raise HandoffError("consumer received a foreign sender or source round")
+                verify_artifact(state.run_dir, message.payload.artifact)
+            context = AgentContext(run_id=state.run_id, round=state.current_round,
+                                   agent_id=node.agent_id, run_dir=state.run_dir,
+                                   snapshot_json=state.canonical_json(), inbox=inbox)
+            directory = state.run_dir / "node_results" / f"{state.current_round:02d}" / node.agent_id
+            directory.mkdir(parents=True, exist_ok=False)
+            atomic_write(directory / "context.json", context.canonical_json(indent=2) + "\n")
+            result = self.registry.get(node.agent_id).run(context)
+            if not isinstance(result, AgentResult):
+                raise HandoffError("node must return an AgentResult")
+            result = AgentResult.model_validate_json(result.canonical_json())
+            atomic_write(directory / "result.json", result.canonical_json(indent=2) + "\n")
+            if (result.run_id, result.round, result.agent_id) != (state.run_id, state.current_round, state.current_node):
+                raise HandoffError("result belongs to another task, round or node")
+            if result.status == "error":
+                if result.generation and result.generation.external_requests is not None:
+                    state = state.updated(agent_state=state.agent_state.updated(
+                        api_calls=state.agent_state.api_calls + result.generation.external_requests))
+                raise NodeFailure(result.error_code)
+            proposed = self.apply_result(state, result, tuple(item.message_id for item in inbox))
+            if measured:
+                selected = select_best_candidate(proposed.agent_state.history)
+                proposed = proposed.updated(selected_round=selected,
+                                            agent_state=proposed.agent_state.updated(best_available_round=selected))
+            for message in result.messages:
+                messages.append(message)
+                events.append("message_sent", node=node.agent_id, round=message.round,
+                              message_id=message.message_id)
+            state = proposed.updated(last_event_seq=events.seq)
+            save_event("node_finished", node=node.agent_id, round=state.current_round,
+                       duration_seconds=perf_counter() - started)
+            node_started = None
+            return result
+
+        def finalize(status, stop, action=AgentAction.FINISH):
+            nonlocal state
+            selected = select_best_candidate(state.agent_state.history)
+            state = state.updated(task_status=status, stop_reason=stop, selected_round=selected,
+                                  agent_state=state.agent_state.updated(best_available_round=selected,
+                                                                       stop_reason=stop, next_action=action))
+
         try:
             state = state.updated(workflow_status="running", current_round=1)
             save_event("workflow_started")
-            for node in self.definition.nodes:
-                state = state.updated(current_node=node.agent_id)
-                save_event("node_started", node=node.agent_id, round=state.current_round)
-                inbox = tuple(message for message in state.messages
-                              if message.receiver == node.agent_id
-                              and message.message_id not in state.consumed_message_ids)
-                if node.receives_from is not None and not inbox:
-                    raise HandoffError("consumer did not receive its required handoff")
-                for message in inbox:
-                    if message.sender != node.receives_from or message.round != state.current_round:
-                        raise HandoffError("consumer received a foreign sender or source round")
-                    verify_artifact(state.run_dir, message.payload.artifact)
-                context = AgentContext(run_id=state.run_id, round=state.current_round,
-                                       agent_id=node.agent_id, run_dir=state.run_dir,
-                                       snapshot_json=state.canonical_json(), inbox=inbox)
-                result = self.registry.get(node.agent_id).run(context)
-                proposed = self.apply_result(state, result, tuple(item.message_id for item in inbox))
-                # Validate the whole proposal before writing its handoff journal.
-                for message in result.messages:
-                    messages.append(message)
-                    events.append("message_sent", node=node.agent_id, round=message.round,
-                                  message_id=message.message_id)
-                state = proposed.updated(last_event_seq=events.seq)
-                save_event("node_finished", node=node.agent_id, round=state.current_round)
+            if not measured:
+                for node in self.definition.nodes:
+                    invoke(node)
+            else:
+                while True:
+                    generated = invoke(self.definition.nodes[0])
+                    candidate = state.agent_state.history[-1] if state.agent_state.history else None
+                    if (candidate is None or candidate.number != state.current_round
+                            or generated.patch.next_action not in {AgentAction.RUN_TESTS, AgentAction.REPAIR_GENERATED_TEST,
+                                                                 AgentAction.REQUEST_REVIEW, AgentAction.FINISH}):
+                        raise HandoffError("generation did not supply a routable candidate")
+                    evaluated = invoke(self.definition.nodes[1])
+                    assessment = evaluated.assessment
+                    if assessment is None:
+                        raise HandoffError("execution requires a structured assessment")
+                    decision = choose_action(state.agent_state)
+                    if assessment.integrity_error and (
+                        assessment.integrity_error not in {"source_changed_during_execution", "tests_changed_during_execution"}
+                        or assessment.action != AgentAction.FINISH
+                        or assessment.stop_reason != StopReason.UNRECOVERABLE_ERROR
+                        or assessment.task_status != (TaskStatus.PARTIAL if candidate.available or state.selected_round else TaskStatus.FAILED)
+                    ):
+                        raise HandoffError("invalid integrity stop recommendation")
+                    if not assessment.integrity_error and (
+                        assessment.action, assessment.stop_reason, assessment.task_status
+                    ) != (decision.action, decision.stop_reason, decision.status):
+                        raise HandoffError("execution recommendation differs from allowed transition")
+                    save_event("route_selected", round=state.current_round, action=assessment.action.value,
+                               stop_reason=assessment.stop_reason.value if assessment.stop_reason else None)
+                    if assessment.action in {AgentAction.REPAIR_GENERATED_TEST, AgentAction.ADD_MISSING_CASES}:
+                        if state.current_round >= state.config.max_rounds:
+                            finalize(TaskStatus.PARTIAL if state.selected_round else TaskStatus.FAILED,
+                                     StopReason.ROUND_LIMIT_REACHED)
+                            break
+                        if len(evaluated.messages) != 1 or evaluated.messages[0].type != "execution_feedback":
+                            raise HandoffError("revision requires the previous assessment feedback")
+                        state = state.updated(current_round=state.current_round + 1)
+                        continue
+                    if assessment.action not in {AgentAction.FINISH, AgentAction.REQUEST_REVIEW} or assessment.stop_reason is None:
+                        raise HandoffError("unknown or incomplete terminal recommendation")
+                    finalize(assessment.task_status, assessment.stop_reason, assessment.action)
+                    break
+                # Optional trailing nodes extend the definition without changing the loop.
+                for node in self.definition.nodes[2:]:
+                    invoke(node)
             state = state.updated(workflow_status="finished", current_node=None, finished_at=utc_now())
-            save_event("workflow_finished")
         except Exception as exc:
             # Exception messages may include credentials from injected clients.
             # Persist a controlled code and preserve every previously committed output.
-            code = "invalid_handoff" if isinstance(exc, (ValueError, TypeError)) else "node_exception"
+            code = exc.code if isinstance(exc, NodeFailure) else "invalid_handoff" if isinstance(exc, (ValueError, TypeError)) else "node_exception"
+            if node_started is not None:
+                save_event("node_failed", node=state.current_node, round=state.current_round,
+                           duration_seconds=perf_counter() - node_started, error_code=code)
+            if measured:
+                finalize(TaskStatus.PARTIAL if state.selected_round else TaskStatus.FAILED,
+                         StopReason.UNRECOVERABLE_ERROR)
             state = state.updated(workflow_status="error", error_code=code,
                                   stop_reason=StopReason.UNRECOVERABLE_ERROR, finished_at=utc_now())
             save_event("workflow_error", node=state.current_node,
                        round=state.current_round, error_code=code)
+        if measured:
+            from .reporting import export_result
+            # Persistence/export failures propagate: never claim an unwritten report.
+            try:
+                export_result(state)
+            except Exception:
+                finalize(TaskStatus.PARTIAL if state.selected_round else TaskStatus.FAILED, StopReason.UNRECOVERABLE_ERROR)
+                state = state.updated(workflow_status="error", error_code="export_error", finished_at=utc_now())
+                save_event("workflow_error", round=state.current_round, error_code="export_error")
+                raise
+        if state.workflow_status == "finished":
+            save_event("workflow_finished")
         return state
+
+
+class NodeFailure(RuntimeError):
+    def __init__(self, code: str):
+        super().__init__(code)
+        self.code = code
