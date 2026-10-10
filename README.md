@@ -2,7 +2,7 @@
 
 面向单文件 Python 代码的测试工作流项目。计划由测试生成 Agent 规划并生成 pytest 候选，测试执行与评估 Agent 执行、采集覆盖率和归因，Workflow 统一调度二者并执行有限反馈，最后导出测试和报告。
 
-**当前阶段：P4 已完成。** `WorkflowRunner` 自动调度两个 Agent，支持最多三轮反馈、停止分支、历史候选选择与最终导出。离线模式只替换生成客户端，pytest/coverage 真实执行。阶段证据见 [P4 验收记录](evaluation/p4.md)；真实模型质量验收属于 P5，现有 `demo` 子命令保留 P1 假节点交接行为。
+**当前阶段：P5 已完成。** `WorkflowRunner` 自动调度两个 Agent，支持最多三轮反馈、停止分支、历史候选选择与最终导出。192 项 Workflow 测试、180 项相关复用代码回归、15 个离线 CLI 案例及三个必需真实模型案例已完成，证据见 [P5 验收记录](evaluation/acceptance.md)。离线模式只替换生成客户端，pytest/coverage 真实执行；现有 `demo` 子命令保留 P1 假节点交接行为。报告强化、正式扩展示例和干净安装属于 P6/P7。
 
 ## 环境与安装
 
@@ -42,7 +42,7 @@ python -m venv .venv
 .\.venv\Scripts\python.exe -m test_workflow run --source examples/calculation.py --spec examples/calculation.md --env-file .env --max-rounds 3 --timeout 30
 ```
 
-该命令会向配置的服务发送源码、规格和反馈。本次 P4 未读取真实密钥或访问模型服务；真实 CLI 的接线通过 Mock 验证，真实模型端到端质量仍待 P5 验收。
+该命令会向配置的服务发送源码、规格和反馈。P4 阶段只用 Mock 验证真实 CLI 接线；P5 已在获得三个必需案例的具体外传授权后运行 DeepSeek，正常和多分支样例完成，discount 输出疑似源码缺陷。完整实测见 [P5 验收](evaluation/acceptance.md)。
 
 复现 P4 离线闭环与回归：
 
@@ -51,6 +51,21 @@ python -m venv .venv
 ```
 
 脚本通过正式 CLI 运行 14 个确定案例，并保存 [evaluation/p4_results.json](evaluation/p4_results.json)、JUnit 与文本结果。详细路由和状态约定见 [docs/workflow.md](docs/workflow.md)。
+
+## P5 系统与真实模型验收
+
+```powershell
+# 本地确定案例 + 系统回归，不读取 .env 或调用模型
+.\.venv\Scripts\python.exe scripts/p5_acceptance.py --offline --tests
+# 读取索引中的已有任务，重新校验文件、交接并更新报告；不重跑节点
+.\.venv\Scripts\python.exe scripts/p5_acceptance.py --refresh
+# 使用本地配置，重新运行三个必需真实案例；会向服务发送数据并产生模型费用
+.\.venv\Scripts\python.exe scripts/p5_acceptance.py --real --env-file .env
+```
+
+本次三个真实案例：calculation 为 6 passed、行覆盖 100%；validation 为 15 passed、行/分支覆盖 100%/100%；discount 为 15 passed、2 failed，保留 `calculate_discount(100) == 90` 并输出 `needs_review/suspected_source_defect`。共发出 4 次真实模型请求，其中 validation 有一次客户端格式修复。两个成功案例都在首轮达标，自动反馈能力由独立离线案例证明。
+
+[evaluation/acceptance.md](evaluation/acceptance.md) 和 [机器可读索引](evaluation/acceptance.json) 区分离线生成、真实测试、Mock/故障注入和真实模型流量，并关联每轮候选、消息、覆盖及实际 JUnit testcase。可选关系样例和重复稳定性测试本次未执行；正式扩展示例、报告强化和干净安装继续留在 P6/P7。
 
 ## 运行 P1 节点交接
 
@@ -117,7 +132,7 @@ python -m venv .venv
 
 ## 真实模型基线
 
-真实生成会将样例源码、行为规格和模型输出契约发送至配置的 DeepSeek 服务。当前会话的这一步尚待用户授权；P0 已保存离线证据。获得授权后，可自行配置本地 `.env`：
+真实生成会将样例源码、行为规格和模型输出契约发送至配置的 DeepSeek 服务。P0 已保存旧项目离线证据，旧项目真实基线本次未补跑；P5 已对新 Workflow 完成三个授权真实案例，两类记录分别保留。可在本地 `.env` 配置实际模型和密钥：
 
 ```powershell
 Copy-Item .env.example .env
@@ -145,6 +160,8 @@ Copy-Item .env.example .env
 | [evaluation/p2.md](evaluation/p2.md) | P2 五组离线验收、测试与复用回归 |
 | [docs/workflow.md](docs/workflow.md) | P4 自动路由、轮次预算、状态与结果选择 |
 | [evaluation/p4.md](evaluation/p4.md) | P4 CLI 闭环、停止分支与回归证据 |
+| [evaluation/acceptance.md](evaluation/acceptance.md) | P5 系统矩阵、真实模型结果与边界 |
+| [evaluation/acceptance.json](evaluation/acceptance.json) | P5 逐轮指标、输入摘要及 JUnit 证据索引 |
 | [TASK_CHECKLIST.md](TASK_CHECKLIST.md) | 60–70 小时全阶段清单 |
 
 ## 当前目录
@@ -153,7 +170,7 @@ Copy-Item .env.example .env
 docs/                       需求、复用、样例、测试计划、开发管理
 evaluation/                 基线报告、结果索引、快照哈希清单
 examples/                   四组源码与规格、离线候选 JSON
-scripts/                    P0–P4 复现与准备脚本
+scripts/                    P0–P5 复现、验收与准备脚本
 src/test_workflow/           两 Agent、适配器、协议、有限反馈编排、CLI 与导出
 tests/                      新 Workflow 协议、节点、编排与 CLI 测试
 vendor/agentdev/             原运行源码、依赖、文档、样例、测试

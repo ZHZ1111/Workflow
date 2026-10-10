@@ -1,0 +1,1834 @@
+{
+  "schema_version": "1.0",
+  "phase": "P5",
+  "offline": {
+    "passed": {
+      "run_id": "run-11d849a9a4744b2fa0b9caedec36b988",
+      "run_dir": "outputs/p5/acceptance-222f0f83b6/passed",
+      "mode": "offline",
+      "model": "offline-fixture-model",
+      "service": "https://example.com",
+      "started_at": "2026-10-10T04:42:14.055382+00:00",
+      "finished_at": "2026-10-10T04:42:18.234047+00:00",
+      "duration_seconds": 4.178665,
+      "workflow_status": "finished",
+      "task_status": "completed",
+      "stop_reason": "coverage_target_met",
+      "max_rounds": 3,
+      "timeout": 30,
+      "selected_round": 1,
+      "selection_reason": "Passing candidates first, then target/available coverage, branch and line coverage, and passed count; ties keep the earlier round.",
+      "selected_all_passed": true,
+      "latest_all_passed": true,
+      "generation_calls": 1,
+      "external_requests": 0,
+      "pytest_processes": 1,
+      "feedback_messages": 0,
+      "source_sha256": "4043de06a34f5aa75919fa484db107bf05d5a78f95ac7cadcdd94cac60e429bf",
+      "spec_sha256": "04af68dbe4df5b6270282ed6ccc02e52b344d2d6a033698e3d6cc0df0dbc69ff",
+      "source_unchanged": true,
+      "spec_unchanged": true,
+      "rounds": [
+        {
+          "round": 1,
+          "client_mode": "offline",
+          "request_attempts": 1,
+          "external_requests": 0,
+          "format_repairs": 0,
+          "model_latency_seconds": 0.0,
+          "token_usage": null,
+          "response_model": "offline-fixture-model",
+          "response_ids": [
+            "offline-fixture"
+          ],
+          "validation_error": null,
+          "execution_kind": "passed",
+          "collected": 3,
+          "passed": 3,
+          "failed": 0,
+          "errors": 0,
+          "coverage_status": "available",
+          "line_percent": 100.0,
+          "branch_percent": null,
+          "recommendation": "finish",
+          "stop_reason": "coverage_target_met",
+          "protected_tests": [
+            "test_total_normal",
+            "test_total_zero_price",
+            "test_total_zero_quantity"
+          ],
+          "issue_kinds": [],
+          "assessment": "outputs/p5/acceptance-222f0f83b6/passed/evaluations/01/assessment.json"
+        }
+      ],
+      "report": "outputs/p5/acceptance-222f0f83b6/passed/report.md",
+      "summary": "outputs/p5/acceptance-222f0f83b6/passed/summary.json",
+      "cli_exit_code": 0,
+      "matches_expected": true
+    },
+    "feedback": {
+      "run_id": "run-1a352b5dee5e4f60823e1b5285e3ddff",
+      "run_dir": "outputs/p5/acceptance-222f0f83b6/feedback",
+      "mode": "offline",
+      "model": "offline-fixture-model",
+      "service": "https://example.com",
+      "started_at": "2026-10-10T04:42:20.904689+00:00",
+      "finished_at": "2026-10-10T04:42:28.936443+00:00",
+      "duration_seconds": 8.031754,
+      "workflow_status": "finished",
+      "task_status": "completed",
+      "stop_reason": "coverage_target_met",
+      "max_rounds": 3,
+      "timeout": 30,
+      "selected_round": 2,
+      "selection_reason": "Passing candidates first, then target/available coverage, branch and line coverage, and passed count; ties keep the earlier round.",
+      "selected_all_passed": true,
+      "latest_all_passed": true,
+      "generation_calls": 2,
+      "external_requests": 0,
+      "pytest_processes": 2,
+      "feedback_messages": 1,
+      "source_sha256": "283e7c1ba21bfbb01d82d0473631f500f552f27f1c801069291b5e0f3777dd7c",
+      "spec_sha256": "139e4633e796b167bea5410bb0ea604715d9219125f8234a29a0c4b99b5d29b1",
+      "source_unchanged": true,
+      "spec_unchanged": true,
+      "rounds": [
+        {
+          "round": 1,
+          "client_mode": "offline",
+          "request_attempts": 1,
+          "external_requests": 0,
+          "format_repairs": 0,
+          "model_latency_seconds": 0.0,
+          "token_usage": null,
+          "response_model": "offline-fixture-model",
+          "response_ids": [
+            "offline-fixture"
+          ],
+          "validation_error": null,
+          "execution_kind": "passed",
+          "collected": 1,
+          "passed": 1,
+          "failed": 0,
+          "errors": 0,
+          "coverage_status": "available",
+          "line_percent": 60.0,
+          "branch_percent": 50.0,
+          "recommendation": "extend_tests",
+          "stop_reason": null,
+          "protected_tests": [
+            "test_score_pass"
+          ],
+          "issue_kinds": [],
+          "assessment": "outputs/p5/acceptance-222f0f83b6/feedback/evaluations/01/assessment.json"
+        },
+        {
+          "round": 2,
+          "client_mode": "offline",
+          "request_attempts": 1,
+          "external_requests": 0,
+          "format_repairs": 0,
+          "model_latency_seconds": 0.0,
+          "token_usage": null,
+          "response_model": "offline-fixture-model",
+          "response_ids": [
+            "offline-fixture"
+          ],
+          "validation_error": null,
+          "execution_kind": "passed",
+          "collected": 12,
+          "passed": 12,
+          "failed": 0,
+          "errors": 0,
+          "coverage_status": "available",
+          "line_percent": 100.0,
+          "branch_percent": 100.0,
+          "recommendation": "finish",
+          "stop_reason": "coverage_target_met",
+          "protected_tests": [
+            "test_score_100",
+            "test_score_59",
+            "test_score_89",
+            "test_score_90",
+            "test_score_above",
+            "test_score_bool",
+            "test_score_float",
+            "test_score_negative",
+            "test_score_none",
+            "test_score_pass",
+            "test_score_string",
+            "test_score_zero"
+          ],
+          "issue_kinds": [],
+          "assessment": "outputs/p5/acceptance-222f0f83b6/feedback/evaluations/02/assessment.json"
+        }
+      ],
+      "report": "outputs/p5/acceptance-222f0f83b6/feedback/report.md",
+      "summary": "outputs/p5/acceptance-222f0f83b6/feedback/summary.json",
+      "cli_exit_code": 0,
+      "matches_expected": true
+    },
+    "syntax_repaired": {
+      "run_id": "run-4d75241990bb4a73a34bfbc960757317",
+      "run_dir": "outputs/p5/acceptance-222f0f83b6/syntax_repaired",
+      "mode": "offline",
+      "model": "offline-fixture-model",
+      "service": "https://example.com",
+      "started_at": "2026-10-10T04:42:29.889498+00:00",
+      "finished_at": "2026-10-10T04:42:34.207933+00:00",
+      "duration_seconds": 4.318435,
+      "workflow_status": "finished",
+      "task_status": "completed",
+      "stop_reason": "coverage_target_met",
+      "max_rounds": 3,
+      "timeout": 30,
+      "selected_round": 2,
+      "selection_reason": "Passing candidates first, then target/available coverage, branch and line coverage, and passed count; ties keep the earlier round.",
+      "selected_all_passed": true,
+      "latest_all_passed": true,
+      "generation_calls": 2,
+      "external_requests": 0,
+      "pytest_processes": 1,
+      "feedback_messages": 1,
+      "source_sha256": "4043de06a34f5aa75919fa484db107bf05d5a78f95ac7cadcdd94cac60e429bf",
+      "spec_sha256": "04af68dbe4df5b6270282ed6ccc02e52b344d2d6a033698e3d6cc0df0dbc69ff",
+      "source_unchanged": true,
+      "spec_unchanged": true,
+      "rounds": [
+        {
+          "round": 1,
+          "client_mode": "offline",
+          "request_attempts": 1,
+          "external_requests": 0,
+          "format_repairs": 0,
+          "model_latency_seconds": 0.0,
+          "token_usage": null,
+          "response_model": "offline-fixture-model",
+          "response_ids": [
+            "offline-fixture"
+          ],
+          "validation_error": "test_syntax（第 3 行）：invalid syntax",
+          "execution_kind": null,
+          "collected": null,
+          "passed": null,
+          "failed": null,
+          "errors": null,
+          "coverage_status": null,
+          "line_percent": null,
+          "branch_percent": null,
+          "recommendation": "repair_tests",
+          "stop_reason": null,
+          "protected_tests": [],
+          "issue_kinds": [
+            "generation_error"
+          ],
+          "assessment": "outputs/p5/acceptance-222f0f83b6/syntax_repaired/evaluations/01/assessment.json"
+        },
+        {
+          "round": 2,
+          "client_mode": "offline",
+          "request_attempts": 1,
+          "external_requests": 0,
+          "format_repairs": 0,
+          "model_latency_seconds": 0.0,
+          "token_usage": null,
+          "response_model": "offline-fixture-model",
+          "response_ids": [
+            "offline-fixture"
+          ],
+          "validation_error": null,
+          "execution_kind": "passed",
+          "collected": 3,
+          "passed": 3,
+          "failed": 0,
+          "errors": 0,
+          "coverage_status": "available",
+          "line_percent": 100.0,
+          "branch_percent": null,
+          "recommendation": "finish",
+          "stop_reason": "coverage_target_met",
+          "protected_tests": [
+            "test_total_normal",
+            "test_total_zero_price",
+            "test_total_zero_quantity"
+          ],
+          "issue_kinds": [],
+          "assessment": "outputs/p5/acceptance-222f0f83b6/syntax_repaired/evaluations/02/assessment.json"
+        }
+      ],
+      "report": "outputs/p5/acceptance-222f0f83b6/syntax_repaired/report.md",
+      "summary": "outputs/p5/acceptance-222f0f83b6/syntax_repaired/summary.json",
+      "cli_exit_code": 0,
+      "matches_expected": true
+    },
+    "name_repaired": {
+      "run_id": "run-317619c90a9a4c29977333e25b8883fb",
+      "run_dir": "outputs/p5/acceptance-222f0f83b6/name_repaired",
+      "mode": "offline",
+      "model": "offline-fixture-model",
+      "service": "https://example.com",
+      "started_at": "2026-10-10T04:42:36.951269+00:00",
+      "finished_at": "2026-10-10T04:42:45.227983+00:00",
+      "duration_seconds": 8.276714,
+      "workflow_status": "finished",
+      "task_status": "completed",
+      "stop_reason": "coverage_target_met",
+      "max_rounds": 3,
+      "timeout": 30,
+      "selected_round": 2,
+      "selection_reason": "Passing candidates first, then target/available coverage, branch and line coverage, and passed count; ties keep the earlier round.",
+      "selected_all_passed": true,
+      "latest_all_passed": true,
+      "generation_calls": 2,
+      "external_requests": 0,
+      "pytest_processes": 2,
+      "feedback_messages": 1,
+      "source_sha256": "4043de06a34f5aa75919fa484db107bf05d5a78f95ac7cadcdd94cac60e429bf",
+      "spec_sha256": "04af68dbe4df5b6270282ed6ccc02e52b344d2d6a033698e3d6cc0df0dbc69ff",
+      "source_unchanged": true,
+      "spec_unchanged": true,
+      "rounds": [
+        {
+          "round": 1,
+          "client_mode": "offline",
+          "request_attempts": 1,
+          "external_requests": 0,
+          "format_repairs": 0,
+          "model_latency_seconds": 0.0,
+          "token_usage": null,
+          "response_model": "offline-fixture-model",
+          "response_ids": [
+            "offline-fixture"
+          ],
+          "validation_error": null,
+          "execution_kind": "execution_error",
+          "collected": 3,
+          "passed": 2,
+          "failed": 0,
+          "errors": 1,
+          "coverage_status": "available",
+          "line_percent": 100.0,
+          "branch_percent": null,
+          "recommendation": "repair_tests",
+          "stop_reason": null,
+          "protected_tests": [
+            "test_total_zero_price",
+            "test_total_zero_quantity"
+          ],
+          "issue_kinds": [
+            "generation_error"
+          ],
+          "assessment": "outputs/p5/acceptance-222f0f83b6/name_repaired/evaluations/01/assessment.json"
+        },
+        {
+          "round": 2,
+          "client_mode": "offline",
+          "request_attempts": 1,
+          "external_requests": 0,
+          "format_repairs": 0,
+          "model_latency_seconds": 0.0,
+          "token_usage": null,
+          "response_model": "offline-fixture-model",
+          "response_ids": [
+            "offline-fixture"
+          ],
+          "validation_error": null,
+          "execution_kind": "passed",
+          "collected": 3,
+          "passed": 3,
+          "failed": 0,
+          "errors": 0,
+          "coverage_status": "available",
+          "line_percent": 100.0,
+          "branch_percent": null,
+          "recommendation": "finish",
+          "stop_reason": "coverage_target_met",
+          "protected_tests": [
+            "test_total_normal",
+            "test_total_zero_price",
+            "test_total_zero_quantity"
+          ],
+          "issue_kinds": [],
+          "assessment": "outputs/p5/acceptance-222f0f83b6/name_repaired/evaluations/02/assessment.json"
+        }
+      ],
+      "report": "outputs/p5/acceptance-222f0f83b6/name_repaired/report.md",
+      "summary": "outputs/p5/acceptance-222f0f83b6/name_repaired/summary.json",
+      "cli_exit_code": 0,
+      "matches_expected": true
+    },
+    "three_round_limit": {
+      "run_id": "run-8d409d50727b470e9f003a0c75d8d19a",
+      "run_dir": "outputs/p5/acceptance-222f0f83b6/three_round_limit",
+      "mode": "offline",
+      "model": "offline-fixture-model",
+      "service": "https://example.com",
+      "started_at": "2026-10-10T04:42:46.182545+00:00",
+      "finished_at": "2026-10-10T04:42:46.460105+00:00",
+      "duration_seconds": 0.27756,
+      "workflow_status": "finished",
+      "task_status": "failed",
+      "stop_reason": "round_limit_reached",
+      "max_rounds": 3,
+      "timeout": 30,
+      "selected_round": null,
+      "selection_reason": "No executed runnable candidate is available.",
+      "selected_all_passed": null,
+      "latest_all_passed": null,
+      "generation_calls": 3,
+      "external_requests": 0,
+      "pytest_processes": 0,
+      "feedback_messages": 2,
+      "source_sha256": "4043de06a34f5aa75919fa484db107bf05d5a78f95ac7cadcdd94cac60e429bf",
+      "spec_sha256": "04af68dbe4df5b6270282ed6ccc02e52b344d2d6a033698e3d6cc0df0dbc69ff",
+      "source_unchanged": true,
+      "spec_unchanged": true,
+      "rounds": [
+        {
+          "round": 1,
+          "client_mode": "offline",
+          "request_attempts": 1,
+          "external_requests": 0,
+          "format_repairs": 0,
+          "model_latency_seconds": 0.0,
+          "token_usage": null,
+          "response_model": "offline-fixture-model",
+          "response_ids": [
+            "offline-fixture"
+          ],
+          "validation_error": "test_syntax（第 3 行）：invalid syntax",
+          "execution_kind": null,
+          "collected": null,
+          "passed": null,
+          "failed": null,
+          "errors": null,
+          "coverage_status": null,
+          "line_percent": null,
+          "branch_percent": null,
+          "recommendation": "repair_tests",
+          "stop_reason": null,
+          "protected_tests": [],
+          "issue_kinds": [
+            "generation_error"
+          ],
+          "assessment": "outputs/p5/acceptance-222f0f83b6/three_round_limit/evaluations/01/assessment.json"
+        },
+        {
+          "round": 2,
+          "client_mode": "offline",
+          "request_attempts": 1,
+          "external_requests": 0,
+          "format_repairs": 0,
+          "model_latency_seconds": 0.0,
+          "token_usage": null,
+          "response_model": "offline-fixture-model",
+          "response_ids": [
+            "offline-fixture"
+          ],
+          "validation_error": "test_syntax（第 3 行）：invalid syntax",
+          "execution_kind": null,
+          "collected": null,
+          "passed": null,
+          "failed": null,
+          "errors": null,
+          "coverage_status": null,
+          "line_percent": null,
+          "branch_percent": null,
+          "recommendation": "repair_tests",
+          "stop_reason": null,
+          "protected_tests": [],
+          "issue_kinds": [
+            "generation_error"
+          ],
+          "assessment": "outputs/p5/acceptance-222f0f83b6/three_round_limit/evaluations/02/assessment.json"
+        },
+        {
+          "round": 3,
+          "client_mode": "offline",
+          "request_attempts": 1,
+          "external_requests": 0,
+          "format_repairs": 0,
+          "model_latency_seconds": 0.0,
+          "token_usage": null,
+          "response_model": "offline-fixture-model",
+          "response_ids": [
+            "offline-fixture"
+          ],
+          "validation_error": "test_syntax（第 3 行）：invalid syntax",
+          "execution_kind": null,
+          "collected": null,
+          "passed": null,
+          "failed": null,
+          "errors": null,
+          "coverage_status": null,
+          "line_percent": null,
+          "branch_percent": null,
+          "recommendation": "finish",
+          "stop_reason": "round_limit_reached",
+          "protected_tests": [],
+          "issue_kinds": [
+            "generation_error"
+          ],
+          "assessment": "outputs/p5/acceptance-222f0f83b6/three_round_limit/evaluations/03/assessment.json"
+        }
+      ],
+      "report": "outputs/p5/acceptance-222f0f83b6/three_round_limit/report.md",
+      "summary": "outputs/p5/acceptance-222f0f83b6/three_round_limit/summary.json",
+      "cli_exit_code": 1,
+      "matches_expected": true
+    },
+    "partial_limit": {
+      "run_id": "run-d1568e6202a24717bfc44f983a8952c8",
+      "run_dir": "outputs/p5/acceptance-222f0f83b6/partial_limit",
+      "mode": "offline",
+      "model": "offline-fixture-model",
+      "service": "https://example.com",
+      "started_at": "2026-10-10T04:42:49.168725+00:00",
+      "finished_at": "2026-10-10T04:42:53.141204+00:00",
+      "duration_seconds": 3.972479,
+      "workflow_status": "finished",
+      "task_status": "partial",
+      "stop_reason": "round_limit_reached",
+      "max_rounds": 1,
+      "timeout": 30,
+      "selected_round": 1,
+      "selection_reason": "Passing candidates first, then target/available coverage, branch and line coverage, and passed count; ties keep the earlier round.",
+      "selected_all_passed": true,
+      "latest_all_passed": true,
+      "generation_calls": 1,
+      "external_requests": 0,
+      "pytest_processes": 1,
+      "feedback_messages": 0,
+      "source_sha256": "283e7c1ba21bfbb01d82d0473631f500f552f27f1c801069291b5e0f3777dd7c",
+      "spec_sha256": "139e4633e796b167bea5410bb0ea604715d9219125f8234a29a0c4b99b5d29b1",
+      "source_unchanged": true,
+      "spec_unchanged": true,
+      "rounds": [
+        {
+          "round": 1,
+          "client_mode": "offline",
+          "request_attempts": 1,
+          "external_requests": 0,
+          "format_repairs": 0,
+          "model_latency_seconds": 0.0,
+          "token_usage": null,
+          "response_model": "offline-fixture-model",
+          "response_ids": [
+            "offline-fixture"
+          ],
+          "validation_error": null,
+          "execution_kind": "passed",
+          "collected": 1,
+          "passed": 1,
+          "failed": 0,
+          "errors": 0,
+          "coverage_status": "available",
+          "line_percent": 60.0,
+          "branch_percent": 50.0,
+          "recommendation": "finish",
+          "stop_reason": "round_limit_reached",
+          "protected_tests": [
+            "test_score_pass"
+          ],
+          "issue_kinds": [],
+          "assessment": "outputs/p5/acceptance-222f0f83b6/partial_limit/evaluations/01/assessment.json"
+        }
+      ],
+      "report": "outputs/p5/acceptance-222f0f83b6/partial_limit/report.md",
+      "summary": "outputs/p5/acceptance-222f0f83b6/partial_limit/summary.json",
+      "cli_exit_code": 1,
+      "matches_expected": true
+    },
+    "duplicate": {
+      "run_id": "run-e311d79c51ea44b9a33235a7aa509231",
+      "run_dir": "outputs/p5/acceptance-222f0f83b6/duplicate",
+      "mode": "offline",
+      "model": "offline-fixture-model",
+      "service": "https://example.com",
+      "started_at": "2026-10-10T04:42:54.025312+00:00",
+      "finished_at": "2026-10-10T04:42:58.326290+00:00",
+      "duration_seconds": 4.300978,
+      "workflow_status": "finished",
+      "task_status": "partial",
+      "stop_reason": "no_progress",
+      "max_rounds": 3,
+      "timeout": 30,
+      "selected_round": 1,
+      "selection_reason": "Passing candidates first, then target/available coverage, branch and line coverage, and passed count; ties keep the earlier round.",
+      "selected_all_passed": true,
+      "latest_all_passed": null,
+      "generation_calls": 2,
+      "external_requests": 0,
+      "pytest_processes": 1,
+      "feedback_messages": 1,
+      "source_sha256": "283e7c1ba21bfbb01d82d0473631f500f552f27f1c801069291b5e0f3777dd7c",
+      "spec_sha256": "139e4633e796b167bea5410bb0ea604715d9219125f8234a29a0c4b99b5d29b1",
+      "source_unchanged": true,
+      "spec_unchanged": true,
+      "rounds": [
+        {
+          "round": 1,
+          "client_mode": "offline",
+          "request_attempts": 1,
+          "external_requests": 0,
+          "format_repairs": 0,
+          "model_latency_seconds": 0.0,
+          "token_usage": null,
+          "response_model": "offline-fixture-model",
+          "response_ids": [
+            "offline-fixture"
+          ],
+          "validation_error": null,
+          "execution_kind": "passed",
+          "collected": 1,
+          "passed": 1,
+          "failed": 0,
+          "errors": 0,
+          "coverage_status": "available",
+          "line_percent": 60.0,
+          "branch_percent": 50.0,
+          "recommendation": "extend_tests",
+          "stop_reason": null,
+          "protected_tests": [
+            "test_score_pass"
+          ],
+          "issue_kinds": [],
+          "assessment": "outputs/p5/acceptance-222f0f83b6/duplicate/evaluations/01/assessment.json"
+        },
+        {
+          "round": 2,
+          "client_mode": "offline",
+          "request_attempts": 1,
+          "external_requests": 0,
+          "format_repairs": 0,
+          "model_latency_seconds": 0.0,
+          "token_usage": null,
+          "response_model": "offline-fixture-model",
+          "response_ids": [
+            "offline-fixture"
+          ],
+          "validation_error": "duplicate_candidate：候选代码与历史有效候选重复，停止无进展迭代。",
+          "execution_kind": null,
+          "collected": null,
+          "passed": null,
+          "failed": null,
+          "errors": null,
+          "coverage_status": null,
+          "line_percent": null,
+          "branch_percent": null,
+          "recommendation": "finish",
+          "stop_reason": "no_progress",
+          "protected_tests": [
+            "test_score_pass"
+          ],
+          "issue_kinds": [
+            "generation_error"
+          ],
+          "assessment": "outputs/p5/acceptance-222f0f83b6/duplicate/evaluations/02/assessment.json"
+        }
+      ],
+      "report": "outputs/p5/acceptance-222f0f83b6/duplicate/report.md",
+      "summary": "outputs/p5/acceptance-222f0f83b6/duplicate/summary.json",
+      "cli_exit_code": 1,
+      "matches_expected": true
+    },
+    "no_coverage_progress": {
+      "run_id": "run-91452ce4a3044859b6c01684a6f175ca",
+      "run_dir": "outputs/p5/acceptance-222f0f83b6/no_coverage_progress",
+      "mode": "offline",
+      "model": "offline-fixture-model",
+      "service": "https://example.com",
+      "started_at": "2026-10-10T04:43:01.125072+00:00",
+      "finished_at": "2026-10-10T04:43:09.078073+00:00",
+      "duration_seconds": 7.953001,
+      "workflow_status": "finished",
+      "task_status": "partial",
+      "stop_reason": "no_progress",
+      "max_rounds": 3,
+      "timeout": 30,
+      "selected_round": 2,
+      "selection_reason": "Passing candidates first, then target/available coverage, branch and line coverage, and passed count; ties keep the earlier round.",
+      "selected_all_passed": true,
+      "latest_all_passed": true,
+      "generation_calls": 2,
+      "external_requests": 0,
+      "pytest_processes": 2,
+      "feedback_messages": 1,
+      "source_sha256": "283e7c1ba21bfbb01d82d0473631f500f552f27f1c801069291b5e0f3777dd7c",
+      "spec_sha256": "139e4633e796b167bea5410bb0ea604715d9219125f8234a29a0c4b99b5d29b1",
+      "source_unchanged": true,
+      "spec_unchanged": true,
+      "rounds": [
+        {
+          "round": 1,
+          "client_mode": "offline",
+          "request_attempts": 1,
+          "external_requests": 0,
+          "format_repairs": 0,
+          "model_latency_seconds": 0.0,
+          "token_usage": null,
+          "response_model": "offline-fixture-model",
+          "response_ids": [
+            "offline-fixture"
+          ],
+          "validation_error": null,
+          "execution_kind": "passed",
+          "collected": 1,
+          "passed": 1,
+          "failed": 0,
+          "errors": 0,
+          "coverage_status": "available",
+          "line_percent": 60.0,
+          "branch_percent": 50.0,
+          "recommendation": "extend_tests",
+          "stop_reason": null,
+          "protected_tests": [
+            "test_score_pass"
+          ],
+          "issue_kinds": [],
+          "assessment": "outputs/p5/acceptance-222f0f83b6/no_coverage_progress/evaluations/01/assessment.json"
+        },
+        {
+          "round": 2,
+          "client_mode": "offline",
+          "request_attempts": 1,
+          "external_requests": 0,
+          "format_repairs": 0,
+          "model_latency_seconds": 0.0,
+          "token_usage": null,
+          "response_model": "offline-fixture-model",
+          "response_ids": [
+            "offline-fixture"
+          ],
+          "validation_error": null,
+          "execution_kind": "passed",
+          "collected": 2,
+          "passed": 2,
+          "failed": 0,
+          "errors": 0,
+          "coverage_status": "available",
+          "line_percent": 60.0,
+          "branch_percent": 50.0,
+          "recommendation": "finish",
+          "stop_reason": "no_progress",
+          "protected_tests": [
+            "test_score_pass",
+            "test_score_pass_again"
+          ],
+          "issue_kinds": [],
+          "assessment": "outputs/p5/acceptance-222f0f83b6/no_coverage_progress/evaluations/02/assessment.json"
+        }
+      ],
+      "report": "outputs/p5/acceptance-222f0f83b6/no_coverage_progress/report.md",
+      "summary": "outputs/p5/acceptance-222f0f83b6/no_coverage_progress/summary.json",
+      "cli_exit_code": 1,
+      "matches_expected": true
+    },
+    "removed_passing_test": {
+      "run_id": "run-7752aa61a5b949c1afeab0c066450446",
+      "run_dir": "outputs/p5/acceptance-222f0f83b6/removed_passing_test",
+      "mode": "offline",
+      "model": "offline-fixture-model",
+      "service": "https://example.com",
+      "started_at": "2026-10-10T04:43:10.045223+00:00",
+      "finished_at": "2026-10-10T04:43:14.380233+00:00",
+      "duration_seconds": 4.33501,
+      "workflow_status": "finished",
+      "task_status": "partial",
+      "stop_reason": "round_limit_reached",
+      "max_rounds": 2,
+      "timeout": 30,
+      "selected_round": 1,
+      "selection_reason": "Passing candidates first, then target/available coverage, branch and line coverage, and passed count; ties keep the earlier round.",
+      "selected_all_passed": true,
+      "latest_all_passed": null,
+      "generation_calls": 2,
+      "external_requests": 0,
+      "pytest_processes": 1,
+      "feedback_messages": 1,
+      "source_sha256": "283e7c1ba21bfbb01d82d0473631f500f552f27f1c801069291b5e0f3777dd7c",
+      "spec_sha256": "139e4633e796b167bea5410bb0ea604715d9219125f8234a29a0c4b99b5d29b1",
+      "source_unchanged": true,
+      "spec_unchanged": true,
+      "rounds": [
+        {
+          "round": 1,
+          "client_mode": "offline",
+          "request_attempts": 1,
+          "external_requests": 0,
+          "format_repairs": 0,
+          "model_latency_seconds": 0.0,
+          "token_usage": null,
+          "response_model": "offline-fixture-model",
+          "response_ids": [
+            "offline-fixture"
+          ],
+          "validation_error": null,
+          "execution_kind": "passed",
+          "collected": 1,
+          "passed": 1,
+          "failed": 0,
+          "errors": 0,
+          "coverage_status": "available",
+          "line_percent": 60.0,
+          "branch_percent": 50.0,
+          "recommendation": "extend_tests",
+          "stop_reason": null,
+          "protected_tests": [
+            "test_score_pass"
+          ],
+          "issue_kinds": [],
+          "assessment": "outputs/p5/acceptance-222f0f83b6/removed_passing_test/evaluations/01/assessment.json"
+        },
+        {
+          "round": 2,
+          "client_mode": "offline",
+          "request_attempts": 1,
+          "external_requests": 0,
+          "format_repairs": 0,
+          "model_latency_seconds": 0.0,
+          "token_usage": null,
+          "response_model": "offline-fixture-model",
+          "response_ids": [
+            "offline-fixture"
+          ],
+          "validation_error": "preserve_tests：必须保留已通过测试 test_score_pass 的函数体、断言及装饰器；新增场景请另建测试函数。",
+          "execution_kind": null,
+          "collected": null,
+          "passed": null,
+          "failed": null,
+          "errors": null,
+          "coverage_status": null,
+          "line_percent": null,
+          "branch_percent": null,
+          "recommendation": "finish",
+          "stop_reason": "round_limit_reached",
+          "protected_tests": [
+            "test_score_pass"
+          ],
+          "issue_kinds": [
+            "generation_error"
+          ],
+          "assessment": "outputs/p5/acceptance-222f0f83b6/removed_passing_test/evaluations/02/assessment.json"
+        }
+      ],
+      "report": "outputs/p5/acceptance-222f0f83b6/removed_passing_test/report.md",
+      "summary": "outputs/p5/acceptance-222f0f83b6/removed_passing_test/summary.json",
+      "cli_exit_code": 1,
+      "matches_expected": true
+    },
+    "weakened_passing_test": {
+      "run_id": "run-bc21369396bd4bd3955be5026f3a8a7f",
+      "run_dir": "outputs/p5/acceptance-222f0f83b6/weakened_passing_test",
+      "mode": "offline",
+      "model": "offline-fixture-model",
+      "service": "https://example.com",
+      "started_at": "2026-10-10T04:43:17.126106+00:00",
+      "finished_at": "2026-10-10T04:43:21.214259+00:00",
+      "duration_seconds": 4.088153,
+      "workflow_status": "finished",
+      "task_status": "partial",
+      "stop_reason": "round_limit_reached",
+      "max_rounds": 2,
+      "timeout": 30,
+      "selected_round": 1,
+      "selection_reason": "Passing candidates first, then target/available coverage, branch and line coverage, and passed count; ties keep the earlier round.",
+      "selected_all_passed": true,
+      "latest_all_passed": null,
+      "generation_calls": 2,
+      "external_requests": 0,
+      "pytest_processes": 1,
+      "feedback_messages": 1,
+      "source_sha256": "283e7c1ba21bfbb01d82d0473631f500f552f27f1c801069291b5e0f3777dd7c",
+      "spec_sha256": "139e4633e796b167bea5410bb0ea604715d9219125f8234a29a0c4b99b5d29b1",
+      "source_unchanged": true,
+      "spec_unchanged": true,
+      "rounds": [
+        {
+          "round": 1,
+          "client_mode": "offline",
+          "request_attempts": 1,
+          "external_requests": 0,
+          "format_repairs": 0,
+          "model_latency_seconds": 0.0,
+          "token_usage": null,
+          "response_model": "offline-fixture-model",
+          "response_ids": [
+            "offline-fixture"
+          ],
+          "validation_error": null,
+          "execution_kind": "passed",
+          "collected": 1,
+          "passed": 1,
+          "failed": 0,
+          "errors": 0,
+          "coverage_status": "available",
+          "line_percent": 60.0,
+          "branch_percent": 50.0,
+          "recommendation": "extend_tests",
+          "stop_reason": null,
+          "protected_tests": [
+            "test_score_pass"
+          ],
+          "issue_kinds": [],
+          "assessment": "outputs/p5/acceptance-222f0f83b6/weakened_passing_test/evaluations/01/assessment.json"
+        },
+        {
+          "round": 2,
+          "client_mode": "offline",
+          "request_attempts": 1,
+          "external_requests": 0,
+          "format_repairs": 0,
+          "model_latency_seconds": 0.0,
+          "token_usage": null,
+          "response_model": "offline-fixture-model",
+          "response_ids": [
+            "offline-fixture"
+          ],
+          "validation_error": "preserve_tests：必须保留已通过测试 test_score_pass 的函数体、断言及装饰器；新增场景请另建测试函数。",
+          "execution_kind": null,
+          "collected": null,
+          "passed": null,
+          "failed": null,
+          "errors": null,
+          "coverage_status": null,
+          "line_percent": null,
+          "branch_percent": null,
+          "recommendation": "finish",
+          "stop_reason": "round_limit_reached",
+          "protected_tests": [
+            "test_score_pass"
+          ],
+          "issue_kinds": [
+            "generation_error"
+          ],
+          "assessment": "outputs/p5/acceptance-222f0f83b6/weakened_passing_test/evaluations/02/assessment.json"
+        }
+      ],
+      "report": "outputs/p5/acceptance-222f0f83b6/weakened_passing_test/report.md",
+      "summary": "outputs/p5/acceptance-222f0f83b6/weakened_passing_test/summary.json",
+      "cli_exit_code": 1,
+      "matches_expected": true
+    },
+    "later_execution_error": {
+      "run_id": "run-4e031a9eb3b04131b0cbf086a87e7fc3",
+      "run_dir": "outputs/p5/acceptance-222f0f83b6/later_execution_error",
+      "mode": "offline",
+      "model": "offline-fixture-model",
+      "service": "https://example.com",
+      "started_at": "2026-10-10T04:43:22.127106+00:00",
+      "finished_at": "2026-10-10T04:43:30.576461+00:00",
+      "duration_seconds": 8.449355,
+      "workflow_status": "finished",
+      "task_status": "partial",
+      "stop_reason": "round_limit_reached",
+      "max_rounds": 2,
+      "timeout": 30,
+      "selected_round": 1,
+      "selection_reason": "Passing candidates first, then target/available coverage, branch and line coverage, and passed count; ties keep the earlier round.",
+      "selected_all_passed": true,
+      "latest_all_passed": false,
+      "generation_calls": 2,
+      "external_requests": 0,
+      "pytest_processes": 2,
+      "feedback_messages": 1,
+      "source_sha256": "283e7c1ba21bfbb01d82d0473631f500f552f27f1c801069291b5e0f3777dd7c",
+      "spec_sha256": "139e4633e796b167bea5410bb0ea604715d9219125f8234a29a0c4b99b5d29b1",
+      "source_unchanged": true,
+      "spec_unchanged": true,
+      "rounds": [
+        {
+          "round": 1,
+          "client_mode": "offline",
+          "request_attempts": 1,
+          "external_requests": 0,
+          "format_repairs": 0,
+          "model_latency_seconds": 0.0,
+          "token_usage": null,
+          "response_model": "offline-fixture-model",
+          "response_ids": [
+            "offline-fixture"
+          ],
+          "validation_error": null,
+          "execution_kind": "passed",
+          "collected": 1,
+          "passed": 1,
+          "failed": 0,
+          "errors": 0,
+          "coverage_status": "available",
+          "line_percent": 60.0,
+          "branch_percent": 50.0,
+          "recommendation": "extend_tests",
+          "stop_reason": null,
+          "protected_tests": [
+            "test_score_pass"
+          ],
+          "issue_kinds": [],
+          "assessment": "outputs/p5/acceptance-222f0f83b6/later_execution_error/evaluations/01/assessment.json"
+        },
+        {
+          "round": 2,
+          "client_mode": "offline",
+          "request_attempts": 1,
+          "external_requests": 0,
+          "format_repairs": 0,
+          "model_latency_seconds": 0.0,
+          "token_usage": null,
+          "response_model": "offline-fixture-model",
+          "response_ids": [
+            "offline-fixture"
+          ],
+          "validation_error": null,
+          "execution_kind": "execution_error",
+          "collected": 2,
+          "passed": 1,
+          "failed": 0,
+          "errors": 1,
+          "coverage_status": "available",
+          "line_percent": 60.0,
+          "branch_percent": 50.0,
+          "recommendation": "finish",
+          "stop_reason": "round_limit_reached",
+          "protected_tests": [
+            "test_score_pass"
+          ],
+          "issue_kinds": [
+            "generation_error"
+          ],
+          "assessment": "outputs/p5/acceptance-222f0f83b6/later_execution_error/evaluations/02/assessment.json"
+        }
+      ],
+      "report": "outputs/p5/acceptance-222f0f83b6/later_execution_error/report.md",
+      "summary": "outputs/p5/acceptance-222f0f83b6/later_execution_error/summary.json",
+      "cli_exit_code": 1,
+      "matches_expected": true
+    },
+    "suspected_defect": {
+      "run_id": "run-d6f9197a5e4940f4add454b1ffa0c7b4",
+      "run_dir": "outputs/p5/acceptance-222f0f83b6/suspected_defect",
+      "mode": "offline",
+      "model": "offline-fixture-model",
+      "service": "https://example.com",
+      "started_at": "2026-10-10T04:43:33.277527+00:00",
+      "finished_at": "2026-10-10T04:43:37.580592+00:00",
+      "duration_seconds": 4.303065,
+      "workflow_status": "finished",
+      "task_status": "needs_review",
+      "stop_reason": "suspected_source_defect",
+      "max_rounds": 3,
+      "timeout": 30,
+      "selected_round": 1,
+      "selection_reason": "Passing candidates first, then target/available coverage, branch and line coverage, and passed count; ties keep the earlier round.",
+      "selected_all_passed": false,
+      "latest_all_passed": false,
+      "generation_calls": 1,
+      "external_requests": 0,
+      "pytest_processes": 1,
+      "feedback_messages": 0,
+      "source_sha256": "aabd7f536284dad04b0478446d78f7c377dc09d5548d09ae24b4cab7cede0b2e",
+      "spec_sha256": "6b741f3a28a1ebd3ad9b61ae01103086fe1f21bf0d87e40165b9c1580f59b63d",
+      "source_unchanged": true,
+      "spec_unchanged": true,
+      "rounds": [
+        {
+          "round": 1,
+          "client_mode": "offline",
+          "request_attempts": 1,
+          "external_requests": 0,
+          "format_repairs": 0,
+          "model_latency_seconds": 0.0,
+          "token_usage": null,
+          "response_model": "offline-fixture-model",
+          "response_ids": [
+            "offline-fixture"
+          ],
+          "validation_error": null,
+          "execution_kind": "assertion_failed",
+          "collected": 1,
+          "passed": 0,
+          "failed": 1,
+          "errors": 0,
+          "coverage_status": "available",
+          "line_percent": 62.5,
+          "branch_percent": 50.0,
+          "recommendation": "request_review",
+          "stop_reason": "suspected_source_defect",
+          "protected_tests": [],
+          "issue_kinds": [
+            "suspected_source_defect"
+          ],
+          "assessment": "outputs/p5/acceptance-222f0f83b6/suspected_defect/evaluations/01/assessment.json"
+        }
+      ],
+      "report": "outputs/p5/acceptance-222f0f83b6/suspected_defect/report.md",
+      "summary": "outputs/p5/acceptance-222f0f83b6/suspected_defect/summary.json",
+      "cli_exit_code": 1,
+      "matches_expected": true
+    },
+    "ambiguous_assertion": {
+      "run_id": "run-4fc0ea76986044c4bcb3292dcf56099a",
+      "run_dir": "outputs/p5/acceptance-222f0f83b6/ambiguous_assertion",
+      "mode": "offline",
+      "model": "offline-fixture-model",
+      "service": "https://example.com",
+      "started_at": "2026-10-10T04:43:38.498994+00:00",
+      "finished_at": "2026-10-10T04:43:42.825871+00:00",
+      "duration_seconds": 4.326877,
+      "workflow_status": "finished",
+      "task_status": "needs_review",
+      "stop_reason": "ambiguous_specification",
+      "max_rounds": 3,
+      "timeout": 30,
+      "selected_round": 1,
+      "selection_reason": "Passing candidates first, then target/available coverage, branch and line coverage, and passed count; ties keep the earlier round.",
+      "selected_all_passed": false,
+      "latest_all_passed": false,
+      "generation_calls": 1,
+      "external_requests": 0,
+      "pytest_processes": 1,
+      "feedback_messages": 0,
+      "source_sha256": "4043de06a34f5aa75919fa484db107bf05d5a78f95ac7cadcdd94cac60e429bf",
+      "spec_sha256": "04af68dbe4df5b6270282ed6ccc02e52b344d2d6a033698e3d6cc0df0dbc69ff",
+      "source_unchanged": true,
+      "spec_unchanged": true,
+      "rounds": [
+        {
+          "round": 1,
+          "client_mode": "offline",
+          "request_attempts": 1,
+          "external_requests": 0,
+          "format_repairs": 0,
+          "model_latency_seconds": 0.0,
+          "token_usage": null,
+          "response_model": "offline-fixture-model",
+          "response_ids": [
+            "offline-fixture"
+          ],
+          "validation_error": null,
+          "execution_kind": "assertion_failed",
+          "collected": 3,
+          "passed": 2,
+          "failed": 1,
+          "errors": 0,
+          "coverage_status": "available",
+          "line_percent": 100.0,
+          "branch_percent": null,
+          "recommendation": "request_review",
+          "stop_reason": "ambiguous_specification",
+          "protected_tests": [
+            "test_total_zero_price",
+            "test_total_zero_quantity"
+          ],
+          "issue_kinds": [
+            "ambiguous_specification"
+          ],
+          "assessment": "outputs/p5/acceptance-222f0f83b6/ambiguous_assertion/evaluations/01/assessment.json"
+        }
+      ],
+      "report": "outputs/p5/acceptance-222f0f83b6/ambiguous_assertion/report.md",
+      "summary": "outputs/p5/acceptance-222f0f83b6/ambiguous_assertion/summary.json",
+      "cli_exit_code": 1,
+      "matches_expected": true
+    },
+    "timeout": {
+      "run_id": "run-a17d5ca371384256b5652782a5d0cc7a",
+      "run_dir": "outputs/p5/acceptance-222f0f83b6/timeout",
+      "mode": "offline",
+      "model": "offline-fixture-model",
+      "service": "https://example.com",
+      "started_at": "2026-10-10T04:43:45.607137+00:00",
+      "finished_at": "2026-10-10T04:43:50.072111+00:00",
+      "duration_seconds": 4.464974,
+      "workflow_status": "finished",
+      "task_status": "failed",
+      "stop_reason": "execution_timeout",
+      "max_rounds": 3,
+      "timeout": 1,
+      "selected_round": null,
+      "selection_reason": "No executed runnable candidate is available.",
+      "selected_all_passed": null,
+      "latest_all_passed": false,
+      "generation_calls": 1,
+      "external_requests": 0,
+      "pytest_processes": 1,
+      "feedback_messages": 0,
+      "source_sha256": "fc41388a39f8c4d3d84c60666fb6e7f9127136b1ab2cbae8cd3f28e15b4c1a1c",
+      "spec_sha256": "37395294c8430458570ae67af35bfe6765242c9d746444e119e0b20474844310",
+      "source_unchanged": true,
+      "spec_unchanged": true,
+      "rounds": [
+        {
+          "round": 1,
+          "client_mode": "offline",
+          "request_attempts": 1,
+          "external_requests": 0,
+          "format_repairs": 0,
+          "model_latency_seconds": 0.0,
+          "token_usage": null,
+          "response_model": "offline-fixture-model",
+          "response_ids": [
+            "offline-fixture"
+          ],
+          "validation_error": null,
+          "execution_kind": "timeout",
+          "collected": 3,
+          "passed": 0,
+          "failed": 0,
+          "errors": 0,
+          "coverage_status": "unavailable",
+          "line_percent": null,
+          "branch_percent": null,
+          "recommendation": "stop_error",
+          "stop_reason": "execution_timeout",
+          "protected_tests": [],
+          "issue_kinds": [
+            "coverage_unavailable"
+          ],
+          "assessment": "outputs/p5/acceptance-222f0f83b6/timeout/evaluations/01/assessment.json"
+        }
+      ],
+      "report": "outputs/p5/acceptance-222f0f83b6/timeout/report.md",
+      "summary": "outputs/p5/acceptance-222f0f83b6/timeout/summary.json",
+      "cli_exit_code": 1,
+      "matches_expected": true
+    },
+    "empty_candidate": {
+      "run_id": "run-a5419e4d0a7743249e11659bee1a540f",
+      "run_dir": "outputs/p5/acceptance-222f0f83b6/empty_candidate",
+      "mode": "offline",
+      "model": "offline-fixture-model",
+      "service": "https://example.com",
+      "started_at": "2026-10-10T04:43:52.646144+00:00",
+      "finished_at": "2026-10-10T04:43:52.759629+00:00",
+      "duration_seconds": 0.113485,
+      "workflow_status": "finished",
+      "task_status": "failed",
+      "stop_reason": "round_limit_reached",
+      "max_rounds": 1,
+      "timeout": 30,
+      "selected_round": null,
+      "selection_reason": "No executed runnable candidate is available.",
+      "selected_all_passed": null,
+      "latest_all_passed": null,
+      "generation_calls": 1,
+      "external_requests": 0,
+      "pytest_processes": 0,
+      "feedback_messages": 0,
+      "source_sha256": "4043de06a34f5aa75919fa484db107bf05d5a78f95ac7cadcdd94cac60e429bf",
+      "spec_sha256": "04af68dbe4df5b6270282ed6ccc02e52b344d2d6a033698e3d6cc0df0dbc69ff",
+      "source_unchanged": true,
+      "spec_unchanged": true,
+      "rounds": [
+        {
+          "round": 1,
+          "client_mode": "offline",
+          "request_attempts": 1,
+          "external_requests": 0,
+          "format_repairs": 0,
+          "model_latency_seconds": 0.0,
+          "token_usage": null,
+          "response_model": "offline-fixture-model",
+          "response_ids": [
+            "offline-fixture"
+          ],
+          "validation_error": "target_import：生成测试缺少 from subject import <target_function>。",
+          "execution_kind": null,
+          "collected": null,
+          "passed": null,
+          "failed": null,
+          "errors": null,
+          "coverage_status": null,
+          "line_percent": null,
+          "branch_percent": null,
+          "recommendation": "finish",
+          "stop_reason": "round_limit_reached",
+          "protected_tests": [],
+          "issue_kinds": [
+            "generation_error"
+          ],
+          "assessment": "outputs/p5/acceptance-222f0f83b6/empty_candidate/evaluations/01/assessment.json"
+        }
+      ],
+      "report": "outputs/p5/acceptance-222f0f83b6/empty_candidate/report.md",
+      "summary": "outputs/p5/acceptance-222f0f83b6/empty_candidate/summary.json",
+      "cli_exit_code": 1,
+      "matches_expected": true
+    }
+  },
+  "real": {
+    "calculation": {
+      "run_id": "run-7250affa4ffc4d1ebfda4d3c8b0947a5",
+      "run_dir": "outputs/p5/real-calculation-20261010",
+      "mode": "real",
+      "model": "deepseek-flash",
+      "service": "https://api.deepseek.com",
+      "started_at": "2026-10-10T04:37:40.592904+00:00",
+      "finished_at": "2026-10-10T04:37:49.266034+00:00",
+      "duration_seconds": 8.67313,
+      "workflow_status": "finished",
+      "task_status": "completed",
+      "stop_reason": "coverage_target_met",
+      "max_rounds": 3,
+      "timeout": 30,
+      "selected_round": 1,
+      "selection_reason": "Passing candidates first, then target/available coverage, branch and line coverage, and passed count; ties keep the earlier round.",
+      "selected_all_passed": true,
+      "latest_all_passed": true,
+      "generation_calls": 1,
+      "external_requests": 1,
+      "pytest_processes": 1,
+      "feedback_messages": 0,
+      "source_sha256": "4043de06a34f5aa75919fa484db107bf05d5a78f95ac7cadcdd94cac60e429bf",
+      "spec_sha256": "04af68dbe4df5b6270282ed6ccc02e52b344d2d6a033698e3d6cc0df0dbc69ff",
+      "source_unchanged": true,
+      "spec_unchanged": true,
+      "rounds": [
+        {
+          "round": 1,
+          "client_mode": "real",
+          "request_attempts": 1,
+          "external_requests": 1,
+          "format_repairs": 0,
+          "model_latency_seconds": 4.241,
+          "token_usage": {
+            "prompt_tokens": 4641,
+            "completion_tokens": 1076,
+            "total_tokens": 5717
+          },
+          "response_model": "deepseek-flash",
+          "response_ids": [
+            "f682bd41-71a2-4ccb-af40-c2d6ad4e531b"
+          ],
+          "validation_error": null,
+          "execution_kind": "passed",
+          "collected": 6,
+          "passed": 6,
+          "failed": 0,
+          "errors": 0,
+          "coverage_status": "available",
+          "line_percent": 100.0,
+          "branch_percent": null,
+          "recommendation": "finish",
+          "stop_reason": "coverage_target_met",
+          "protected_tests": [
+            "test_boundary_both_zero",
+            "test_boundary_identity",
+            "test_boundary_large_product",
+            "test_boundary_zero_price",
+            "test_boundary_zero_quantity",
+            "test_normal_12_3"
+          ],
+          "issue_kinds": [],
+          "assessment": "outputs/p5/real-calculation-20261010/evaluations/01/assessment.json"
+        }
+      ],
+      "report": "outputs/p5/real-calculation-20261010/report.md",
+      "summary": "outputs/p5/real-calculation-20261010/summary.json"
+    },
+    "validation": {
+      "run_id": "run-62b0d5da105045c3b6aaf6fd7fb3f7c5",
+      "run_dir": "outputs/p5/real-validation-20261010",
+      "mode": "real",
+      "model": "deepseek-flash",
+      "service": "https://api.deepseek.com",
+      "started_at": "2026-10-10T04:38:07.916062+00:00",
+      "finished_at": "2026-10-10T04:38:26.589519+00:00",
+      "duration_seconds": 18.673457,
+      "workflow_status": "finished",
+      "task_status": "completed",
+      "stop_reason": "coverage_target_met",
+      "max_rounds": 3,
+      "timeout": 30,
+      "selected_round": 1,
+      "selection_reason": "Passing candidates first, then target/available coverage, branch and line coverage, and passed count; ties keep the earlier round.",
+      "selected_all_passed": true,
+      "latest_all_passed": true,
+      "generation_calls": 1,
+      "external_requests": 2,
+      "pytest_processes": 1,
+      "feedback_messages": 0,
+      "source_sha256": "283e7c1ba21bfbb01d82d0473631f500f552f27f1c801069291b5e0f3777dd7c",
+      "spec_sha256": "139e4633e796b167bea5410bb0ea604715d9219125f8234a29a0c4b99b5d29b1",
+      "source_unchanged": true,
+      "spec_unchanged": true,
+      "rounds": [
+        {
+          "round": 1,
+          "client_mode": "real",
+          "request_attempts": 2,
+          "external_requests": 2,
+          "format_repairs": 1,
+          "model_latency_seconds": 14.408,
+          "token_usage": {
+            "prompt_tokens": 13254,
+            "completion_tokens": 4408,
+            "total_tokens": 17662
+          },
+          "response_model": "deepseek-flash",
+          "response_ids": [
+            "f01d7b92-9494-4fad-b858-c191ad66bc30",
+            "9fd5d196-8603-4c7e-9a1d-77608dc69f76"
+          ],
+          "validation_error": null,
+          "execution_kind": "passed",
+          "collected": 15,
+          "passed": 15,
+          "failed": 0,
+          "errors": 0,
+          "coverage_status": "available",
+          "line_percent": 100.0,
+          "branch_percent": 100.0,
+          "recommendation": "finish",
+          "stop_reason": "coverage_target_met",
+          "protected_tests": [
+            "test_exception_bool",
+            "test_exception_out_of_range",
+            "test_exception_wrong_type",
+            "test_unit_excellent_boundaries",
+            "test_unit_fail_boundaries",
+            "test_unit_fail_normal",
+            "test_unit_pass_boundaries",
+            "test_unit_pass_normal"
+          ],
+          "issue_kinds": [],
+          "assessment": "outputs/p5/real-validation-20261010/evaluations/01/assessment.json"
+        }
+      ],
+      "report": "outputs/p5/real-validation-20261010/report.md",
+      "summary": "outputs/p5/real-validation-20261010/summary.json"
+    },
+    "discount": {
+      "run_id": "run-0cfcd96fccf44740a7d6d79dbf180921",
+      "run_dir": "outputs/p5/real-discount-20261010",
+      "mode": "real",
+      "model": "deepseek-flash",
+      "service": "https://api.deepseek.com",
+      "started_at": "2026-10-10T04:39:41.125527+00:00",
+      "finished_at": "2026-10-10T04:39:55.524617+00:00",
+      "duration_seconds": 14.39909,
+      "workflow_status": "finished",
+      "task_status": "needs_review",
+      "stop_reason": "suspected_source_defect",
+      "max_rounds": 3,
+      "timeout": 30,
+      "selected_round": 1,
+      "selection_reason": "Passing candidates first, then target/available coverage, branch and line coverage, and passed count; ties keep the earlier round.",
+      "selected_all_passed": false,
+      "latest_all_passed": false,
+      "generation_calls": 1,
+      "external_requests": 1,
+      "pytest_processes": 1,
+      "feedback_messages": 0,
+      "source_sha256": "aabd7f536284dad04b0478446d78f7c377dc09d5548d09ae24b4cab7cede0b2e",
+      "spec_sha256": "6b741f3a28a1ebd3ad9b61ae01103086fe1f21bf0d87e40165b9c1580f59b63d",
+      "source_unchanged": true,
+      "spec_unchanged": true,
+      "rounds": [
+        {
+          "round": 1,
+          "client_mode": "real",
+          "request_attempts": 1,
+          "external_requests": 1,
+          "format_repairs": 0,
+          "model_latency_seconds": 9.882,
+          "token_usage": {
+            "prompt_tokens": 5413,
+            "completion_tokens": 2051,
+            "total_tokens": 7464
+          },
+          "response_model": "deepseek-flash",
+          "response_ids": [
+            "7389a00f-2754-4157-ae5a-30cfab6de6c0"
+          ],
+          "validation_error": null,
+          "execution_kind": "assertion_failed",
+          "collected": 17,
+          "passed": 15,
+          "failed": 2,
+          "errors": 0,
+          "coverage_status": "available",
+          "line_percent": 100.0,
+          "branch_percent": 100.0,
+          "recommendation": "request_review",
+          "stop_reason": "suspected_source_defect",
+          "protected_tests": [
+            "test_boundary_just_above_100",
+            "test_branch_floor_division",
+            "test_exception_negative",
+            "test_exception_type",
+            "test_exception_type_before_range",
+            "test_normal_below_threshold",
+            "test_normal_zero"
+          ],
+          "issue_kinds": [
+            "ambiguous_specification",
+            "suspected_source_defect"
+          ],
+          "assessment": "outputs/p5/real-discount-20261010/evaluations/01/assessment.json"
+        }
+      ],
+      "report": "outputs/p5/real-discount-20261010/report.md",
+      "summary": "outputs/p5/real-discount-20261010/summary.json"
+    }
+  },
+  "checks": {
+    "workflow": {
+      "tests": 192,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "exit_code": 0,
+      "junit": "evaluation/p5_workflow_tests.xml"
+    },
+    "vendor": {
+      "tests": 180,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "exit_code": 0,
+      "junit": "evaluation/p5_vendor_tests.xml"
+    }
+  },
+  "optional": {
+    "relationships": "not_run_not_authorized",
+    "normal_repeat": "not_run"
+  },
+  "updated_at": "2026-10-10T12:53:23.993398+08:00",
+  "vendor_files_unchanged": true,
+  "vendor_manifest_files": 57,
+  "real_acceptance_complete": true,
+  "offline_acceptance_complete": true,
+  "regression_complete": true,
+  "p5_complete": true,
+  "matrix": [
+    {
+      "id": "A01",
+      "name": "正确简单函数",
+      "status": "passed",
+      "run_evidence": [
+        "real.calculation"
+      ],
+      "test_evidence": []
+    },
+    {
+      "id": "A02",
+      "name": "多分支目标覆盖",
+      "status": "passed",
+      "run_evidence": [
+        "real.validation"
+      ],
+      "test_evidence": []
+    },
+    {
+      "id": "A03",
+      "name": "真实执行反馈补充",
+      "status": "passed",
+      "run_evidence": [
+        "offline.feedback"
+      ],
+      "test_evidence": [
+        {
+          "junit": "evaluation/p5_workflow_tests.xml",
+          "case": "tests.test_workflow_integration.test_real_feedback_is_consumed_and_changes_next_prompt",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "id": "A04",
+      "name": "可修复候选错误",
+      "status": "passed",
+      "run_evidence": [
+        "offline.syntax_repaired",
+        "offline.name_repaired"
+      ],
+      "test_evidence": []
+    },
+    {
+      "id": "A05",
+      "name": "规格支持的边界缺陷",
+      "status": "passed",
+      "run_evidence": [
+        "real.discount"
+      ],
+      "test_evidence": []
+    },
+    {
+      "id": "A06",
+      "name": "不明确规格需复核",
+      "status": "passed",
+      "run_evidence": [
+        "offline.ambiguous_assertion"
+      ],
+      "test_evidence": [
+        {
+          "junit": "evaluation/p5_workflow_tests.xml",
+          "case": "tests.test_system.test_blocking_question_goes_to_review_without_pytest",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "id": "A07",
+      "name": "真实超时有界停止",
+      "status": "passed",
+      "run_evidence": [
+        "offline.timeout"
+      ],
+      "test_evidence": [
+        {
+          "junit": "evaluation/p5_workflow_tests.xml",
+          "case": "tests.test_execution_adapter.test_timeout_terminates_pytest_and_keeps_source_and_diagnostics",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "id": "A08",
+      "name": "API/非法响应有界失败",
+      "status": "passed",
+      "run_evidence": [],
+      "test_evidence": [
+        {
+          "junit": "evaluation/p5_workflow_tests.xml",
+          "case": "tests.test_generation_adapter.test_provider_retry_exhaustion_is_bounded[503-None-llm_service_unavailable-transient]",
+          "passed": true
+        },
+        {
+          "junit": "evaluation/p5_workflow_tests.xml",
+          "case": "tests.test_generation_adapter.test_provider_retry_exhaustion_is_bounded[200-{}-llm_invalid_generated_output-format]",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "id": "A09",
+      "name": "空测试禁止完成",
+      "status": "passed",
+      "run_evidence": [
+        "offline.empty_candidate"
+      ],
+      "test_evidence": [
+        {
+          "junit": "evaluation/p5_workflow_tests.xml",
+          "case": "tests.test_execution_adapter.test_no_tests_real_backend_observation_cannot_complete",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "id": "A10",
+      "name": "预算/无进展与选择",
+      "status": "passed",
+      "run_evidence": [
+        "offline.three_round_limit",
+        "offline.duplicate",
+        "offline.no_coverage_progress",
+        "offline.later_execution_error"
+      ],
+      "test_evidence": []
+    },
+    {
+      "id": "A11",
+      "name": "错误任务或轮次拒绝",
+      "status": "passed",
+      "run_evidence": [],
+      "test_evidence": [
+        {
+          "junit": "evaluation/p5_workflow_tests.xml",
+          "case": "tests.test_system.test_corrupt_first_generation_cannot_launch_execution[run_id]",
+          "passed": true
+        },
+        {
+          "junit": "evaluation/p5_workflow_tests.xml",
+          "case": "tests.test_system.test_corrupt_first_generation_cannot_launch_execution[round]",
+          "passed": true
+        },
+        {
+          "junit": "evaluation/p5_workflow_tests.xml",
+          "case": "tests.test_system.test_corrupt_first_generation_cannot_launch_execution[node]",
+          "passed": true
+        },
+        {
+          "junit": "evaluation/p5_workflow_tests.xml",
+          "case": "tests.test_system.test_corrupt_first_generation_cannot_launch_execution[receiver]",
+          "passed": true
+        },
+        {
+          "junit": "evaluation/p5_workflow_tests.xml",
+          "case": "tests.test_system.test_corrupt_first_generation_cannot_launch_execution[duplicate]",
+          "passed": true
+        },
+        {
+          "junit": "evaluation/p5_workflow_tests.xml",
+          "case": "tests.test_system.test_corrupt_first_generation_cannot_launch_execution[digest]",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "id": "A12",
+      "name": "节点注册/定义扩展",
+      "status": "passed",
+      "run_evidence": [],
+      "test_evidence": [
+        {
+          "junit": "evaluation/p5_workflow_tests.xml",
+          "case": "tests.test_workflow_integration.test_registered_trailing_node_runs_without_loop_edits",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "id": "A13",
+      "name": "已有输出不覆盖",
+      "status": "passed",
+      "run_evidence": [],
+      "test_evidence": [
+        {
+          "junit": "evaluation/p5_workflow_tests.xml",
+          "case": "tests.test_workflow_integration.test_cli_real_execution_offline_generation_and_exact_output",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "id": "A14",
+      "name": "覆盖导出失败保留测试",
+      "status": "passed",
+      "run_evidence": [],
+      "test_evidence": [
+        {
+          "junit": "evaluation/p5_workflow_tests.xml",
+          "case": "tests.test_workflow_integration.test_coverage_export_failure_keeps_tests_without_completion",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "id": "A15",
+      "name": "保护历史通过行为",
+      "status": "passed",
+      "run_evidence": [
+        "offline.removed_passing_test",
+        "offline.weakened_passing_test"
+      ],
+      "test_evidence": []
+    },
+    {
+      "id": "W11",
+      "name": "跨节点与修订归属",
+      "status": "passed",
+      "run_evidence": [],
+      "test_evidence": [
+        {
+          "junit": "evaluation/p5_workflow_tests.xml",
+          "case": "tests.test_system.test_wrong_revision_round_preserves_committed_history",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "id": "W12",
+      "name": "重复消息不重复执行",
+      "status": "passed",
+      "run_evidence": [],
+      "test_evidence": [
+        {
+          "junit": "evaluation/p5_workflow_tests.xml",
+          "case": "tests.test_system.test_corrupt_first_generation_cannot_launch_execution[duplicate]",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "id": "W13",
+      "name": "中文/空格输入输出",
+      "status": "passed",
+      "run_evidence": [],
+      "test_evidence": [
+        {
+          "junit": "evaluation/p5_workflow_tests.xml",
+          "case": "tests.test_system.test_chinese_and_space_input_paths_use_same_real_workflow",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "id": "W14",
+      "name": "非法输入零调用",
+      "status": "passed",
+      "run_evidence": [],
+      "test_evidence": [
+        {
+          "junit": "evaluation/p5_workflow_tests.xml",
+          "case": "tests.test_system.test_invalid_input_cannot_spend_generation_call[missing_source]",
+          "passed": true
+        },
+        {
+          "junit": "evaluation/p5_workflow_tests.xml",
+          "case": "tests.test_system.test_invalid_input_cannot_spend_generation_call[missing_spec]",
+          "passed": true
+        },
+        {
+          "junit": "evaluation/p5_workflow_tests.xml",
+          "case": "tests.test_system.test_invalid_input_cannot_spend_generation_call[blank_spec]",
+          "passed": true
+        },
+        {
+          "junit": "evaluation/p5_workflow_tests.xml",
+          "case": "tests.test_system.test_invalid_input_cannot_spend_generation_call[directory_source]",
+          "passed": true
+        },
+        {
+          "junit": "evaluation/p5_workflow_tests.xml",
+          "case": "tests.test_system.test_invalid_input_cannot_spend_generation_call[class_source]",
+          "passed": true
+        },
+        {
+          "junit": "evaluation/p5_workflow_tests.xml",
+          "case": "tests.test_system.test_invalid_input_cannot_spend_generation_call[bad_utf8_spec]",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "id": "W15",
+      "name": "副本变更阻止执行",
+      "status": "passed",
+      "run_evidence": [],
+      "test_evidence": [
+        {
+          "junit": "evaluation/p5_workflow_tests.xml",
+          "case": "tests.test_system.test_changed_subject_between_nodes_is_rejected_before_pytest",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "id": "W16",
+      "name": "持久化失败不伪称保存",
+      "status": "passed",
+      "run_evidence": [],
+      "test_evidence": [
+        {
+          "junit": "evaluation/p5_workflow_tests.xml",
+          "case": "tests.test_system.test_persistent_state_write_failure_exposes_last_saved_snapshot",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "id": "W17",
+      "name": "正式 ResultSummaryNode 示例",
+      "status": "delivery_pending_P6",
+      "note": "A12 已证明接口接入；正式示例与文档按 P6 交付。"
+    },
+    {
+      "id": "W18",
+      "name": "干净目录安装",
+      "status": "pending_P7"
+    }
+  ],
+  "core_matrix_complete": true
+}

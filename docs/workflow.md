@@ -45,4 +45,6 @@ report.md 和 summary.json 完成后才记录 workflow_finished；导出失败�
 
 退出码 0 为 completed，1 为其他业务结论或节点错误，2 为输入/配置/产物持久化错误。`scripts/p4_baseline.py` 通过正式 CLI 运行确定案例再执行回归；--skip-tests 只复现案例，--tests-only 在已有 CLI 索引上更新回归证据。阶段结果见 [../evaluation/p4.md](../evaluation/p4.md)。
 
+P5 的 `scripts/p5_acceptance.py` 进一步保存统一系统矩阵和真实模型索引：--offline --tests 执行本地案例与回归，--real 明确启用三个必需真实模型案例，--collect-real 读取指定既有任务，--refresh 重新校验索引里的文件与交接。离线与读取模式不读取密钥、不发出模型请求；每个新案例使用独立目录，历史记录不覆盖。结果见 [../evaluation/acceptance.md](../evaluation/acceptance.md)。
+
 流程定义可以追加无消息依赖的尾部节点：实现同步接口、注册稳定标识并追加 NodeDefinition 即可。P4 自动测试验证该接入方式；P6 再交付正式扩展示例和更完整的报告能力。

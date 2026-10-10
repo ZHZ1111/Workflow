@@ -1,6 +1,6 @@
 # 测试与验收计划
 
-版本：P4 / 2026-10-10。本表是新 Workflow 的完整验收计划；旧项目基线见 `evaluation/baseline.md`，P1–P3 历史证据保留，当前 175 项 Workflow 测试、52 项相关复用回归和 14 个正式 CLI 闭环证据见 `evaluation/p4.md`。自动路由已完成，真实模型质量和完整系统验收留在 P5。验收以行为和证据为准，不以方法名字或旧项目测试通过代替。
+版本：P5 / 2026-10-10。本表是新 Workflow 的完整验收计划；旧项目基线见 `evaluation/baseline.md`，P1–P4 历史证据保留。当前 192 项 Workflow 测试、15 个本次离线 CLI 案例和 3 个真实模型案例见 `evaluation/acceptance.md`；逐项结果与实际 JUnit testcase 在 `evaluation/acceptance.json`。验收以行为和证据为准，不以方法名字或旧项目测试通过代替。
 
 ## 测试分层
 
@@ -38,7 +38,7 @@
 
 ## 证据规范
 
-每个验收项记录用例 ID、模式（离线/真实模型）、配置、运行标识、源码与规格版本、每轮测试数、执行种类、目标覆盖、动作和停止原因、选中轮次、耗时、模型请求数及报告路径。新验收索引放 `evaluation/acceptance.json`，结论放 `evaluation/acceptance.md`，P5 执行时创建；当前不创建空“通过”文件。
+每个验收项记录用例 ID、模式（离线/真实模型）、配置、运行标识、源码与规格版本、每轮测试数、执行种类、目标覆盖、动作和停止原因、选中轮次、耗时、模型请求数及报告路径。P5 已生成 `evaluation/acceptance.json` 与 `evaluation/acceptance.md`；矩阵状态根据真实任务和实际 JUnit testcase 计算，不预先填“通过”。
 
 离线候选仅替换生成客户端，执行器尽量实际运行；真实模型首轮达标不强求发生反馈，可用 W02 证明反馈机制。真实模型故障时保存离线证据并标明真实验收未完成。P0 的 api_calls 在固定客户端中是旧适配器的模拟尝试计数，真实外部请求数单独记录为 0。
 
@@ -55,3 +55,9 @@ P3：`python scripts/p3_baseline.py` 用真实执行节点验证 12 类诊断与
 只为有风险的协议、路由、历史保护和跨节点行为写测试；文案、简单 getter 等低影响改动不写镜像测试。检查通过后不无理由重复跑全量测试。
 
 P4：`python scripts/p4_baseline.py` 通过正式 CLI 实测 14 个案例、17 次 pytest 执行。新增 27 项编排/CLI 集成测试覆盖顺序、反馈来源、修复、三轮预算、无进展、历史保护与选择、缺陷复核、超时、覆盖导出错误、节点/模型失败、报告失败、扩展接入、输出路径和模式配置。当前回归 175 passed；相关 vendor test_agent.py 与 test_generation.py 共 52 passed。真实 CLI 接线和结构化模型失败使用 Mock 或故障客户端，实际模型请求为 0；真实质量仍待 P5。
+
+P5：`python scripts/p5_acceptance.py --offline --tests` 用当前 Workflow 重新执行 15 个确定 CLI 案例，并运行新 Workflow 与生成/客户端/执行/覆盖/归因相关 vendor 回归。新增 17 项 tests/test_system.py 重点检查跨节点损坏、错误修订保留历史、持久化失败、阻塞问题、中文/空格输入和非法输入零模型调用；全量 Workflow 192 passed，相关 vendor 180 passed。已有 P4 测试仍证明具体反馈进入下一轮生成 prompt。
+
+三个必需真实样例在用户明确授权具体数据发往 api.deepseek.com 后执行：calculation 为 6 passed、100% 行覆盖；validation 为 15 passed、100%/100%；discount 为 15 passed、2 failed，needs_review/suspected_source_defect。请求数分别 1、2、1，validation 有一次客户端格式修复，候选仍只有一轮；本次没有真实 Workflow 反馈提升，不作跨次稳定性结论。可选关系样例未调用。
+
+A01–A15 的核心矩阵关联新实测或本次回归证据；正式扩展示例 W17 和干净安装 W18 分别留在 P6/P7。持久化持续失败时无法保证新 error 状态写入，验证的是抛错、保留最后成功快照、不继续依赖执行且不虚报产物已保存。
