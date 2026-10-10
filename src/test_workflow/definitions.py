@@ -1,4 +1,4 @@
-"""P1 defines a fixed sequential flow; feedback routing arrives in P4."""
+"""Sequential nodes and permitted feedback edges; loop scheduling arrives in P4."""
 
 from typing import Annotated
 
@@ -13,9 +13,15 @@ class NodeDefinition(ContractModel):
     receives_from: StableId | None = None
 
 
+class FeedbackRoute(ContractModel):
+    sender: StableId
+    receiver: StableId
+
+
 class WorkflowDefinition(ContractModel):
     name: StableId
     nodes: Annotated[tuple[NodeDefinition, ...], Field(min_length=1)]
+    feedback_routes: tuple[FeedbackRoute, ...] = ()
 
     @model_validator(mode="after")
     def ordered_dependencies(self):
@@ -26,10 +32,20 @@ class WorkflowDefinition(ContractModel):
             if node.receives_from is not None and node.receives_from not in preceding:
                 raise ValueError("a dependency must precede its consumer")
             preceding.add(node.agent_id)
+        pairs = {(route.sender, route.receiver) for route in self.feedback_routes}
+        if len(pairs) != len(self.feedback_routes) or any(
+            route.sender not in preceding or route.receiver not in preceding or route.sender == route.receiver
+            for route in self.feedback_routes
+        ):
+            raise ValueError("feedback routes must uniquely connect registered distinct nodes")
         return self
 
 
 DEMO_WORKFLOW = WorkflowDefinition(name="p1_handoff", nodes=(
     NodeDefinition(agent_id="test_generation"),
     NodeDefinition(agent_id="test_execution", receives_from="test_generation"),
+))
+
+EVALUATION_WORKFLOW = DEMO_WORKFLOW.updated(name="p3_evaluation", feedback_routes=(
+    FeedbackRoute(sender="test_execution", receiver="test_generation"),
 ))

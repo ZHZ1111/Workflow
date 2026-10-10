@@ -1,0 +1,562 @@
+{
+  "schema_version": "1.0",
+  "run_id": "run-9305369eda104e56aa0fd314e768cbd0",
+  "round": 1,
+  "agent_id": "test_execution",
+  "status": "ok",
+  "patch": {
+    "candidate": {
+      "number": 1,
+      "generated": {
+        "plan": {
+          "schema_version": "1.1",
+          "target_functions": [
+            "calculate_total"
+          ],
+          "oracle_mode": "specification",
+          "entry_functions": [
+            "calculate_total"
+          ],
+          "relationships": [],
+          "strategy": [
+            {
+              "subject_kind": "function",
+              "function_name": "calculate_total",
+              "relationship_id": null,
+              "decision": "unit_test",
+              "reason": "Explicit behavior specification"
+            }
+          ],
+          "scenarios": [
+            {
+              "scenario_id": "total_normal",
+              "target_function": "calculate_total",
+              "category": "boundary",
+              "inputs": {
+                "args": [
+                  12,
+                  3
+                ],
+                "kwargs": {}
+              },
+              "expected_behavior": "returns 36",
+              "expected_basis": {
+                "kind": "specification",
+                "detail": "See examples/calculation.md"
+              },
+              "test_kind": "unit",
+              "involved_functions": [
+                "calculate_total"
+              ],
+              "relationship_ids": [],
+              "steps": []
+            },
+            {
+              "scenario_id": "total_zero_price",
+              "target_function": "calculate_total",
+              "category": "boundary",
+              "inputs": {
+                "args": [
+                  0,
+                  5
+                ],
+                "kwargs": {}
+              },
+              "expected_behavior": "returns 0",
+              "expected_basis": {
+                "kind": "specification",
+                "detail": "See examples/calculation.md"
+              },
+              "test_kind": "unit",
+              "involved_functions": [
+                "calculate_total"
+              ],
+              "relationship_ids": [],
+              "steps": []
+            },
+            {
+              "scenario_id": "total_zero_quantity",
+              "target_function": "calculate_total",
+              "category": "boundary",
+              "inputs": {
+                "args": [
+                  12,
+                  0
+                ],
+                "kwargs": {}
+              },
+              "expected_behavior": "returns 0",
+              "expected_basis": {
+                "kind": "specification",
+                "detail": "See examples/calculation.md"
+              },
+              "test_kind": "unit",
+              "involved_functions": [
+                "calculate_total"
+              ],
+              "relationship_ids": [],
+              "steps": []
+            }
+          ]
+        },
+        "code": "import pytest\nfrom subject import calculate_total\n\ndef test_total_normal():\n    assert calculate_total(12, 3) == missing_expected\n\ndef test_total_zero_price():\n    assert calculate_total(0, 5) == 0\n\ndef test_total_zero_quantity():\n    assert calculate_total(12, 0) == 0\n",
+        "mappings": [
+          {
+            "test_function": "test_total_normal",
+            "scenario_ids": [
+              "total_normal"
+            ]
+          },
+          {
+            "test_function": "test_total_zero_price",
+            "scenario_ids": [
+              "total_zero_price"
+            ]
+          },
+          {
+            "test_function": "test_total_zero_quantity",
+            "scenario_ids": [
+              "total_zero_quantity"
+            ]
+          }
+        ],
+        "assumptions": [],
+        "questions": []
+      },
+      "test_path": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\p3\\run-9305369eda104e56aa0fd314e768cbd0\\agent_workspace\\rounds\\01\\test_subject.py",
+      "validation_error": null,
+      "execution": {
+        "kind": "execution_error",
+        "exit_code": 1,
+        "collected": 3,
+        "executed": 3,
+        "passed": 2,
+        "failed": 0,
+        "errors": 1,
+        "skipped": 0,
+        "xfailed": 0,
+        "xpassed": 0,
+        "stdout": "F..                                                                      [100%]\r\n================================== FAILURES ===================================\r\n______________________________ test_total_normal ______________________________\r\nrounds\\01\\test_subject.py:5: in test_total_normal\r\n    assert calculate_total(12, 3) == missing_expected\r\n                                     ^^^^^^^^^^^^^^^^\r\nE   NameError: name 'missing_expected' is not defined\r\n=================================== PASSES ====================================\r\n=========================== short test summary info ===========================\r\nPASSED rounds/01/test_subject.py::test_total_zero_price\r\nPASSED rounds/01/test_subject.py::test_total_zero_quantity\r\nFAILED rounds/01/test_subject.py::test_total_normal - NameError: name 'missin...\r\n1 failed, 2 passed in 0.25s\r\n",
+        "stderr": "rounds/01/test_subject.py::test_total_normal (call, rounds\\01\\test_subject.py:4)\nrounds\\01\\test_subject.py:5: in test_total_normal\n    assert calculate_total(12, 3) == missing_expected\n                                     ^^^^^^^^^^^^^^^^\nE   NameError: name 'missing_expected' is not defined",
+        "timed_out": false,
+        "stdout_truncated": false,
+        "stderr_truncated": false,
+        "duration_seconds": 1.1403769000025932,
+        "failures": [
+          {
+            "nodeid": "rounds/01/test_subject.py::test_total_normal",
+            "phase": "call",
+            "exception_type": "NameError",
+            "path": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\p3\\run-9305369eda104e56aa0fd314e768cbd0\\agent_workspace\\rounds\\01\\test_subject.py",
+            "line": 5,
+            "missing_module": null
+          }
+        ]
+      },
+      "coverage": {
+        "target_file": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\p3\\run-9305369eda104e56aa0fd314e768cbd0\\agent_workspace\\subject.py",
+        "status": "available",
+        "covered_lines": 2,
+        "total_lines": 2,
+        "covered_branches": 0,
+        "total_branches": 0,
+        "missing_lines": [],
+        "missing_branches": [],
+        "error": null
+      }
+    },
+    "issues": [
+      {
+        "kind": "generation_error",
+        "summary": "生成测试存在语法、名称或导入错误。",
+        "evidence": [
+          "rounds/01/test_subject.py::test_total_normal: call, NameError, E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\p3\\run-9305369eda104e56aa0fd314e768cbd0\\agent_workspace\\rounds\\01\\test_subject.py:5"
+        ],
+        "round_number": 1,
+        "scenario_id": null
+      }
+    ],
+    "next_action": "repair_generated_test",
+    "api_calls_delta": 0,
+    "token_usage": null,
+    "token_usage_reported": false
+  },
+  "messages": [
+    {
+      "schema_version": "1.0",
+      "message_id": "msg-feedback-01",
+      "run_id": "run-9305369eda104e56aa0fd314e768cbd0",
+      "round": 1,
+      "sender": "test_execution",
+      "receiver": "test_generation",
+      "type": "execution_feedback",
+      "payload": {
+        "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1",
+        "artifact": {
+          "path": "evaluations/01/assessment.json",
+          "kind": "assessment",
+          "sha256": "244f820261ca0debd19bffc360f8bdcaf6c5c9f277adcae34910c49e93823bfc",
+          "round": 1,
+          "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1"
+        },
+        "reason": "结构化失败位置指向生成测试的名称、语法或导入错误。",
+        "recommended_action": "repair_generated_test",
+        "feedback": {
+          "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1",
+          "execution": {
+            "kind": "execution_error",
+            "exit_code": 1,
+            "collected": 3,
+            "executed": 3,
+            "passed": 2,
+            "failed": 0,
+            "errors": 1,
+            "skipped": 0,
+            "xfailed": 0,
+            "xpassed": 0,
+            "stdout": "F..                                                                      [100%]\r\n================================== FAILURES ===================================\r\n______________________________ test_total_normal ______________________________\r\nrounds\\01\\test_subject.py:5: in test_total_normal\r\n    assert calculate_total(12, 3) == missing_expected\r\n                                     ^^^^^^^^^^^^^^^^\r\nE   NameError: name 'missing_expected' is not defined\r\n=================================== PASSES ====================================\r\n=========================== short test summary info ===========================\r\nPASSED rounds/01/test_subject.py::test_total_zero_price\r\nPASSED rounds/01/test_subject.py::test_total_zero_quantity\r\nFAILED rounds/01/test_subject.py::test_total_normal - NameError: name 'missin...\r\n1 failed, 2 passed in 0.25s\r\n",
+            "stderr": "rounds/01/test_subject.py::test_total_normal (call, rounds\\01\\test_subject.py:4)\nrounds\\01\\test_subject.py:5: in test_total_normal\n    assert calculate_total(12, 3) == missing_expected\n                                     ^^^^^^^^^^^^^^^^\nE   NameError: name 'missing_expected' is not defined",
+            "timed_out": false,
+            "stdout_truncated": false,
+            "stderr_truncated": false,
+            "duration_seconds": 1.1403769000025932,
+            "failures": [
+              {
+                "nodeid": "rounds/01/test_subject.py::test_total_normal",
+                "phase": "call",
+                "exception_type": "NameError",
+                "path": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\p3\\run-9305369eda104e56aa0fd314e768cbd0\\agent_workspace\\rounds\\01\\test_subject.py",
+                "line": 5,
+                "missing_module": null
+              }
+            ]
+          },
+          "coverage": {
+            "target_file": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\p3\\run-9305369eda104e56aa0fd314e768cbd0\\agent_workspace\\subject.py",
+            "status": "available",
+            "covered_lines": 2,
+            "total_lines": 2,
+            "covered_branches": 0,
+            "total_branches": 0,
+            "missing_lines": [],
+            "missing_branches": [],
+            "error": null
+          },
+          "validation_error": null,
+          "issues": [
+            {
+              "kind": "generation_error",
+              "summary": "生成测试存在语法、名称或导入错误。",
+              "evidence": [
+                "rounds/01/test_subject.py::test_total_normal: call, NameError, E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\p3\\run-9305369eda104e56aa0fd314e768cbd0\\agent_workspace\\rounds\\01\\test_subject.py:5"
+              ],
+              "round_number": 1,
+              "scenario_id": null
+            }
+          ],
+          "protected_tests": [
+            "test_total_zero_price",
+            "test_total_zero_quantity"
+          ],
+          "source_hints_json": "{\"affected_functions\": [], \"caller_chain_functions\": [], \"coverage_source_hints\": {\"missing_branches\": [], \"missing_lines\": [], \"status\": \"available\", \"target_file\": \"E:\\\\File-Document\\\\SE\\\\hw2\\\\Workflow\\\\outputs\\\\p3\\\\run-9305369eda104e56aa0fd314e768cbd0\\\\agent_workspace\\\\subject.py\"}, \"direct_call_evidence\": [], \"prior_strategy\": [{\"decision\": \"unit_test\", \"function_name\": \"calculate_total\", \"reason\": \"Explicit behavior specification\", \"relationship_id\": null, \"subject_kind\": \"function\"}], \"test_selection_instruction\": \"结合缺失位置、真实调用链和已有策略，判断补充单元边界或入口协作行为，说明新增行为及预期依据；不要机械地为每条调用边添加测试。\"}"
+        }
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "agent_workspace/rounds/01/executions/run-ofbejfbn/.coverage",
+      "kind": "execution_evidence",
+      "sha256": "25324efe848f97905f7f6336c76a86e4ae235de9c7300f56ab88ec1a96982200",
+      "round": 1,
+      "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-ofbejfbn/.coveragerc",
+      "kind": "execution_evidence",
+      "sha256": "34b98bb8504189b50c6874dac53eb05ce9074be35e6ea982a0c27e8d28a6c517",
+      "round": 1,
+      "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-ofbejfbn/coverage.json",
+      "kind": "execution_evidence",
+      "sha256": "79746c06f73efa98d0cc4d3f3dd7c6dd0109a5a9d2603a196225fa4c5967980f",
+      "round": 1,
+      "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-ofbejfbn/coverage_export.json",
+      "kind": "execution_evidence",
+      "sha256": "b13c6d02babc2475b1647d90344954c18c53b8333105117d645e0c4054bd56ca",
+      "round": 1,
+      "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-ofbejfbn/coverage_export.stderr.txt",
+      "kind": "execution_evidence",
+      "sha256": "cb7a869a75a531e3ee1b6e54bb700406914dcf954f47dd8831b4fe309fcadc48",
+      "round": 1,
+      "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-ofbejfbn/coverage_export.stdout.txt",
+      "kind": "execution_evidence",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "round": 1,
+      "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-ofbejfbn/coverage_result.json",
+      "kind": "coverage",
+      "sha256": "e1de231fd77b7d2ed3ade932b72401684c058247e3b9a4fe359a63813268d63f",
+      "round": 1,
+      "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-ofbejfbn/coverage_source_hints.json",
+      "kind": "execution_evidence",
+      "sha256": "1520ba4aa8820d44879a619483df3288590ac1891f4bf85f13004a709a11bf40",
+      "round": 1,
+      "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-ofbejfbn/execution.json",
+      "kind": "execution",
+      "sha256": "a2ca42e05f8578452cba7b249d15c69a8e0efaedfbb187c3d43d618f37f0c4b9",
+      "round": 1,
+      "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-ofbejfbn/pytest.ini",
+      "kind": "execution_evidence",
+      "sha256": "bf86cec34582454295d6d58edcaa5238eb52160b89a3032263d679455e826480",
+      "round": 1,
+      "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-ofbejfbn/pytest.xml",
+      "kind": "execution_evidence",
+      "sha256": "f26f74fe436ab33de44553cbc9c1f05c09e8002ef37f28610f49cb794a31cf33",
+      "round": 1,
+      "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-ofbejfbn/pytest_result.json",
+      "kind": "execution_evidence",
+      "sha256": "8ace0f75fb196bfe51d62464d2720c8bc7590fdb3f9ef3d254ff8d321534ba3c",
+      "round": 1,
+      "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-ofbejfbn/run_result.json",
+      "kind": "execution_evidence",
+      "sha256": "d0345f235e47f02cbfe214bb75daf62f19396f8169f84b9aea888f3e4a56c558",
+      "round": 1,
+      "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-ofbejfbn/stderr.txt",
+      "kind": "execution_evidence",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "round": 1,
+      "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-ofbejfbn/stdout.txt",
+      "kind": "execution_evidence",
+      "sha256": "a4e8a1f05ce7f0b6cc365fef13d64a2d4b0d16204c22d4482242803477e1284e",
+      "round": 1,
+      "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1"
+    },
+    {
+      "path": "evaluations/01/assessment.json",
+      "kind": "assessment",
+      "sha256": "244f820261ca0debd19bffc360f8bdcaf6c5c9f277adcae34910c49e93823bfc",
+      "round": 1,
+      "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1"
+    }
+  ],
+  "error_code": null,
+  "diagnostic_paths": [],
+  "generation": null,
+  "assessment": {
+    "schema_version": "1.0",
+    "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1",
+    "observation_mode": "real",
+    "tool_calls": 1,
+    "pytest_started": true,
+    "action": "repair_generated_test",
+    "recommendation": "repair_tests",
+    "reason": "结构化失败位置指向生成测试的名称、语法或导入错误。",
+    "stop_reason": null,
+    "task_status": null,
+    "feedback": {
+      "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1",
+      "execution": {
+        "kind": "execution_error",
+        "exit_code": 1,
+        "collected": 3,
+        "executed": 3,
+        "passed": 2,
+        "failed": 0,
+        "errors": 1,
+        "skipped": 0,
+        "xfailed": 0,
+        "xpassed": 0,
+        "stdout": "F..                                                                      [100%]\r\n================================== FAILURES ===================================\r\n______________________________ test_total_normal ______________________________\r\nrounds\\01\\test_subject.py:5: in test_total_normal\r\n    assert calculate_total(12, 3) == missing_expected\r\n                                     ^^^^^^^^^^^^^^^^\r\nE   NameError: name 'missing_expected' is not defined\r\n=================================== PASSES ====================================\r\n=========================== short test summary info ===========================\r\nPASSED rounds/01/test_subject.py::test_total_zero_price\r\nPASSED rounds/01/test_subject.py::test_total_zero_quantity\r\nFAILED rounds/01/test_subject.py::test_total_normal - NameError: name 'missin...\r\n1 failed, 2 passed in 0.25s\r\n",
+        "stderr": "rounds/01/test_subject.py::test_total_normal (call, rounds\\01\\test_subject.py:4)\nrounds\\01\\test_subject.py:5: in test_total_normal\n    assert calculate_total(12, 3) == missing_expected\n                                     ^^^^^^^^^^^^^^^^\nE   NameError: name 'missing_expected' is not defined",
+        "timed_out": false,
+        "stdout_truncated": false,
+        "stderr_truncated": false,
+        "duration_seconds": 1.1403769000025932,
+        "failures": [
+          {
+            "nodeid": "rounds/01/test_subject.py::test_total_normal",
+            "phase": "call",
+            "exception_type": "NameError",
+            "path": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\p3\\run-9305369eda104e56aa0fd314e768cbd0\\agent_workspace\\rounds\\01\\test_subject.py",
+            "line": 5,
+            "missing_module": null
+          }
+        ]
+      },
+      "coverage": {
+        "target_file": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\p3\\run-9305369eda104e56aa0fd314e768cbd0\\agent_workspace\\subject.py",
+        "status": "available",
+        "covered_lines": 2,
+        "total_lines": 2,
+        "covered_branches": 0,
+        "total_branches": 0,
+        "missing_lines": [],
+        "missing_branches": [],
+        "error": null
+      },
+      "validation_error": null,
+      "issues": [
+        {
+          "kind": "generation_error",
+          "summary": "生成测试存在语法、名称或导入错误。",
+          "evidence": [
+            "rounds/01/test_subject.py::test_total_normal: call, NameError, E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\p3\\run-9305369eda104e56aa0fd314e768cbd0\\agent_workspace\\rounds\\01\\test_subject.py:5"
+          ],
+          "round_number": 1,
+          "scenario_id": null
+        }
+      ],
+      "protected_tests": [
+        "test_total_zero_price",
+        "test_total_zero_quantity"
+      ],
+      "source_hints_json": "{\"affected_functions\": [], \"caller_chain_functions\": [], \"coverage_source_hints\": {\"missing_branches\": [], \"missing_lines\": [], \"status\": \"available\", \"target_file\": \"E:\\\\File-Document\\\\SE\\\\hw2\\\\Workflow\\\\outputs\\\\p3\\\\run-9305369eda104e56aa0fd314e768cbd0\\\\agent_workspace\\\\subject.py\"}, \"direct_call_evidence\": [], \"prior_strategy\": [{\"decision\": \"unit_test\", \"function_name\": \"calculate_total\", \"reason\": \"Explicit behavior specification\", \"relationship_id\": null, \"subject_kind\": \"function\"}], \"test_selection_instruction\": \"结合缺失位置、真实调用链和已有策略，判断补充单元边界或入口协作行为，说明新增行为及预期依据；不要机械地为每条调用边添加测试。\"}"
+    },
+    "evidence": [
+      {
+        "path": "agent_workspace/rounds/01/executions/run-ofbejfbn/.coverage",
+        "kind": "execution_evidence",
+        "sha256": "25324efe848f97905f7f6336c76a86e4ae235de9c7300f56ab88ec1a96982200",
+        "round": 1,
+        "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1"
+      },
+      {
+        "path": "agent_workspace/rounds/01/executions/run-ofbejfbn/.coveragerc",
+        "kind": "execution_evidence",
+        "sha256": "34b98bb8504189b50c6874dac53eb05ce9074be35e6ea982a0c27e8d28a6c517",
+        "round": 1,
+        "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1"
+      },
+      {
+        "path": "agent_workspace/rounds/01/executions/run-ofbejfbn/coverage.json",
+        "kind": "execution_evidence",
+        "sha256": "79746c06f73efa98d0cc4d3f3dd7c6dd0109a5a9d2603a196225fa4c5967980f",
+        "round": 1,
+        "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1"
+      },
+      {
+        "path": "agent_workspace/rounds/01/executions/run-ofbejfbn/coverage_export.json",
+        "kind": "execution_evidence",
+        "sha256": "b13c6d02babc2475b1647d90344954c18c53b8333105117d645e0c4054bd56ca",
+        "round": 1,
+        "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1"
+      },
+      {
+        "path": "agent_workspace/rounds/01/executions/run-ofbejfbn/coverage_export.stderr.txt",
+        "kind": "execution_evidence",
+        "sha256": "cb7a869a75a531e3ee1b6e54bb700406914dcf954f47dd8831b4fe309fcadc48",
+        "round": 1,
+        "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1"
+      },
+      {
+        "path": "agent_workspace/rounds/01/executions/run-ofbejfbn/coverage_export.stdout.txt",
+        "kind": "execution_evidence",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "round": 1,
+        "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1"
+      },
+      {
+        "path": "agent_workspace/rounds/01/executions/run-ofbejfbn/coverage_result.json",
+        "kind": "coverage",
+        "sha256": "e1de231fd77b7d2ed3ade932b72401684c058247e3b9a4fe359a63813268d63f",
+        "round": 1,
+        "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1"
+      },
+      {
+        "path": "agent_workspace/rounds/01/executions/run-ofbejfbn/coverage_source_hints.json",
+        "kind": "execution_evidence",
+        "sha256": "1520ba4aa8820d44879a619483df3288590ac1891f4bf85f13004a709a11bf40",
+        "round": 1,
+        "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1"
+      },
+      {
+        "path": "agent_workspace/rounds/01/executions/run-ofbejfbn/execution.json",
+        "kind": "execution",
+        "sha256": "a2ca42e05f8578452cba7b249d15c69a8e0efaedfbb187c3d43d618f37f0c4b9",
+        "round": 1,
+        "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1"
+      },
+      {
+        "path": "agent_workspace/rounds/01/executions/run-ofbejfbn/pytest.ini",
+        "kind": "execution_evidence",
+        "sha256": "bf86cec34582454295d6d58edcaa5238eb52160b89a3032263d679455e826480",
+        "round": 1,
+        "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1"
+      },
+      {
+        "path": "agent_workspace/rounds/01/executions/run-ofbejfbn/pytest.xml",
+        "kind": "execution_evidence",
+        "sha256": "f26f74fe436ab33de44553cbc9c1f05c09e8002ef37f28610f49cb794a31cf33",
+        "round": 1,
+        "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1"
+      },
+      {
+        "path": "agent_workspace/rounds/01/executions/run-ofbejfbn/pytest_result.json",
+        "kind": "execution_evidence",
+        "sha256": "8ace0f75fb196bfe51d62464d2720c8bc7590fdb3f9ef3d254ff8d321534ba3c",
+        "round": 1,
+        "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1"
+      },
+      {
+        "path": "agent_workspace/rounds/01/executions/run-ofbejfbn/run_result.json",
+        "kind": "execution_evidence",
+        "sha256": "d0345f235e47f02cbfe214bb75daf62f19396f8169f84b9aea888f3e4a56c558",
+        "round": 1,
+        "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1"
+      },
+      {
+        "path": "agent_workspace/rounds/01/executions/run-ofbejfbn/stderr.txt",
+        "kind": "execution_evidence",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "round": 1,
+        "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1"
+      },
+      {
+        "path": "agent_workspace/rounds/01/executions/run-ofbejfbn/stdout.txt",
+        "kind": "execution_evidence",
+        "sha256": "a4e8a1f05ce7f0b6cc365fef13d64a2d4b0d16204c22d4482242803477e1284e",
+        "round": 1,
+        "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1"
+      }
+    ],
+    "integrity_error": null
+  }
+}

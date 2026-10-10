@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0",
+  "message_id": "msg-feedback-01",
+  "run_id": "run-9305369eda104e56aa0fd314e768cbd0",
+  "round": 1,
+  "sender": "test_execution",
+  "receiver": "test_generation",
+  "type": "execution_feedback",
+  "payload": {
+    "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1",
+    "artifact": {
+      "path": "evaluations/01/assessment.json",
+      "kind": "assessment",
+      "sha256": "244f820261ca0debd19bffc360f8bdcaf6c5c9f277adcae34910c49e93823bfc",
+      "round": 1,
+      "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1"
+    },
+    "reason": "结构化失败位置指向生成测试的名称、语法或导入错误。",
+    "recommended_action": "repair_generated_test",
+    "feedback": {
+      "candidate_id": "run-9305369eda104e56aa0fd314e768cbd0:1",
+      "execution": {
+        "kind": "execution_error",
+        "exit_code": 1,
+        "collected": 3,
+        "executed": 3,
+        "passed": 2,
+        "failed": 0,
+        "errors": 1,
+        "skipped": 0,
+        "xfailed": 0,
+        "xpassed": 0,
+        "stdout": "F..                                                                      [100%]\r\n================================== FAILURES ===================================\r\n______________________________ test_total_normal ______________________________\r\nrounds\\01\\test_subject.py:5: in test_total_normal\r\n    assert calculate_total(12, 3) == missing_expected\r\n                                     ^^^^^^^^^^^^^^^^\r\nE   NameError: name 'missing_expected' is not defined\r\n=================================== PASSES ====================================\r\n=========================== short test summary info ===========================\r\nPASSED rounds/01/test_subject.py::test_total_zero_price\r\nPASSED rounds/01/test_subject.py::test_total_zero_quantity\r\nFAILED rounds/01/test_subject.py::test_total_normal - NameError: name 'missin...\r\n1 failed, 2 passed in 0.25s\r\n",
+        "stderr": "rounds/01/test_subject.py::test_total_normal (call, rounds\\01\\test_subject.py:4)\nrounds\\01\\test_subject.py:5: in test_total_normal\n    assert calculate_total(12, 3) == missing_expected\n                                     ^^^^^^^^^^^^^^^^\nE   NameError: name 'missing_expected' is not defined",
+        "timed_out": false,
+        "stdout_truncated": false,
+        "stderr_truncated": false,
+        "duration_seconds": 1.1403769000025932,
+        "failures": [
+          {
+            "nodeid": "rounds/01/test_subject.py::test_total_normal",
+            "phase": "call",
+            "exception_type": "NameError",
+            "path": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\p3\\run-9305369eda104e56aa0fd314e768cbd0\\agent_workspace\\rounds\\01\\test_subject.py",
+            "line": 5,
+            "missing_module": null
+          }
+        ]
+      },
+      "coverage": {
+        "target_file": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\p3\\run-9305369eda104e56aa0fd314e768cbd0\\agent_workspace\\subject.py",
+        "status": "available",
+        "covered_lines": 2,
+        "total_lines": 2,
+        "covered_branches": 0,
+        "total_branches": 0,
+        "missing_lines": [],
+        "missing_branches": [],
+        "error": null
+      },
+      "validation_error": null,
+      "issues": [
+        {
+          "kind": "generation_error",
+          "summary": "生成测试存在语法、名称或导入错误。",
+          "evidence": [
+            "rounds/01/test_subject.py::test_total_normal: call, NameError, E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\p3\\run-9305369eda104e56aa0fd314e768cbd0\\agent_workspace\\rounds\\01\\test_subject.py:5"
+          ],
+          "round_number": 1,
+          "scenario_id": null
+        }
+      ],
+      "protected_tests": [
+        "test_total_zero_price",
+        "test_total_zero_quantity"
+      ],
+      "source_hints_json": "{\"affected_functions\": [], \"caller_chain_functions\": [], \"coverage_source_hints\": {\"missing_branches\": [], \"missing_lines\": [], \"status\": \"available\", \"target_file\": \"E:\\\\File-Document\\\\SE\\\\hw2\\\\Workflow\\\\outputs\\\\p3\\\\run-9305369eda104e56aa0fd314e768cbd0\\\\agent_workspace\\\\subject.py\"}, \"direct_call_evidence\": [], \"prior_strategy\": [{\"decision\": \"unit_test\", \"function_name\": \"calculate_total\", \"reason\": \"Explicit behavior specification\", \"relationship_id\": null, \"subject_kind\": \"function\"}], \"test_selection_instruction\": \"结合缺失位置、真实调用链和已有策略，判断补充单元边界或入口协作行为，说明新增行为及预期依据；不要机械地为每条调用边添加测试。\"}"
+    }
+  }
+}

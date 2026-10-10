@@ -7,7 +7,7 @@ from testgen_agent.models import AgentState, CandidateRound, ModelInfo, OracleMo
 from testgen_agent.tools import analyze_source
 
 from .config import WorkflowConfig
-from .contracts import AgentContext, AgentResult, StatePatch
+from .contracts import AgentContext, AgentResult, StatePatch, ExecutionAssessment
 from .definitions import WorkflowDefinition
 from .events import EventWriter, MessageWriter
 from .registry import AgentRegistry
@@ -116,7 +116,10 @@ class WorkflowRunner:
             ):
                 raise HandoffError("message belongs to another task, round or sender")
             destinations = [node for node in self.definition.nodes if node.agent_id == message.receiver]
-            if not destinations or destinations[0].receives_from != state.current_node:
+            feedback_route = message.type == "execution_feedback" and any(
+                route.sender == message.sender and route.receiver == message.receiver
+                for route in self.definition.feedback_routes)
+            if not destinations or (destinations[0].receives_from != state.current_node and not feedback_route):
                 raise HandoffError("message receiver is not a declared consumer")
             if message.message_id in known_ids:
                 raise HandoffError("message ID was already sent")
@@ -136,6 +139,25 @@ class WorkflowRunner:
                     verify_artifact(state.run_dir, reference).read_text(encoding="utf-8"))
                 if saved != business.history[-1]:
                     raise HandoffError("candidate artifact differs from the proposed business state")
+            elif message.type == "execution_feedback" and message.payload.artifact.kind == "assessment":
+                saved = ExecutionAssessment.model_validate_json(verify_artifact(
+                    state.run_dir, message.payload.artifact).read_text(encoding="utf-8"))
+                if (saved != result.assessment or saved.feedback != message.payload.feedback
+                        or saved.action != message.payload.recommended_action):
+                    raise HandoffError("feedback differs from its recorded assessment")
+        if result.assessment is not None:
+            assessment = result.assessment
+            candidate = business.history[-1]
+            refs = tuple(item for item in result.artifacts if item.kind == "assessment")
+            if (result.agent_id != "test_execution" or len(refs) != 1
+                    or ExecutionAssessment.model_validate_json(verify_artifact(state.run_dir, refs[0]).read_text(encoding="utf-8")) != assessment
+                    or assessment.evidence != tuple(item for item in result.artifacts if item.kind != "assessment")):
+                raise HandoffError("assessment requires matching registered evidence")
+            if (assessment.candidate_id != f"{state.run_id}:{state.current_round}"
+                    or assessment.feedback.execution != candidate.execution
+                    or assessment.feedback.coverage != candidate.coverage
+                    or assessment.action != result.patch.next_action):
+                raise HandoffError("assessment differs from the committed candidate or action")
         return state.updated(
             agent_state=business, artifacts=artifacts,
             messages=(*state.messages, *result.messages),

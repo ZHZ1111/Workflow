@@ -1,0 +1,390 @@
+{
+  "schema_version": "1.0",
+  "run_id": "run-8f80d4f7e32e4dbabde622192ba9d371",
+  "round": 1,
+  "agent_id": "test_execution",
+  "status": "ok",
+  "patch": {
+    "candidate": {
+      "number": 1,
+      "generated": {
+        "plan": {
+          "schema_version": "1.1",
+          "target_functions": [
+            "calculate_total"
+          ],
+          "oracle_mode": "specification",
+          "entry_functions": [
+            "calculate_total"
+          ],
+          "relationships": [],
+          "strategy": [
+            {
+              "subject_kind": "function",
+              "function_name": "calculate_total",
+              "relationship_id": null,
+              "decision": "unit_test",
+              "reason": "Explicit behavior specification"
+            }
+          ],
+          "scenarios": [
+            {
+              "scenario_id": "total_normal",
+              "target_function": "calculate_total",
+              "category": "boundary",
+              "inputs": {
+                "args": [
+                  12,
+                  3
+                ],
+                "kwargs": {}
+              },
+              "expected_behavior": "returns 36",
+              "expected_basis": {
+                "kind": "specification",
+                "detail": "See examples/calculation.md"
+              },
+              "test_kind": "unit",
+              "involved_functions": [
+                "calculate_total"
+              ],
+              "relationship_ids": [],
+              "steps": []
+            },
+            {
+              "scenario_id": "total_zero_price",
+              "target_function": "calculate_total",
+              "category": "boundary",
+              "inputs": {
+                "args": [
+                  0,
+                  5
+                ],
+                "kwargs": {}
+              },
+              "expected_behavior": "returns 0",
+              "expected_basis": {
+                "kind": "specification",
+                "detail": "See examples/calculation.md"
+              },
+              "test_kind": "unit",
+              "involved_functions": [
+                "calculate_total"
+              ],
+              "relationship_ids": [],
+              "steps": []
+            },
+            {
+              "scenario_id": "total_zero_quantity",
+              "target_function": "calculate_total",
+              "category": "boundary",
+              "inputs": {
+                "args": [
+                  12,
+                  0
+                ],
+                "kwargs": {}
+              },
+              "expected_behavior": "returns 0",
+              "expected_basis": {
+                "kind": "specification",
+                "detail": "See examples/calculation.md"
+              },
+              "test_kind": "unit",
+              "involved_functions": [
+                "calculate_total"
+              ],
+              "relationship_ids": [],
+              "steps": []
+            }
+          ]
+        },
+        "code": "import pytest\nfrom subject import calculate_total\n\ndef test_total_normal():\n    assert calculate_total(12, 3) == 36\n\ndef test_total_zero_price():\n    assert calculate_total(0, 5) == 0\n\ndef test_total_zero_quantity():\n    assert calculate_total(12, 0) == 0\n",
+        "mappings": [
+          {
+            "test_function": "test_total_normal",
+            "scenario_ids": [
+              "total_normal"
+            ]
+          },
+          {
+            "test_function": "test_total_zero_price",
+            "scenario_ids": [
+              "total_zero_price"
+            ]
+          },
+          {
+            "test_function": "test_total_zero_quantity",
+            "scenario_ids": [
+              "total_zero_quantity"
+            ]
+          }
+        ],
+        "assumptions": [],
+        "questions": []
+      },
+      "test_path": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\p3\\run-8f80d4f7e32e4dbabde622192ba9d371\\agent_workspace\\rounds\\01\\test_subject.py",
+      "validation_error": null,
+      "execution": {
+        "kind": "timeout",
+        "exit_code": 1,
+        "collected": 3,
+        "executed": 1,
+        "passed": 0,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "xfailed": 0,
+        "xpassed": 0,
+        "stdout": "",
+        "stderr": "Execution exceeded 2 seconds; process terminated.",
+        "timed_out": true,
+        "stdout_truncated": false,
+        "stderr_truncated": false,
+        "duration_seconds": 4.67421650000324,
+        "failures": []
+      },
+      "coverage": {
+        "target_file": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\p3\\run-8f80d4f7e32e4dbabde622192ba9d371\\agent_workspace\\subject.py",
+        "status": "unavailable",
+        "covered_lines": null,
+        "total_lines": null,
+        "covered_branches": null,
+        "total_branches": null,
+        "missing_lines": [],
+        "missing_branches": [],
+        "error": "coverage_not_finalized: pytest did not finish normally."
+      }
+    },
+    "issues": [
+      {
+        "kind": "coverage_unavailable",
+        "summary": "同次执行的目标覆盖率不可用，保留真实执行结果。",
+        "evidence": [
+          "coverage_not_finalized: pytest did not finish normally."
+        ],
+        "round_number": 1,
+        "scenario_id": null
+      }
+    ],
+    "next_action": "finish",
+    "api_calls_delta": 0,
+    "token_usage": null,
+    "token_usage_reported": false
+  },
+  "messages": [],
+  "artifacts": [
+    {
+      "path": "agent_workspace/rounds/01/executions/run-9_lc4e8m/.coveragerc",
+      "kind": "execution_evidence",
+      "sha256": "34b98bb8504189b50c6874dac53eb05ce9074be35e6ea982a0c27e8d28a6c517",
+      "round": 1,
+      "candidate_id": "run-8f80d4f7e32e4dbabde622192ba9d371:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-9_lc4e8m/coverage_export.json",
+      "kind": "execution_evidence",
+      "sha256": "ab056cb441649a081ebbbee18492a53f93a6ac8d4ce5b88235ccf631f885e423",
+      "round": 1,
+      "candidate_id": "run-8f80d4f7e32e4dbabde622192ba9d371:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-9_lc4e8m/coverage_result.json",
+      "kind": "coverage",
+      "sha256": "7b2f8fa79e5debce1b67271e5cbd4cb9d083acb7c1144a14de9d38e7da9f9e68",
+      "round": 1,
+      "candidate_id": "run-8f80d4f7e32e4dbabde622192ba9d371:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-9_lc4e8m/coverage_source_hints.json",
+      "kind": "execution_evidence",
+      "sha256": "d8e46248e5578f05da5b8d95f31f04e4af4e4ace5557511550f234cec2ecf3d0",
+      "round": 1,
+      "candidate_id": "run-8f80d4f7e32e4dbabde622192ba9d371:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-9_lc4e8m/execution.json",
+      "kind": "execution",
+      "sha256": "cf3a3306721c05949de3dfca294bfd37b68461d13e9779158028d93f3c48324a",
+      "round": 1,
+      "candidate_id": "run-8f80d4f7e32e4dbabde622192ba9d371:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-9_lc4e8m/pytest.ini",
+      "kind": "execution_evidence",
+      "sha256": "bf86cec34582454295d6d58edcaa5238eb52160b89a3032263d679455e826480",
+      "round": 1,
+      "candidate_id": "run-8f80d4f7e32e4dbabde622192ba9d371:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-9_lc4e8m/pytest_result.json",
+      "kind": "execution_evidence",
+      "sha256": "20c3e34afbd87aa474c7d2c014c997529dfed74a751cea9ccd3812817aac607f",
+      "round": 1,
+      "candidate_id": "run-8f80d4f7e32e4dbabde622192ba9d371:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-9_lc4e8m/run_result.json",
+      "kind": "execution_evidence",
+      "sha256": "b28c26da6b74cee20e2b3cc3c9afc9a938f180b3549ba6102be8fd871833545a",
+      "round": 1,
+      "candidate_id": "run-8f80d4f7e32e4dbabde622192ba9d371:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-9_lc4e8m/stderr.txt",
+      "kind": "execution_evidence",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "round": 1,
+      "candidate_id": "run-8f80d4f7e32e4dbabde622192ba9d371:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-9_lc4e8m/stdout.txt",
+      "kind": "execution_evidence",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "round": 1,
+      "candidate_id": "run-8f80d4f7e32e4dbabde622192ba9d371:1"
+    },
+    {
+      "path": "evaluations/01/assessment.json",
+      "kind": "assessment",
+      "sha256": "e98eb2a17417f951bf6ec57c3fa5cbb9a765a1d40102bbde5113113f898cf3ed",
+      "round": 1,
+      "candidate_id": "run-8f80d4f7e32e4dbabde622192ba9d371:1"
+    }
+  ],
+  "error_code": null,
+  "diagnostic_paths": [],
+  "generation": null,
+  "assessment": {
+    "schema_version": "1.0",
+    "candidate_id": "run-8f80d4f7e32e4dbabde622192ba9d371:1",
+    "observation_mode": "real",
+    "tool_calls": 1,
+    "pytest_started": true,
+    "action": "finish",
+    "recommendation": "stop_error",
+    "reason": "测试执行超时，停止自动生成。",
+    "stop_reason": "execution_timeout",
+    "task_status": "failed",
+    "feedback": {
+      "candidate_id": "run-8f80d4f7e32e4dbabde622192ba9d371:1",
+      "execution": {
+        "kind": "timeout",
+        "exit_code": 1,
+        "collected": 3,
+        "executed": 1,
+        "passed": 0,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "xfailed": 0,
+        "xpassed": 0,
+        "stdout": "",
+        "stderr": "Execution exceeded 2 seconds; process terminated.",
+        "timed_out": true,
+        "stdout_truncated": false,
+        "stderr_truncated": false,
+        "duration_seconds": 4.67421650000324,
+        "failures": []
+      },
+      "coverage": {
+        "target_file": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\p3\\run-8f80d4f7e32e4dbabde622192ba9d371\\agent_workspace\\subject.py",
+        "status": "unavailable",
+        "covered_lines": null,
+        "total_lines": null,
+        "covered_branches": null,
+        "total_branches": null,
+        "missing_lines": [],
+        "missing_branches": [],
+        "error": "coverage_not_finalized: pytest did not finish normally."
+      },
+      "validation_error": null,
+      "issues": [
+        {
+          "kind": "coverage_unavailable",
+          "summary": "同次执行的目标覆盖率不可用，保留真实执行结果。",
+          "evidence": [
+            "coverage_not_finalized: pytest did not finish normally."
+          ],
+          "round_number": 1,
+          "scenario_id": null
+        }
+      ],
+      "protected_tests": [],
+      "source_hints_json": "{\"affected_functions\": [], \"caller_chain_functions\": [], \"coverage_source_hints\": {\"error\": \"coverage_not_finalized: pytest did not finish normally.\", \"missing_branches\": [], \"missing_lines\": [], \"status\": \"unavailable\", \"target_file\": \"E:\\\\File-Document\\\\SE\\\\hw2\\\\Workflow\\\\outputs\\\\p3\\\\run-8f80d4f7e32e4dbabde622192ba9d371\\\\agent_workspace\\\\subject.py\"}, \"direct_call_evidence\": [], \"prior_strategy\": [{\"decision\": \"unit_test\", \"function_name\": \"calculate_total\", \"reason\": \"Explicit behavior specification\", \"relationship_id\": null, \"subject_kind\": \"function\"}], \"test_selection_instruction\": \"结合缺失位置、真实调用链和已有策略，判断补充单元边界或入口协作行为，说明新增行为及预期依据；不要机械地为每条调用边添加测试。\"}"
+    },
+    "evidence": [
+      {
+        "path": "agent_workspace/rounds/01/executions/run-9_lc4e8m/.coveragerc",
+        "kind": "execution_evidence",
+        "sha256": "34b98bb8504189b50c6874dac53eb05ce9074be35e6ea982a0c27e8d28a6c517",
+        "round": 1,
+        "candidate_id": "run-8f80d4f7e32e4dbabde622192ba9d371:1"
+      },
+      {
+        "path": "agent_workspace/rounds/01/executions/run-9_lc4e8m/coverage_export.json",
+        "kind": "execution_evidence",
+        "sha256": "ab056cb441649a081ebbbee18492a53f93a6ac8d4ce5b88235ccf631f885e423",
+        "round": 1,
+        "candidate_id": "run-8f80d4f7e32e4dbabde622192ba9d371:1"
+      },
+      {
+        "path": "agent_workspace/rounds/01/executions/run-9_lc4e8m/coverage_result.json",
+        "kind": "coverage",
+        "sha256": "7b2f8fa79e5debce1b67271e5cbd4cb9d083acb7c1144a14de9d38e7da9f9e68",
+        "round": 1,
+        "candidate_id": "run-8f80d4f7e32e4dbabde622192ba9d371:1"
+      },
+      {
+        "path": "agent_workspace/rounds/01/executions/run-9_lc4e8m/coverage_source_hints.json",
+        "kind": "execution_evidence",
+        "sha256": "d8e46248e5578f05da5b8d95f31f04e4af4e4ace5557511550f234cec2ecf3d0",
+        "round": 1,
+        "candidate_id": "run-8f80d4f7e32e4dbabde622192ba9d371:1"
+      },
+      {
+        "path": "agent_workspace/rounds/01/executions/run-9_lc4e8m/execution.json",
+        "kind": "execution",
+        "sha256": "cf3a3306721c05949de3dfca294bfd37b68461d13e9779158028d93f3c48324a",
+        "round": 1,
+        "candidate_id": "run-8f80d4f7e32e4dbabde622192ba9d371:1"
+      },
+      {
+        "path": "agent_workspace/rounds/01/executions/run-9_lc4e8m/pytest.ini",
+        "kind": "execution_evidence",
+        "sha256": "bf86cec34582454295d6d58edcaa5238eb52160b89a3032263d679455e826480",
+        "round": 1,
+        "candidate_id": "run-8f80d4f7e32e4dbabde622192ba9d371:1"
+      },
+      {
+        "path": "agent_workspace/rounds/01/executions/run-9_lc4e8m/pytest_result.json",
+        "kind": "execution_evidence",
+        "sha256": "20c3e34afbd87aa474c7d2c014c997529dfed74a751cea9ccd3812817aac607f",
+        "round": 1,
+        "candidate_id": "run-8f80d4f7e32e4dbabde622192ba9d371:1"
+      },
+      {
+        "path": "agent_workspace/rounds/01/executions/run-9_lc4e8m/run_result.json",
+        "kind": "execution_evidence",
+        "sha256": "b28c26da6b74cee20e2b3cc3c9afc9a938f180b3549ba6102be8fd871833545a",
+        "round": 1,
+        "candidate_id": "run-8f80d4f7e32e4dbabde622192ba9d371:1"
+      },
+      {
+        "path": "agent_workspace/rounds/01/executions/run-9_lc4e8m/stderr.txt",
+        "kind": "execution_evidence",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "round": 1,
+        "candidate_id": "run-8f80d4f7e32e4dbabde622192ba9d371:1"
+      },
+      {
+        "path": "agent_workspace/rounds/01/executions/run-9_lc4e8m/stdout.txt",
+        "kind": "execution_evidence",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "round": 1,
+        "candidate_id": "run-8f80d4f7e32e4dbabde622192ba9d371:1"
+      }
+    ],
+    "integrity_error": null
+  }
+}

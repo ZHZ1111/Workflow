@@ -1,1 +1,1 @@
-"""Single-step AgentDev generation reuse; execution adaptation follows in P3."""
+"""Single-step AgentDev generation, execution and evaluation adapters."""

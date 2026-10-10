@@ -1,0 +1,116 @@
+{
+  "plan": {
+    "schema_version": "1.1",
+    "target_functions": [
+      "calculate_total"
+    ],
+    "oracle_mode": "specification",
+    "entry_functions": [
+      "calculate_total"
+    ],
+    "relationships": [],
+    "strategy": [
+      {
+        "subject_kind": "function",
+        "function_name": "calculate_total",
+        "relationship_id": null,
+        "decision": "unit_test",
+        "reason": "Explicit behavior specification"
+      }
+    ],
+    "scenarios": [
+      {
+        "scenario_id": "total_normal",
+        "target_function": "calculate_total",
+        "category": "boundary",
+        "inputs": {
+          "args": [
+            12,
+            3
+          ],
+          "kwargs": {}
+        },
+        "expected_behavior": "returns 36",
+        "expected_basis": {
+          "kind": "specification",
+          "detail": "See examples/calculation.md"
+        },
+        "test_kind": "unit",
+        "involved_functions": [
+          "calculate_total"
+        ],
+        "relationship_ids": [],
+        "steps": []
+      },
+      {
+        "scenario_id": "total_zero_price",
+        "target_function": "calculate_total",
+        "category": "boundary",
+        "inputs": {
+          "args": [
+            0,
+            5
+          ],
+          "kwargs": {}
+        },
+        "expected_behavior": "returns 0",
+        "expected_basis": {
+          "kind": "specification",
+          "detail": "See examples/calculation.md"
+        },
+        "test_kind": "unit",
+        "involved_functions": [
+          "calculate_total"
+        ],
+        "relationship_ids": [],
+        "steps": []
+      },
+      {
+        "scenario_id": "total_zero_quantity",
+        "target_function": "calculate_total",
+        "category": "boundary",
+        "inputs": {
+          "args": [
+            12,
+            0
+          ],
+          "kwargs": {}
+        },
+        "expected_behavior": "returns 0",
+        "expected_basis": {
+          "kind": "specification",
+          "detail": "See examples/calculation.md"
+        },
+        "test_kind": "unit",
+        "involved_functions": [
+          "calculate_total"
+        ],
+        "relationship_ids": [],
+        "steps": []
+      }
+    ]
+  },
+  "code": "import pytest\nfrom subject import calculate_total\n\ndef test_total_normal():\n    assert calculate_total(12, 3) == 37\n\ndef test_total_zero_price():\n    assert calculate_total(0, 5) == 0\n\ndef test_total_zero_quantity():\n    assert calculate_total(12, 0) == 0\n",
+  "mappings": [
+    {
+      "test_function": "test_total_normal",
+      "scenario_ids": [
+        "total_normal"
+      ]
+    },
+    {
+      "test_function": "test_total_zero_price",
+      "scenario_ids": [
+        "total_zero_price"
+      ]
+    },
+    {
+      "test_function": "test_total_zero_quantity",
+      "scenario_ids": [
+        "total_zero_quantity"
+      ]
+    }
+  ],
+  "assumptions": [],
+  "questions": []
+}

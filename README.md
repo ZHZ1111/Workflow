@@ -2,7 +2,7 @@
 
 面向单文件 Python 代码的测试工作流项目。计划由测试生成 Agent 规划并生成 pytest 候选，测试执行与评估 Agent 执行、采集覆盖率和归因，Workflow 统一调度二者并执行有限反馈，最后导出测试和报告。
 
-**当前阶段：P2 已完成。** 在 P1 协议与顺序交接基础上，已实现 `TestGenerationAgent`：复用 AgentDev 单步首轮/修订、候选门禁、历史通过测试保护、错误分类和调用计数。当前 Workflow 测试 89 项通过，相关 vendor 回归 74 项通过；执行与评估 Agent、完整反馈路由将在 P3/P4 接入。`testgen_agent` 仍是复用项目的基线入口。
+**当前阶段：P3 已完成。** 已实现单步 `TestGenerationAgent` 和 `TestExecutionAgent`：候选门禁、真实 pytest/coverage、保守失败归因和结构化反馈均已验证。当前 Workflow 测试及阶段证据见 [P3 验收记录](evaluation/p3.md)。自动反馈调度、正式运行 CLI 和最终结果导出将在 P4 接入；现有 demo CLI 保持 P1 离线交接行为。`testgen_agent` 仍是复用项目的基线入口。
 
 ## 环境与安装
 
@@ -54,6 +54,19 @@ python -m venv .venv
 精简证据见 [evaluation/p2.md](evaluation/p2.md) 与 `evaluation/p2_results.json`；协议样例与更新后的 Schema 位于 `examples/contracts/p2/`。离线候选调用数和真实外部请求数分别记录，真实外部请求数为 0。需重建错误候选时运行 `scripts/build_p2_fixtures.py`。
 
 生成节点通过 Python 接口注入已有 `GenerationClient`，支持本地 fixture 和 `DeepSeekClient`。P2 验收没有读取 `.env` 或使用真实模型；正式模型 CLI 和完整路由留到后续阶段。接口与错误约定见 [docs/generation.md](docs/generation.md)。
+
+## 运行 P3 执行与评估验收
+
+```powershell
+.\.venv\Scripts\python.exe scripts/p3_baseline.py
+.\.venv\Scripts\python.exe -m pytest tests -q
+```
+
+验收使用离线生成候选和真实执行节点，检查通过、低覆盖后的单步修订、非法语法、空测试、断言失败、名称/导入/收集错误、疑似缺陷、超时及 coverage 导出失败。每个有效候选只启动一次 pytest；无效候选只生成评估反馈。脚本手动传递修订消息，P4 自动循环尚待实现。
+
+完整产物保存在 `outputs/p3/<run_id>/`，执行证据位于内层 `rounds/NN/executions/run-*/`，外层 `evaluations/NN/assessment.json` 给出动作建议、问题、目标覆盖和证据引用。索引见 [evaluation/p3_results.json](evaluation/p3_results.json)，协议样例在 `examples/contracts/p3/`。整个验收不读取 `.env`，外部模型请求数为 0。需重建故障候选时运行 `scripts/build_p3_fixtures.py`。
+
+节点接口、建议与最终业务结论的区别见 [docs/execution.md](docs/execution.md)。默认执行器运行真实 pytest；故障注入与手工底层 no_tests 案例在验收记录中单独说明。
 
 ## 复现 P0 离线基线
 

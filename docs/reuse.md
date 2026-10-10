@@ -107,4 +107,12 @@ P2 已将首轮、修订上下文、一次客户端调用和保存封装到 `tes
 
 原候选文件不修改；相对 test_path 映射为 Workflow 绝对 test_path 后另存 `handoffs/<round>/candidate.json`。原始计划、候选、LLM 结果和测试文件继续保留，并注册相对文件引用及摘要。原工具结果直接放入原 CandidateRound 模型，不复制执行/coverage 模型。失败次数、用量保留旧客户端可提供的证据；未知字段为空，外层不重试。新代码和协议增加集中在 Workflow 包，vendor 和旧 hw1 工程未修改。
 
-P2 相关生成、客户端、提示词回归共 74 项通过，证据见 `evaluation/p2_vendor_tests.xml` 和 `evaluation/p2_vendor_tests.txt`。P3 将 coverage 工具、失败分类和建议封装成执行节点；P4 负责完整历史提交、路由和导出。旧 `_export_results()` 是私有入口，P0 仅记录；后续优先使用公开 reporting/模型组合输出，必要快照修改必须在此补记差异与回归结果。
+P2 相关生成、客户端、提示词回归共 74 项通过，证据见 `evaluation/p2_vendor_tests.xml` 和 `evaluation/p2_vendor_tests.txt`。P4 负责完整历史选择、自动路由和导出。旧 `_export_results()` 是私有入口，P0 仅记录；后续优先使用公开 reporting/模型组合输出，必要快照修改必须在此补记差异与回归结果。
+
+## P3 执行适配已完成
+
+TestExecutionAgent 复用 run_tests_with_coverage、CoverageRunResult、validate_generated_tests、classify_failures、choose_action、preserved_tests 和 round_directory。原 ExecutionResult/CoverageResult 原样写入当前 CandidateRound；覆盖工具的 execution.json/coverage_result.json 必须与返回对象相同，目标和证据目录必须属于当前轮，原工具文件不重写。
+
+适配器添加任务/消息/文件门禁、一次执行约束、执行前后源码和测试一致性、任务相对证据引用，以及独立评估和结构化消息。source_hints 来自原 choose_action 的反馈重新计算，未根据控制台字符串造计数。工具/保存异常保留已有目录并提供受控错误码；不修改 vendor 实现或采用旧完整闭环。
+
+相关执行、覆盖、归因、决策回归 128 项通过，新 Workflow 148 项通过；证据见 evaluation/p3_tests.xml、evaluation/p3_vendor_tests.xml 和 evaluation/p3.md。2026-10-10 复核 reuse_manifest.json 中 57 文件的 SHA-256，全数一致，无快照变更。

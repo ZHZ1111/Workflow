@@ -1,0 +1,112 @@
+{
+  "schema_version": "1.0",
+  "run_id": "run-c17af1ece72145ae96968186a4f71580",
+  "round": 1,
+  "agent_id": "test_execution",
+  "status": "ok",
+  "patch": {
+    "candidate": null,
+    "issues": [
+      {
+        "kind": "generation_error",
+        "summary": "生成测试未通过宿主校验。",
+        "evidence": [
+          "test_syntax（第 3 行）：invalid syntax"
+        ],
+        "round_number": 1,
+        "scenario_id": null
+      }
+    ],
+    "next_action": "repair_generated_test",
+    "api_calls_delta": 0,
+    "token_usage": null,
+    "token_usage_reported": false
+  },
+  "messages": [
+    {
+      "schema_version": "1.0",
+      "message_id": "msg-feedback-01",
+      "run_id": "run-c17af1ece72145ae96968186a4f71580",
+      "round": 1,
+      "sender": "test_execution",
+      "receiver": "test_generation",
+      "type": "execution_feedback",
+      "payload": {
+        "candidate_id": "run-c17af1ece72145ae96968186a4f71580:1",
+        "artifact": {
+          "path": "evaluations/01/assessment.json",
+          "kind": "assessment",
+          "sha256": "a3bda6c436ec6870abbfe933c7eaff1e37ff2baca06da96b6112656cd96c94fd",
+          "round": 1,
+          "candidate_id": "run-c17af1ece72145ae96968186a4f71580:1"
+        },
+        "reason": "候选校验失败，修复生成测试后才能执行。",
+        "recommended_action": "repair_generated_test",
+        "feedback": {
+          "candidate_id": "run-c17af1ece72145ae96968186a4f71580:1",
+          "execution": null,
+          "coverage": null,
+          "validation_error": "test_syntax（第 3 行）：invalid syntax",
+          "issues": [
+            {
+              "kind": "generation_error",
+              "summary": "生成测试未通过宿主校验。",
+              "evidence": [
+                "test_syntax（第 3 行）：invalid syntax"
+              ],
+              "round_number": 1,
+              "scenario_id": null
+            }
+          ],
+          "protected_tests": [],
+          "source_hints_json": "{\"affected_functions\": [], \"caller_chain_functions\": [], \"coverage_source_hints\": null, \"direct_call_evidence\": [], \"prior_strategy\": [{\"decision\": \"unit_test\", \"function_name\": \"calculate_total\", \"reason\": \"Explicit behavior specification\", \"relationship_id\": null, \"subject_kind\": \"function\"}], \"test_selection_instruction\": \"结合缺失位置、真实调用链和已有策略，判断补充单元边界或入口协作行为，说明新增行为及预期依据；不要机械地为每条调用边添加测试。\", \"validation_error\": \"test_syntax（第 3 行）：invalid syntax\"}"
+        }
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "evaluations/01/assessment.json",
+      "kind": "assessment",
+      "sha256": "a3bda6c436ec6870abbfe933c7eaff1e37ff2baca06da96b6112656cd96c94fd",
+      "round": 1,
+      "candidate_id": "run-c17af1ece72145ae96968186a4f71580:1"
+    }
+  ],
+  "error_code": null,
+  "diagnostic_paths": [],
+  "generation": null,
+  "assessment": {
+    "schema_version": "1.0",
+    "candidate_id": "run-c17af1ece72145ae96968186a4f71580:1",
+    "observation_mode": "real",
+    "tool_calls": 0,
+    "pytest_started": false,
+    "action": "repair_generated_test",
+    "recommendation": "repair_tests",
+    "reason": "候选校验失败，修复生成测试后才能执行。",
+    "stop_reason": null,
+    "task_status": null,
+    "feedback": {
+      "candidate_id": "run-c17af1ece72145ae96968186a4f71580:1",
+      "execution": null,
+      "coverage": null,
+      "validation_error": "test_syntax（第 3 行）：invalid syntax",
+      "issues": [
+        {
+          "kind": "generation_error",
+          "summary": "生成测试未通过宿主校验。",
+          "evidence": [
+            "test_syntax（第 3 行）：invalid syntax"
+          ],
+          "round_number": 1,
+          "scenario_id": null
+        }
+      ],
+      "protected_tests": [],
+      "source_hints_json": "{\"affected_functions\": [], \"caller_chain_functions\": [], \"coverage_source_hints\": null, \"direct_call_evidence\": [], \"prior_strategy\": [{\"decision\": \"unit_test\", \"function_name\": \"calculate_total\", \"reason\": \"Explicit behavior specification\", \"relationship_id\": null, \"subject_kind\": \"function\"}], \"test_selection_instruction\": \"结合缺失位置、真实调用链和已有策略，判断补充单元边界或入口协作行为，说明新增行为及预期依据；不要机械地为每条调用边添加测试。\", \"validation_error\": \"test_syntax（第 3 行）：invalid syntax\"}"
+    },
+    "evidence": [],
+    "integrity_error": null
+  }
+}

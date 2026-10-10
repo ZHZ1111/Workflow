@@ -1,0 +1,161 @@
+{
+  "schema_version": "1.0",
+  "candidate_id": "run-3a148f85bbd94d00bb2584e615d78f43:1",
+  "observation_mode": "real",
+  "tool_calls": 1,
+  "pytest_started": true,
+  "action": "finish",
+  "recommendation": "finish",
+  "reason": "真实测试全通过、覆盖目标达到，已选协作场景通过宿主断言校验。",
+  "stop_reason": "coverage_target_met",
+  "task_status": "completed",
+  "feedback": {
+    "candidate_id": "run-3a148f85bbd94d00bb2584e615d78f43:1",
+    "execution": {
+      "kind": "passed",
+      "exit_code": 0,
+      "collected": 3,
+      "executed": 3,
+      "passed": 3,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xfailed": 0,
+      "xpassed": 0,
+      "stdout": "...                                                                      [100%]\r\n=================================== PASSES ====================================\r\n=========================== short test summary info ===========================\r\nPASSED rounds/01/test_subject.py::test_total_normal\r\nPASSED rounds/01/test_subject.py::test_total_zero_price\r\nPASSED rounds/01/test_subject.py::test_total_zero_quantity\r\n3 passed in 0.18s\r\n",
+      "stderr": "",
+      "timed_out": false,
+      "stdout_truncated": false,
+      "stderr_truncated": false,
+      "duration_seconds": 1.024825000000419,
+      "failures": []
+    },
+    "coverage": {
+      "target_file": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\p3\\run-3a148f85bbd94d00bb2584e615d78f43\\agent_workspace\\subject.py",
+      "status": "available",
+      "covered_lines": 2,
+      "total_lines": 2,
+      "covered_branches": 0,
+      "total_branches": 0,
+      "missing_lines": [],
+      "missing_branches": [],
+      "error": null
+    },
+    "validation_error": null,
+    "issues": [],
+    "protected_tests": [
+      "test_total_normal",
+      "test_total_zero_price",
+      "test_total_zero_quantity"
+    ],
+    "source_hints_json": "{\"affected_functions\": [], \"caller_chain_functions\": [], \"coverage_source_hints\": {\"missing_branches\": [], \"missing_lines\": [], \"status\": \"available\", \"target_file\": \"E:\\\\File-Document\\\\SE\\\\hw2\\\\Workflow\\\\outputs\\\\p3\\\\run-3a148f85bbd94d00bb2584e615d78f43\\\\agent_workspace\\\\subject.py\"}, \"direct_call_evidence\": [], \"prior_strategy\": [{\"decision\": \"unit_test\", \"function_name\": \"calculate_total\", \"reason\": \"Explicit behavior specification\", \"relationship_id\": null, \"subject_kind\": \"function\"}], \"test_selection_instruction\": \"结合缺失位置、真实调用链和已有策略，判断补充单元边界或入口协作行为，说明新增行为及预期依据；不要机械地为每条调用边添加测试。\"}"
+  },
+  "evidence": [
+    {
+      "path": "agent_workspace/rounds/01/executions/run-ebm5dlio/.coverage",
+      "kind": "execution_evidence",
+      "sha256": "9384ec0c33ca08bea4a44273605379522279dc8d7fdb7c64d39c8178bb8bb2e2",
+      "round": 1,
+      "candidate_id": "run-3a148f85bbd94d00bb2584e615d78f43:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-ebm5dlio/.coveragerc",
+      "kind": "execution_evidence",
+      "sha256": "34b98bb8504189b50c6874dac53eb05ce9074be35e6ea982a0c27e8d28a6c517",
+      "round": 1,
+      "candidate_id": "run-3a148f85bbd94d00bb2584e615d78f43:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-ebm5dlio/coverage.json",
+      "kind": "execution_evidence",
+      "sha256": "a3273f762841d03fa56396c44bb443c1c2256530b2a43fb816650dd0b9cca980",
+      "round": 1,
+      "candidate_id": "run-3a148f85bbd94d00bb2584e615d78f43:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-ebm5dlio/coverage_export.json",
+      "kind": "execution_evidence",
+      "sha256": "9465f756ba0d160b1907624c51e5254d2f7d2a80b405414496b750b82b5f5c9a",
+      "round": 1,
+      "candidate_id": "run-3a148f85bbd94d00bb2584e615d78f43:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-ebm5dlio/coverage_export.stderr.txt",
+      "kind": "execution_evidence",
+      "sha256": "73647eef0837d4afd50ef9b45fd1b16653006f246d5b35f14ec206095bd67b61",
+      "round": 1,
+      "candidate_id": "run-3a148f85bbd94d00bb2584e615d78f43:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-ebm5dlio/coverage_export.stdout.txt",
+      "kind": "execution_evidence",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "round": 1,
+      "candidate_id": "run-3a148f85bbd94d00bb2584e615d78f43:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-ebm5dlio/coverage_result.json",
+      "kind": "coverage",
+      "sha256": "a2e9f5e6cddeba13946d48bd56934dc5fdd91e732c46139b4848754ed7161766",
+      "round": 1,
+      "candidate_id": "run-3a148f85bbd94d00bb2584e615d78f43:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-ebm5dlio/coverage_source_hints.json",
+      "kind": "execution_evidence",
+      "sha256": "50fe63fc5c053c908298a4b9fd272a819ea7a098ea14c8a645f7d5e60326a52c",
+      "round": 1,
+      "candidate_id": "run-3a148f85bbd94d00bb2584e615d78f43:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-ebm5dlio/execution.json",
+      "kind": "execution",
+      "sha256": "d65f19713c8c8a24e5e153d9cf55cfac72b605fa3cd5bb6fd31f7bfa4f836a02",
+      "round": 1,
+      "candidate_id": "run-3a148f85bbd94d00bb2584e615d78f43:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-ebm5dlio/pytest.ini",
+      "kind": "execution_evidence",
+      "sha256": "bf86cec34582454295d6d58edcaa5238eb52160b89a3032263d679455e826480",
+      "round": 1,
+      "candidate_id": "run-3a148f85bbd94d00bb2584e615d78f43:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-ebm5dlio/pytest.xml",
+      "kind": "execution_evidence",
+      "sha256": "11c1220a825c865b005fb2a8b034be79465dd0443d64b64317309485a8470a46",
+      "round": 1,
+      "candidate_id": "run-3a148f85bbd94d00bb2584e615d78f43:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-ebm5dlio/pytest_result.json",
+      "kind": "execution_evidence",
+      "sha256": "fefc25bdc41d55b355f4ddc972512631ae606ce825e690289a5cc5fffee13f11",
+      "round": 1,
+      "candidate_id": "run-3a148f85bbd94d00bb2584e615d78f43:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-ebm5dlio/run_result.json",
+      "kind": "execution_evidence",
+      "sha256": "c0d7f22c4fb8a2740e928e0659dfb3df2a0fb18457d96b7f6ec3b5abb68e340a",
+      "round": 1,
+      "candidate_id": "run-3a148f85bbd94d00bb2584e615d78f43:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-ebm5dlio/stderr.txt",
+      "kind": "execution_evidence",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "round": 1,
+      "candidate_id": "run-3a148f85bbd94d00bb2584e615d78f43:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-ebm5dlio/stdout.txt",
+      "kind": "execution_evidence",
+      "sha256": "30c8d4afcd9f345aa6b54b605936c4a4b1c1564f823c957a571ad409fdba5357",
+      "round": 1,
+      "candidate_id": "run-3a148f85bbd94d00bb2584e615d78f43:1"
+    }
+  ],
+  "integrity_error": null
+}

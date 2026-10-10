@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from test_workflow.contracts import AgentContext, AgentResult, Message
+from test_workflow.contracts import AgentContext, AgentResult, ExecutionAssessment, Message
 from test_workflow.state import WorkflowState
 
 EXAMPLES = Path(__file__).resolve().parents[1] / "examples/contracts/p1"
@@ -23,5 +23,15 @@ def test_checked_in_contract_examples_validate(name, model):
 @pytest.mark.parametrize("suffix,model", [("context", AgentContext), ("result", AgentResult)])
 def test_p2_contract_examples_validate(sample, suffix, model):
     path = EXAMPLES.parent / "p2" / f"{sample}_{suffix}.json"
+    value = model.model_validate_json(path.read_text(encoding="utf-8"))
+    assert model.model_validate_json(value.canonical_json()) == value
+
+
+@pytest.mark.parametrize("sample", ["passed", "low_coverage_revision", "invalid_syntax", "no_tests_rejected",
+                                    "ambiguous_assertion", "name_error", "import_error", "collection_error",
+                                    "suspected_defect", "timeout", "coverage_export_failure"])
+@pytest.mark.parametrize("suffix,model", [("context", AgentContext), ("result", AgentResult), ("assessment", ExecutionAssessment)])
+def test_p3_contract_examples_validate(sample, suffix, model):
+    path = EXAMPLES.parent / "p3" / f"{sample}_{suffix}.json"
     value = model.model_validate_json(path.read_text(encoding="utf-8"))
     assert model.model_validate_json(value.canonical_json()) == value

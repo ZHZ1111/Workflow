@@ -1,0 +1,450 @@
+{
+  "schema_version": "1.0",
+  "run_id": "run-57422e3bfa18431485a7cc500c05bd65",
+  "round": 1,
+  "agent_id": "test_execution",
+  "status": "ok",
+  "patch": {
+    "candidate": {
+      "number": 1,
+      "generated": {
+        "plan": {
+          "schema_version": "1.1",
+          "target_functions": [
+            "calculate_total"
+          ],
+          "oracle_mode": "specification",
+          "entry_functions": [
+            "calculate_total"
+          ],
+          "relationships": [],
+          "strategy": [
+            {
+              "subject_kind": "function",
+              "function_name": "calculate_total",
+              "relationship_id": null,
+              "decision": "unit_test",
+              "reason": "Explicit behavior specification"
+            }
+          ],
+          "scenarios": [
+            {
+              "scenario_id": "total_normal",
+              "target_function": "calculate_total",
+              "category": "boundary",
+              "inputs": {
+                "args": [
+                  12,
+                  3
+                ],
+                "kwargs": {}
+              },
+              "expected_behavior": "returns 36",
+              "expected_basis": {
+                "kind": "specification",
+                "detail": "See examples/calculation.md"
+              },
+              "test_kind": "unit",
+              "involved_functions": [
+                "calculate_total"
+              ],
+              "relationship_ids": [],
+              "steps": []
+            },
+            {
+              "scenario_id": "total_zero_price",
+              "target_function": "calculate_total",
+              "category": "boundary",
+              "inputs": {
+                "args": [
+                  0,
+                  5
+                ],
+                "kwargs": {}
+              },
+              "expected_behavior": "returns 0",
+              "expected_basis": {
+                "kind": "specification",
+                "detail": "See examples/calculation.md"
+              },
+              "test_kind": "unit",
+              "involved_functions": [
+                "calculate_total"
+              ],
+              "relationship_ids": [],
+              "steps": []
+            },
+            {
+              "scenario_id": "total_zero_quantity",
+              "target_function": "calculate_total",
+              "category": "boundary",
+              "inputs": {
+                "args": [
+                  12,
+                  0
+                ],
+                "kwargs": {}
+              },
+              "expected_behavior": "returns 0",
+              "expected_basis": {
+                "kind": "specification",
+                "detail": "See examples/calculation.md"
+              },
+              "test_kind": "unit",
+              "involved_functions": [
+                "calculate_total"
+              ],
+              "relationship_ids": [],
+              "steps": []
+            }
+          ]
+        },
+        "code": "import pytest\nfrom subject import calculate_total\n\ndef test_total_normal():\n    assert calculate_total(12, 3) == 36\n\ndef test_total_zero_price():\n    assert calculate_total(0, 5) == 0\n\ndef test_total_zero_quantity():\n    assert calculate_total(12, 0) == 0\n",
+        "mappings": [
+          {
+            "test_function": "test_total_normal",
+            "scenario_ids": [
+              "total_normal"
+            ]
+          },
+          {
+            "test_function": "test_total_zero_price",
+            "scenario_ids": [
+              "total_zero_price"
+            ]
+          },
+          {
+            "test_function": "test_total_zero_quantity",
+            "scenario_ids": [
+              "total_zero_quantity"
+            ]
+          }
+        ],
+        "assumptions": [],
+        "questions": []
+      },
+      "test_path": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\p3\\run-57422e3bfa18431485a7cc500c05bd65\\agent_workspace\\rounds\\01\\test_subject.py",
+      "validation_error": null,
+      "execution": {
+        "kind": "passed",
+        "exit_code": 0,
+        "collected": 3,
+        "executed": 3,
+        "passed": 3,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "xfailed": 0,
+        "xpassed": 0,
+        "stdout": "...                                                                      [100%]\r\n=================================== PASSES ====================================\r\n=========================== short test summary info ===========================\r\nPASSED rounds/01/test_subject.py::test_total_normal\r\nPASSED rounds/01/test_subject.py::test_total_zero_price\r\nPASSED rounds/01/test_subject.py::test_total_zero_quantity\r\n3 passed in 0.17s\r\n",
+        "stderr": "",
+        "timed_out": false,
+        "stdout_truncated": false,
+        "stderr_truncated": false,
+        "duration_seconds": 1.0109051000035834,
+        "failures": []
+      },
+      "coverage": {
+        "target_file": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\p3\\run-57422e3bfa18431485a7cc500c05bd65\\agent_workspace\\subject.py",
+        "status": "unavailable",
+        "covered_lines": null,
+        "total_lines": null,
+        "covered_branches": null,
+        "total_branches": null,
+        "missing_lines": [],
+        "missing_branches": [],
+        "error": "coverage_export_launch_failed: execution result is retained."
+      }
+    },
+    "issues": [
+      {
+        "kind": "coverage_unavailable",
+        "summary": "同次执行的目标覆盖率不可用，保留真实执行结果。",
+        "evidence": [
+          "coverage_export_launch_failed: execution result is retained."
+        ],
+        "round_number": 1,
+        "scenario_id": null
+      }
+    ],
+    "next_action": "finish",
+    "api_calls_delta": 0,
+    "token_usage": null,
+    "token_usage_reported": false
+  },
+  "messages": [],
+  "artifacts": [
+    {
+      "path": "agent_workspace/rounds/01/executions/run-1es5h3ek/.coverage",
+      "kind": "execution_evidence",
+      "sha256": "afe02cd6004d50155f7265344db975639b07810878c67dd0da76e5a06a86f6d8",
+      "round": 1,
+      "candidate_id": "run-57422e3bfa18431485a7cc500c05bd65:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-1es5h3ek/.coveragerc",
+      "kind": "execution_evidence",
+      "sha256": "34b98bb8504189b50c6874dac53eb05ce9074be35e6ea982a0c27e8d28a6c517",
+      "round": 1,
+      "candidate_id": "run-57422e3bfa18431485a7cc500c05bd65:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-1es5h3ek/coverage_export.json",
+      "kind": "execution_evidence",
+      "sha256": "5be97a23dd257f2064a5145c4845a3fa6cd118d5646c1b59f77edcfe91be565a",
+      "round": 1,
+      "candidate_id": "run-57422e3bfa18431485a7cc500c05bd65:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-1es5h3ek/coverage_export.stderr.txt",
+      "kind": "execution_evidence",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "round": 1,
+      "candidate_id": "run-57422e3bfa18431485a7cc500c05bd65:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-1es5h3ek/coverage_export.stdout.txt",
+      "kind": "execution_evidence",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "round": 1,
+      "candidate_id": "run-57422e3bfa18431485a7cc500c05bd65:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-1es5h3ek/coverage_result.json",
+      "kind": "coverage",
+      "sha256": "a9f8d6e917e1babc790c25e4c74c6556a49889de57daf8486e56a0a3c45f1f21",
+      "round": 1,
+      "candidate_id": "run-57422e3bfa18431485a7cc500c05bd65:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-1es5h3ek/coverage_source_hints.json",
+      "kind": "execution_evidence",
+      "sha256": "bb42a4a0a9d9bf94a0e167c5ad320f29ede19eaa87e86ca932302b2d3577ab4c",
+      "round": 1,
+      "candidate_id": "run-57422e3bfa18431485a7cc500c05bd65:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-1es5h3ek/execution.json",
+      "kind": "execution",
+      "sha256": "0ac82aaa3757303e47892b7879174da978934e1c00c4d0a6f93eb7c3983aa8b3",
+      "round": 1,
+      "candidate_id": "run-57422e3bfa18431485a7cc500c05bd65:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-1es5h3ek/pytest.ini",
+      "kind": "execution_evidence",
+      "sha256": "bf86cec34582454295d6d58edcaa5238eb52160b89a3032263d679455e826480",
+      "round": 1,
+      "candidate_id": "run-57422e3bfa18431485a7cc500c05bd65:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-1es5h3ek/pytest.xml",
+      "kind": "execution_evidence",
+      "sha256": "9715165151eb4545946cf04b5b02b38ef13457061ea864d63ccec2a120e4251e",
+      "round": 1,
+      "candidate_id": "run-57422e3bfa18431485a7cc500c05bd65:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-1es5h3ek/pytest_result.json",
+      "kind": "execution_evidence",
+      "sha256": "fefc25bdc41d55b355f4ddc972512631ae606ce825e690289a5cc5fffee13f11",
+      "round": 1,
+      "candidate_id": "run-57422e3bfa18431485a7cc500c05bd65:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-1es5h3ek/run_result.json",
+      "kind": "execution_evidence",
+      "sha256": "9099a40f958f7b85730f2f21e30d9fcd4ca354580a13ca080dbf3ed86b6f5c35",
+      "round": 1,
+      "candidate_id": "run-57422e3bfa18431485a7cc500c05bd65:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-1es5h3ek/stderr.txt",
+      "kind": "execution_evidence",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "round": 1,
+      "candidate_id": "run-57422e3bfa18431485a7cc500c05bd65:1"
+    },
+    {
+      "path": "agent_workspace/rounds/01/executions/run-1es5h3ek/stdout.txt",
+      "kind": "execution_evidence",
+      "sha256": "b27c26c19a03b4f3b73ae773127d317575c960fe1d627c3eb4a95d34b9a6017d",
+      "round": 1,
+      "candidate_id": "run-57422e3bfa18431485a7cc500c05bd65:1"
+    },
+    {
+      "path": "evaluations/01/assessment.json",
+      "kind": "assessment",
+      "sha256": "377d016b72600c7673bdd5ac7831adef970d3bdcd2aad8a32fd9c4872cd51d05",
+      "round": 1,
+      "candidate_id": "run-57422e3bfa18431485a7cc500c05bd65:1"
+    }
+  ],
+  "error_code": null,
+  "diagnostic_paths": [],
+  "generation": null,
+  "assessment": {
+    "schema_version": "1.0",
+    "candidate_id": "run-57422e3bfa18431485a7cc500c05bd65:1",
+    "observation_mode": "real",
+    "tool_calls": 1,
+    "pytest_started": true,
+    "action": "finish",
+    "recommendation": "stop_error",
+    "reason": "覆盖结果不可用，测试通过但覆盖目标未验收。",
+    "stop_reason": "unrecoverable_error",
+    "task_status": "partial",
+    "feedback": {
+      "candidate_id": "run-57422e3bfa18431485a7cc500c05bd65:1",
+      "execution": {
+        "kind": "passed",
+        "exit_code": 0,
+        "collected": 3,
+        "executed": 3,
+        "passed": 3,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "xfailed": 0,
+        "xpassed": 0,
+        "stdout": "...                                                                      [100%]\r\n=================================== PASSES ====================================\r\n=========================== short test summary info ===========================\r\nPASSED rounds/01/test_subject.py::test_total_normal\r\nPASSED rounds/01/test_subject.py::test_total_zero_price\r\nPASSED rounds/01/test_subject.py::test_total_zero_quantity\r\n3 passed in 0.17s\r\n",
+        "stderr": "",
+        "timed_out": false,
+        "stdout_truncated": false,
+        "stderr_truncated": false,
+        "duration_seconds": 1.0109051000035834,
+        "failures": []
+      },
+      "coverage": {
+        "target_file": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\p3\\run-57422e3bfa18431485a7cc500c05bd65\\agent_workspace\\subject.py",
+        "status": "unavailable",
+        "covered_lines": null,
+        "total_lines": null,
+        "covered_branches": null,
+        "total_branches": null,
+        "missing_lines": [],
+        "missing_branches": [],
+        "error": "coverage_export_launch_failed: execution result is retained."
+      },
+      "validation_error": null,
+      "issues": [
+        {
+          "kind": "coverage_unavailable",
+          "summary": "同次执行的目标覆盖率不可用，保留真实执行结果。",
+          "evidence": [
+            "coverage_export_launch_failed: execution result is retained."
+          ],
+          "round_number": 1,
+          "scenario_id": null
+        }
+      ],
+      "protected_tests": [
+        "test_total_normal",
+        "test_total_zero_price",
+        "test_total_zero_quantity"
+      ],
+      "source_hints_json": "{\"affected_functions\": [], \"caller_chain_functions\": [], \"coverage_source_hints\": {\"error\": \"coverage_export_launch_failed: execution result is retained.\", \"missing_branches\": [], \"missing_lines\": [], \"status\": \"unavailable\", \"target_file\": \"E:\\\\File-Document\\\\SE\\\\hw2\\\\Workflow\\\\outputs\\\\p3\\\\run-57422e3bfa18431485a7cc500c05bd65\\\\agent_workspace\\\\subject.py\"}, \"direct_call_evidence\": [], \"prior_strategy\": [{\"decision\": \"unit_test\", \"function_name\": \"calculate_total\", \"reason\": \"Explicit behavior specification\", \"relationship_id\": null, \"subject_kind\": \"function\"}], \"test_selection_instruction\": \"结合缺失位置、真实调用链和已有策略，判断补充单元边界或入口协作行为，说明新增行为及预期依据；不要机械地为每条调用边添加测试。\"}"
+    },
+    "evidence": [
+      {
+        "path": "agent_workspace/rounds/01/executions/run-1es5h3ek/.coverage",
+        "kind": "execution_evidence",
+        "sha256": "afe02cd6004d50155f7265344db975639b07810878c67dd0da76e5a06a86f6d8",
+        "round": 1,
+        "candidate_id": "run-57422e3bfa18431485a7cc500c05bd65:1"
+      },
+      {
+        "path": "agent_workspace/rounds/01/executions/run-1es5h3ek/.coveragerc",
+        "kind": "execution_evidence",
+        "sha256": "34b98bb8504189b50c6874dac53eb05ce9074be35e6ea982a0c27e8d28a6c517",
+        "round": 1,
+        "candidate_id": "run-57422e3bfa18431485a7cc500c05bd65:1"
+      },
+      {
+        "path": "agent_workspace/rounds/01/executions/run-1es5h3ek/coverage_export.json",
+        "kind": "execution_evidence",
+        "sha256": "5be97a23dd257f2064a5145c4845a3fa6cd118d5646c1b59f77edcfe91be565a",
+        "round": 1,
+        "candidate_id": "run-57422e3bfa18431485a7cc500c05bd65:1"
+      },
+      {
+        "path": "agent_workspace/rounds/01/executions/run-1es5h3ek/coverage_export.stderr.txt",
+        "kind": "execution_evidence",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "round": 1,
+        "candidate_id": "run-57422e3bfa18431485a7cc500c05bd65:1"
+      },
+      {
+        "path": "agent_workspace/rounds/01/executions/run-1es5h3ek/coverage_export.stdout.txt",
+        "kind": "execution_evidence",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "round": 1,
+        "candidate_id": "run-57422e3bfa18431485a7cc500c05bd65:1"
+      },
+      {
+        "path": "agent_workspace/rounds/01/executions/run-1es5h3ek/coverage_result.json",
+        "kind": "coverage",
+        "sha256": "a9f8d6e917e1babc790c25e4c74c6556a49889de57daf8486e56a0a3c45f1f21",
+        "round": 1,
+        "candidate_id": "run-57422e3bfa18431485a7cc500c05bd65:1"
+      },
+      {
+        "path": "agent_workspace/rounds/01/executions/run-1es5h3ek/coverage_source_hints.json",
+        "kind": "execution_evidence",
+        "sha256": "bb42a4a0a9d9bf94a0e167c5ad320f29ede19eaa87e86ca932302b2d3577ab4c",
+        "round": 1,
+        "candidate_id": "run-57422e3bfa18431485a7cc500c05bd65:1"
+      },
+      {
+        "path": "agent_workspace/rounds/01/executions/run-1es5h3ek/execution.json",
+        "kind": "execution",
+        "sha256": "0ac82aaa3757303e47892b7879174da978934e1c00c4d0a6f93eb7c3983aa8b3",
+        "round": 1,
+        "candidate_id": "run-57422e3bfa18431485a7cc500c05bd65:1"
+      },
+      {
+        "path": "agent_workspace/rounds/01/executions/run-1es5h3ek/pytest.ini",
+        "kind": "execution_evidence",
+        "sha256": "bf86cec34582454295d6d58edcaa5238eb52160b89a3032263d679455e826480",
+        "round": 1,
+        "candidate_id": "run-57422e3bfa18431485a7cc500c05bd65:1"
+      },
+      {
+        "path": "agent_workspace/rounds/01/executions/run-1es5h3ek/pytest.xml",
+        "kind": "execution_evidence",
+        "sha256": "9715165151eb4545946cf04b5b02b38ef13457061ea864d63ccec2a120e4251e",
+        "round": 1,
+        "candidate_id": "run-57422e3bfa18431485a7cc500c05bd65:1"
+      },
+      {
+        "path": "agent_workspace/rounds/01/executions/run-1es5h3ek/pytest_result.json",
+        "kind": "execution_evidence",
+        "sha256": "fefc25bdc41d55b355f4ddc972512631ae606ce825e690289a5cc5fffee13f11",
+        "round": 1,
+        "candidate_id": "run-57422e3bfa18431485a7cc500c05bd65:1"
+      },
+      {
+        "path": "agent_workspace/rounds/01/executions/run-1es5h3ek/run_result.json",
+        "kind": "execution_evidence",
+        "sha256": "9099a40f958f7b85730f2f21e30d9fcd4ca354580a13ca080dbf3ed86b6f5c35",
+        "round": 1,
+        "candidate_id": "run-57422e3bfa18431485a7cc500c05bd65:1"
+      },
+      {
+        "path": "agent_workspace/rounds/01/executions/run-1es5h3ek/stderr.txt",
+        "kind": "execution_evidence",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "round": 1,
+        "candidate_id": "run-57422e3bfa18431485a7cc500c05bd65:1"
+      },
+      {
+        "path": "agent_workspace/rounds/01/executions/run-1es5h3ek/stdout.txt",
+        "kind": "execution_evidence",
+        "sha256": "b27c26c19a03b4f3b73ae773127d317575c960fe1d627c3eb4a95d34b9a6017d",
+        "round": 1,
+        "candidate_id": "run-57422e3bfa18431485a7cc500c05bd65:1"
+      }
+    ],
+    "integrity_error": null
+  }
+}
