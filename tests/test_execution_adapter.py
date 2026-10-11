@@ -121,7 +121,7 @@ def test_real_feedback_drives_one_manual_revision_with_protected_tests(tmp_path)
     with patch("test_workflow.agents.test_execution.run_tests_with_coverage", wraps=run_tests_with_coverage) as tool:
         er2 = TestExecutionAgent().run(ec2)
     assert er2.status == "ok", er2.error_code
-    tool.assert_called_once_with(state.agent_state.request.output_dir, timeout=30, round_number=2)
+    tool.assert_called_once_with(state.agent_state.request.output_dir, timeout=60, round_number=2)
     assert er2.assessment.recommendation == "finish"
     assert er2.assessment.feedback.coverage.branch_percent == 100
     assert len(runner.apply_result(ec2.state, er2).agent_state.history) == 2
