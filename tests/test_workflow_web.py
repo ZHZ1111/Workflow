@@ -11,8 +11,8 @@ from urllib.request import Request, urlopen
 import pytest
 from testgen_agent.config import AppConfig
 
-from test_workflow.service import fixture_client
-from test_workflow.web import WebServer, samples, validate_payload
+from test_workflow.service import fixture_client, sample_inputs as samples
+from test_workflow.web import WebServer, validate_payload
 
 
 @pytest.fixture
@@ -46,15 +46,18 @@ def wait_job(base, identity):
 @pytest.mark.parametrize("sample,status,rounds", [
     ("calculation", "completed", 1), ("validation", "completed", 2), ("discount", "needs_review", 1),
 ])
-def test_http_offline_full_workflow(server, sample, status, rounds):
+def test_http_workflow_with_fixture_model(server, sample, status, rounds):
     _, base = server
-    with patch("test_workflow.web.load_config", side_effect=AssertionError("offline must not load secrets")):
-        code, created = call(base, "/api/runs", {**samples()[sample], "sample": sample, "mode": "offline"})
+    config = AppConfig(model="fixture-model", api_key="fixture-key")
+    with patch("test_workflow.web.load_config", return_value=config), patch(
+            "test_workflow.web.DeepSeekClient", return_value=fixture_client(sample)) as factory:
+        code, created = call(base, "/api/runs", samples()[sample])
         assert code == 202
         job = wait_job(base, created["id"])
     assert job["status"] == "finished" and job["summary"]["task_status"] == status
     assert job["summary"]["rounds"] == rounds
-    assert job["summary"]["external_requests"] == 0
+    factory.assert_called_once_with(config)
+    assert job["state"]["config"]["mode"] == "real"
     assert job["summary"]["pytest_processes"] == rounds
     assert job["summary"]["agents"]["result_summary"]["committed_results"] == 1
     assert job["events"] and job["messages"] and job["reportMarkdown"] and job["testCode"]
@@ -74,6 +77,7 @@ def test_http_real_model_wiring_and_secret_redaction(server):
             "test_workflow.web.DeepSeekClient", return_value=fixture_client("calculation")) as client:
         _, bootstrap = call(base, "/api/bootstrap")
         assert bootstrap["config"]["ready"] is True
+        assert "samples" not in bootstrap
         _, created = call(base, "/api/runs", {**samples()["calculation"], "mode": "real", "max_rounds": 1, "timeout": 10})
         job = wait_job(base, created["id"])
     client.assert_called_once_with(config)
@@ -84,12 +88,12 @@ def test_http_real_model_wiring_and_secret_redaction(server):
 
 
 @pytest.mark.parametrize("change", [
-    {"source": ""}, {"spec": ""}, {"mode": "invalid"}, {"max_rounds": True},
-    {"max_rounds": 4}, {"timeout": 0}, {"sample": "unknown"}, {"source": "def altered(): return 1"},
+    {"source": ""}, {"spec": ""}, {"mode": "offline"}, {"max_rounds": True},
+    {"max_rounds": 4}, {"timeout": 0}, {"spec": None}, {"source": 123},
 ])
 def test_invalid_submission_creates_no_job(server, change):
     app, base = server
-    payload = {**samples()["calculation"], "mode": "offline", "sample": "calculation", **change}
+    payload = {**samples()["calculation"], **change}
     with pytest.raises(HTTPError) as error:
         call(base, "/api/runs", payload)
     assert error.value.code == 400 and not app.store._jobs
@@ -98,7 +102,11 @@ def test_invalid_submission_creates_no_job(server, change):
 
 def test_http_assets_and_request_boundaries(server):
     app, base = server
-    assert b"/app.js" in call(base, "/")[1]
+    html = call(base, "/")[1]
+    assert b"/app.js" in html
+    assert b'<select' not in html
+    assert b'<textarea id="source" spellcheck="false" required></textarea>' in html
+    assert b'<textarea id="spec" required></textarea>' in html
     assert b"fetch(" in call(base, "/app.js")[1]
     assert call(base, "/styles.css")[0] == 200
     for headers, expected in [({"Origin": "https://elsewhere.example"}, 403),
@@ -110,7 +118,7 @@ def test_http_assets_and_request_boundaries(server):
     app.store.busy.acquire()
     try:
         with pytest.raises(HTTPError) as error:
-            call(base, "/api/runs", {**samples()["calculation"], "sample": "calculation", "mode": "offline"})
+            call(base, "/api/runs", samples()["calculation"])
         assert error.value.code == 409
     finally:
         app.store.busy.release()

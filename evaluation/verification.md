@@ -2,6 +2,8 @@
 
 日期：2026-10-11（北京时间）。Windows x64、CPython 3.13.9。机器可读结果见 [verification.json](verification.json)。
 
+本记录保留工程初验时的功能与实测结果。随后按用户要求，Web 改为仅使用 DeepSeek、空白源码/规格输入，移除页面及 API 的离线样例功能；CLI 离线功能保留，当前使用方式以 README 为准。
+
 ## 当前结果
 
 - Workflow 与完整 vendor 回归：**645 passed，0 failures/errors**，耗时 221.77 秒；原始 JUnit 在 `outputs/verification-tests.xml`。
@@ -42,3 +44,9 @@ vendor 仅修改 `src/testgen_agent/tools/_pytest_results.py`。原始来源哈�
 首次沙箱内联网被限制；自动审批最初要求具体数据外传授权，用户随后明确允许三个样例及其规格、生成测试、执行反馈发送至 `https://api.deepseek.com`，之后完成真实调用。失败的网络/pytest 尝试保存在独立任务中，不冒充成功。
 
 本次证明 Windows 当前环境与新的 Windows 虚拟环境可运行。GitHub Actions 的 Windows/Linux 配置已提供，远端 CI 尚未触发；未将其记作实测成功。未执行可选 relationships 样例，也不保证任意模型输出都达标；服务失败、输入不支持及疑似源码缺陷仍返回真实业务状态。
+
+## 后续 Web 输入调整
+
+按用户要求移除样例和生成方式选择，源码及规格初始为空。Web API 固定使用 DeepSeek 并拒绝离线模式；bootstrap 不再返回样例。CLI 的离线模式保留。已重启工作台，浏览器验证两个输入框可编辑且交付时为空，截图为 `outputs/web-blank-form.png`。
+
+本次相关 Web/CLI 回归 19 passed；新 checkout 例子规格校验 66 passed、行/分支覆盖 100%。最新干净安装记录为 `outputs/install-verification/21824a81a7404615bf9dc486ae507b2b/results.json`，Web 在安装验收中注入本地模型响应验证两轮反馈，不发出外部模型请求。

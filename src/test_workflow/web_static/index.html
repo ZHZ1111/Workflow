@@ -6,9 +6,9 @@
 <main>
 <section class="panel input"><h2>创建任务</h2>
 <form id="run-form">
-<div class="settings"><label>样例<select id="sample"><option value="calculation">计算 · 正常完成</option><option value="validation">验证 · 反馈修订</option><option value="discount">折扣 · 缺陷复核</option></select></label><label>生成方式<select id="mode"><option value="real">DeepSeek</option><option value="offline">离线样例</option></select></label><label>最多轮次<input id="max-rounds" type="number" min="1" max="3" value="3" required></label><label>每轮执行超时（秒）<input id="timeout" type="number" min="1" max="300" value="30" required></label></div>
+<div class="settings"><label for="max-rounds">最多轮次<input id="max-rounds" type="number" min="1" max="3" value="3" required></label><label for="timeout">每轮执行超时（秒）<input id="timeout" type="number" min="1" max="300" value="30" required></label></div>
 <div class="editors"><label>Python 源码<textarea id="source" spellcheck="false" required></textarea></label><label>行为规格<textarea id="spec" required></textarea></label></div>
-<p id="mode-hint" class="muted">DeepSeek 将接收源码、规格和反馈；密钥从服务器本地配置读取。</p>
+<p class="muted">DeepSeek 将接收源码、规格和反馈；密钥从服务器本地配置读取。</p>
 <div class="actions"><button id="submit" type="submit" disabled>运行工作流</button><span id="request-error" role="alert"></span></div>
 </form></section>
 <section class="panel" aria-live="polite"><div class="section-heading"><h2>任务结果</h2><span id="job-status" class="badge">等待开始</span></div><p id="output-dir" class="muted">运行后显示保存位置、逐轮结论和可下载产物。</p>

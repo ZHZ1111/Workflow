@@ -14,7 +14,8 @@ from uuid import uuid4
 
 from test_workflow.reporting import inspect_summary
 from test_workflow.state import StateStore
-from test_workflow.web import WebServer, samples
+from test_workflow.service import sample_inputs as samples
+from test_workflow.web import WebServer
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -53,6 +54,8 @@ def main():
     args = parser.parse_args()
     if args.skip_offline and not args.real:
         parser.error("--skip-offline requires --real")
+    if args.interfaces == ["web"] and not args.real:
+        parser.error("Web only uses DeepSeek; --interfaces web requires --real")
     directory = ROOT / "outputs" / "verification" / uuid4().hex
     directory.mkdir(parents=True)
     results = {"verified_at": datetime.now(timezone.utc).isoformat(), "python": sys.version,
@@ -65,6 +68,8 @@ def main():
         try:
             for mode in modes:
                 for interface in args.interfaces:
+                    if mode == "offline" and interface == "web":
+                        continue
                     for sample, content in samples().items():
                         if sample not in args.samples:
                             continue
@@ -81,7 +86,7 @@ def main():
                                 (directory / f"{mode}-cli-{sample}.log").write_text(completed.stdout + completed.stderr, encoding="utf-8")
                                 assert completed.returncode == (1 if sample == "discount" else 0), completed.stdout
                             else:
-                                created = request(base, "/api/runs", {**content, "mode": mode, "sample": sample})
+                                created = request(base, "/api/runs", content)
                                 deadline = time.monotonic() + 1800
                                 while True:
                                     job = request(base, f"/api/runs/{created['id']}")

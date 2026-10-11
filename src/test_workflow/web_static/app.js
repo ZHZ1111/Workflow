@@ -1,5 +1,5 @@
 const $ = id => document.getElementById(id);
-let bootstrap;
+let modelReady = false;
 let activeJob = null;
 const statuses = {queued:'排队中',running:'运行中',finished:'流程结束',failed:'运行失败',completed:'已完成',partial:'部分完成',needs_review:'需要复核'};
 const label = value => statuses[value] || value || '—';
@@ -8,16 +8,6 @@ async function request(url, options) {
   const body = await response.json();
   if (!response.ok) throw new Error(body.error || `请求失败 (${response.status})`);
   return body;
-}
-function loadSample() {
-  const value = bootstrap.samples[$('sample').value];
-  $('source').value = value.source;
-  $('spec').value = value.spec;
-}
-function modeHint() {
-  $('mode-hint').textContent = $('mode').value === 'offline'
-    ? '离线样例使用固定生成候选，pytest 和 coverage 真实运行；编辑输入后请切换 DeepSeek。'
-    : 'DeepSeek 将接收源码、规格和反馈；密钥从服务器本地配置读取。';
 }
 function render(job) {
   $('job-status').textContent = label(job.status);
@@ -60,32 +50,30 @@ async function poll(identity) {
     await delay(1200);
   }
 }
-$('sample').addEventListener('change', loadSample);
-$('mode').addEventListener('change', modeHint);
 $('run-form').addEventListener('submit', async event => {
   event.preventDefault();
   if (activeJob) return;
   $('submit').disabled = true;
   $('request-error').textContent = '';
   try {
-    const payload = {source:$('source').value, spec:$('spec').value, sample:$('sample').value,
-      mode:$('mode').value, max_rounds:Number($('max-rounds').value), timeout:Number($('timeout').value)};
+    const payload = {source:$('source').value, spec:$('spec').value,
+      max_rounds:Number($('max-rounds').value), timeout:Number($('timeout').value)};
     const job = await request('/api/runs', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
     activeJob = job.id;
     sessionStorage.setItem('workflowJob', activeJob);
     await poll(activeJob);
   } catch (error) { $('request-error').textContent = error.message; }
-  finally { activeJob = null; $('submit').disabled = false; }
+  finally { activeJob = null; $('submit').disabled = !modelReady; }
 });
 async function init() {
   try {
-    bootstrap = await request('/api/bootstrap');
+    const bootstrap = await request('/api/bootstrap');
     const config = bootstrap.config;
-    $('config-status').textContent = config.ready ? `DeepSeek · ${config.model}` : 'DeepSeek 未配置 · 可运行离线样例';
+    modelReady = config.ready;
+    $('config-status').textContent = config.ready ? `DeepSeek · ${config.model}` : 'DeepSeek 未配置';
+    if (!modelReady) $('request-error').textContent = '请在服务器 .env 中配置 DeepSeek 模型与密钥后刷新页面。';
     $('max-rounds').value = config.max_rounds;
     $('timeout').value = config.timeout;
-    if (!config.ready) $('mode').value = 'offline';
-    loadSample(); modeHint();
     const previous = sessionStorage.getItem('workflowJob');
     if (previous) {
       try {
@@ -93,7 +81,7 @@ async function init() {
         if (!['finished','failed'].includes(job.status)) { activeJob = previous; await poll(previous); }
       } catch { sessionStorage.removeItem('workflowJob'); }
     }
-    activeJob = null; $('submit').disabled = false;
+    activeJob = null; $('submit').disabled = !modelReady;
   } catch (error) { $('request-error').textContent = error.message; }
 }
 init();

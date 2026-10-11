@@ -14,18 +14,12 @@ from testgen_agent.llm_client import DeepSeekClient
 from testgen_agent.models import ModelInfo
 
 from .config import WorkflowConfig
-from .service import DATA_ROOT, DEMO_FIXTURES, fixture_client, run_workflow
+from .service import run_workflow
 
 STATIC_ROOT = Path(__file__).with_name("web_static")
 MAX_REQUEST_BYTES = 512 * 1024
 DOWNLOADS = {"tests": "final/test_subject.py", "source": "final/subject.py",
              "report": "report.md", "summary": "summary.json", "state": "state.json"}
-
-
-def samples() -> dict:
-    return {name: {"source": (DATA_ROOT / f"{name}.py").read_text(encoding="utf-8"),
-                   "spec": (DATA_ROOT / f"{name}.md").read_text(encoding="utf-8")}
-            for name in DEMO_FIXTURES}
 
 
 def validate_payload(value) -> dict:
@@ -36,19 +30,11 @@ def validate_payload(value) -> dict:
         raise ValueError("请提供不超过 128 KiB 的 Python 源码。")
     if not isinstance(spec, str) or not spec.strip() or len(spec.encode("utf-8")) > 128 * 1024:
         raise ValueError("请提供非空、大小不超过 128 KiB 的行为规格。")
-    mode = value.get("mode", "real")
-    if mode not in ("real", "offline"):
-        raise ValueError("运行模式无效。")
-    config = WorkflowConfig(mode=mode, max_rounds=value.get("max_rounds", 3),
+    if value.get("mode", "real") != "real":
+        raise ValueError("Web 工作台只使用 DeepSeek。")
+    config = WorkflowConfig(mode="real", max_rounds=value.get("max_rounds", 3),
                             execution_timeout_seconds=value.get("timeout", 30))
-    sample = value.get("sample")
-    if mode == "offline":
-        if not isinstance(sample, str) or sample not in DEMO_FIXTURES:
-            raise ValueError("离线模式请选择内置样例。")
-        expected = samples()[sample]
-        if source.strip() != expected["source"].strip() or spec.strip() != expected["spec"].strip():
-            raise ValueError("编辑源码或规格后请使用 DeepSeek 模式。")
-    return {"source": source, "spec": spec, "sample": sample, "config": config}
+    return {"source": source, "spec": spec, "config": config}
 
 
 @dataclass(frozen=True)
@@ -120,12 +106,9 @@ def _run_job(store: JobStore, identity: str, payload: dict):
         source.write_text(payload["source"], encoding="utf-8")
         spec.write_text(payload["spec"], encoding="utf-8")
         config = payload["config"]
-        if config.mode == "offline":
-            client = fixture_client(payload["sample"])
-        else:
-            model_config = load_config(env_file=store.env_file)
-            config = config.updated(model=ModelInfo.from_config(model_config))
-            client = DeepSeekClient(model_config)
+        model_config = load_config(env_file=store.env_file)
+        config = config.updated(model=ModelInfo.from_config(model_config))
+        client = DeepSeekClient(model_config)
         store.update(identity, status="running")
         state = run_workflow(source=source, specification=spec, output=job.output,
                              config=config, client=client, with_summary=True)
@@ -191,7 +174,7 @@ class WebHandler(BaseHTTPRequestHandler):
                             "timeout": config.execution_timeout_seconds}
             except ValueError:
                 settings = {"ready": False, "model": None, "max_rounds": 3, "timeout": 30}
-            self._json({"config": settings, "samples": samples()})
+            self._json({"config": settings})
             return
         parts = path.strip("/").split("/")
         if len(parts) in (3, 5) and parts[:2] == ["api", "runs"]:
@@ -226,7 +209,7 @@ class WebHandler(BaseHTTPRequestHandler):
         try:
             payload = validate_payload(json.loads(self.rfile.read(length).decode("utf-8")))
         except (UnicodeError, ValueError):
-            self._json({"error": "输入无效；检查源码、规格、轮次、超时和离线样例是否匹配。"}, HTTPStatus.BAD_REQUEST)
+            self._json({"error": "输入无效；检查源码、规格、轮次和超时。Web 仅支持 DeepSeek。"}, HTTPStatus.BAD_REQUEST)
             return
         store = self.server.store
         if not store.busy.acquire(blocking=False):
@@ -254,7 +237,7 @@ class WebServer(ThreadingHTTPServer):
 def serve(host: str, port: int, project_root: Path, env_file: Path | None = None) -> int:
     with WebServer((host, port), project_root, env_file) as server:
         print(f"Workflow Web：http://{host}:{server.server_port}", flush=True)
-        print("按 Ctrl+C 停止。DeepSeek 模式读取本地配置；离线模式不调用模型。", flush=True)
+        print("按 Ctrl+C 停止。工作台使用 DeepSeek，读取本地模型配置。", flush=True)
         try:
             server.serve_forever()
         except KeyboardInterrupt:

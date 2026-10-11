@@ -22,6 +22,13 @@ DEMO_FIXTURES = {
 }
 
 
+def sample_inputs() -> dict:
+    """Bundled CLI/acceptance inputs; the Web form never preloads samples."""
+    return {name: {"source": (DATA_ROOT / f"{name}.py").read_text(encoding="utf-8"),
+                   "spec": (DATA_ROOT / f"{name}.md").read_text(encoding="utf-8")}
+            for name in DEMO_FIXTURES}
+
+
 def fixture_client(sample: str, fixtures: tuple[Path, ...] = ()) -> FixtureClient:
     paths = fixtures or tuple(DATA_ROOT / name for name in DEMO_FIXTURES.get(sample, ()))
     if not paths:

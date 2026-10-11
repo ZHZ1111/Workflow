@@ -2,7 +2,7 @@
 
 为单文件 Python 源码生成并验证 pytest 测试。生成 Agent 负责规划与修订，执行 Agent 负责 pytest、覆盖率和评估，Workflow 负责交接、最多三轮反馈、历史候选选择和报告导出。
 
-**CLI 和 Web 共用同一工作流服务。** 两种入口均支持 DeepSeek 和离线固定候选；离线模式也真实执行 pytest/coverage。本次结果和修复记录见 [工程验收](evaluation/verification.md)。
+**CLI 和 Web 共用同一工作流服务。** Web 仅使用 DeepSeek，用户自行输入源码与行为规格；CLI 另外保留离线固定候选，仍真实执行 pytest/coverage。工程初验结果和修复记录见 [工程验收](evaluation/verification.md)。
 
 ## 安装
 
@@ -69,7 +69,9 @@ Copy-Item .env.example .env
 .\.venv\Scripts\test-workflow-web.exe --port 8765
 ```
 
-打开 [本机工作台](http://127.0.0.1:8765)。选择样例和生成方式，填写源码/规格后点击“运行工作流”。DeepSeek 模式支持自定义输入；离线模式仅支持未改动的三个内置样例。页面显示结论、停止原因、选中轮次、模型请求/pytest 启动数、逐轮覆盖和反馈，提供测试与报告下载。
+打开 [本机工作台](http://127.0.0.1:8765)。源码和行为规格初始为空，填写后点击“运行工作流”，由 DeepSeek 生成测试。没有样例或生成方式选择；未配置 DeepSeek 时不能提交。页面显示结论、停止原因、选中轮次、模型请求/pytest 启动数、逐轮覆盖和反馈，提供测试与报告下载。
+
+复杂例子见 [checkout.py](examples/checkout.py) 与 [checkout.md](examples/checkout.md)：包含购物车校验、会员折扣、优惠券门槛/叠加/封顶、优惠后的运费门槛和加急费。把两个文件全文分别粘贴到页面即可使用。
 
 默认读取当前目录的 `.env`，可用 `--project-root` 指定输出项目目录、`--env-file` 指定配置。输出保存在 `outputs/web/<job_id>/`，输入保存在 `outputs/web-inputs/<job_id>/`。仅监听本机，一次执行一个任务，拒绝跨站提交。刷新页面可继续查看当前任务；服务重启后用 CLI `inspect` 读取持久化产物。
 
@@ -90,11 +92,11 @@ Copy-Item .env.example .env
 ```powershell
 # 全量 Workflow + vendor 回归
 .\.venv\Scripts\python.exe -m pytest tests vendor/agentdev/tests -q
-# CLI / HTTP 正常、反馈、缺陷复核：六个离线任务
+# CLI 正常、反馈、缺陷复核：三个离线任务
 .\.venv\Scripts\python.exe scripts/verify_workflow.py
-# 六个离线 + 六个 DeepSeek 任务，发送样例及反馈并产生费用
+# 三个 CLI 离线 + 六个 CLI/Web DeepSeek 任务，发送样例及反馈并产生费用
 .\.venv\Scripts\python.exe scripts/verify_workflow.py --real --env-file .env
-# 新虚拟环境、wheel 安装、仓库之外的 CLI/Web 两轮反馈
+# 新环境、wheel 安装、CLI 两轮反馈与 Web 注入模型响应的两轮验证
 .\.venv\Scripts\python.exe scripts/verify_install.py
 ```
 
