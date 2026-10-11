@@ -328,6 +328,8 @@ def main():
     evidence["vendor_files_unchanged"] = all(file_digest(ROOT / "vendor/agentdev" / item["path"]) == item["sha256"]
                                                for item in manifest["files"])
     evidence["vendor_manifest_files"] = len(manifest["files"])
+    from vendor_audit import audit_vendor
+    evidence["vendor_files_verified"] = audit_vendor(ROOT)["verified"]
     expected = {"calculation": ("completed", "coverage_target_met"), "validation": ("completed", "coverage_target_met"),
                 "discount": ("needs_review", "suspected_source_defect")}
     evidence["real_acceptance_complete"] = all(name in evidence["real"] and (
@@ -342,11 +344,11 @@ def main():
     evidence["matrix"] = matrix(evidence)
     evidence["core_matrix_complete"] = all(item["status"] == "passed" for item in evidence["matrix"] if item["id"] not in {"W17", "W18"})
     evidence["p5_complete"] = (evidence["real_acceptance_complete"] and evidence["offline_acceptance_complete"]
-                               and evidence["regression_complete"] and evidence["vendor_files_unchanged"] and evidence["core_matrix_complete"])
+                               and evidence["regression_complete"] and evidence["vendor_files_verified"] and evidence["core_matrix_complete"])
     evidence["updated_at"] = now()
     atomic_write(INDEX, json.dumps(evidence, ensure_ascii=False, indent=2) + "\n")
     write_report(evidence)
-    success = (evidence["vendor_files_unchanged"] and (not args.tests or evidence["regression_complete"])
+    success = (evidence["vendor_files_verified"] and (not args.tests or evidence["regression_complete"])
                and (not args.offline or evidence["offline_acceptance_complete"])
                and (not (args.real or args.collect_real) or evidence["real_acceptance_complete"]))
     return 0 if success else 1

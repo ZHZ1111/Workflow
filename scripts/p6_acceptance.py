@@ -101,11 +101,13 @@ def main():
         print(result.stdout.strip(), flush=True)
     manifest = json.loads((ROOT / "evaluation/reuse_manifest.json").read_text(encoding="utf-8"))
     evidence["vendor_files_unchanged"] = all(file_digest(ROOT / "vendor/agentdev" / item["path"]) == item["sha256"] for item in manifest["files"])
+    from vendor_audit import audit_vendor
+    evidence["vendor_files_verified"] = audit_vendor(ROOT)["verified"]
     evidence["updated_at"] = datetime.now(timezone(timedelta(hours=8))).isoformat()
-    evidence["p6_complete"] = (len(evidence["cases"]) == len(CASES) and evidence["vendor_files_unchanged"]
+    evidence["p6_complete"] = (len(evidence["cases"]) == len(CASES) and evidence["vendor_files_verified"]
                               and evidence.get("tests", {}).get("exit_code") == 0)
     atomic_write(INDEX, json.dumps(evidence, ensure_ascii=False, indent=2) + "\n")
-    return 0 if evidence["vendor_files_unchanged"] and (args.skip_tests or evidence.get("tests", {}).get("exit_code") == 0) else 1
+    return 0 if evidence["vendor_files_verified"] and (args.skip_tests or evidence.get("tests", {}).get("exit_code") == 0) else 1
 
 
 if __name__ == "__main__":

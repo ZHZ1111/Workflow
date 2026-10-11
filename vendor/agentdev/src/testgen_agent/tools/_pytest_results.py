@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+import time
 import traceback
 from pathlib import Path
 
@@ -27,7 +28,16 @@ class _Recorder:
         # Replace atomically so a timed-out process leaves the last full checkpoint.
         temporary = self.destination.with_suffix(".tmp")
         temporary.write_text(json.dumps(self.data, ensure_ascii=False), encoding="utf-8")
-        temporary.replace(self.destination)
+        # Windows may briefly deny replacement while a file scanner holds a
+        # checkpoint. Retry that sharing violation without rerunning any tests.
+        for attempt in range(8):
+            try:
+                temporary.replace(self.destination)
+                break
+            except PermissionError:
+                if os.name != "nt" or attempt == 7:
+                    raise
+                time.sleep(0.025)
 
     def pytest_sessionstart(self, session) -> None:
         self.save()

@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0",
+  "patches": [
+    {
+      "path": "src/testgen_agent/tools/_pytest_results.py",
+      "original_sha256": "7137121a5b293c27cbc3f3993778b47556df64574b0ca4371cc436e688c37710",
+      "sha256": "b5623e4bb051d1a95f98f02ad3a681ddcdd16e4abcbcbc5085b737563f2eb15c",
+      "reason": "Retry transient Windows PermissionError when atomically replacing pytest execution checkpoints; test execution and decision policies are unchanged."
+    }
+  ]
+}

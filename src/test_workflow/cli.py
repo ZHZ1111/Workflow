@@ -6,19 +6,16 @@ from pathlib import Path
 
 from testgen_agent.config import load_config
 from testgen_agent.llm_client import DeepSeekClient
-from testgen_agent.models import GeneratedTests, ModelInfo, TaskStatus
+from testgen_agent.models import ModelInfo, TaskStatus
 
-from .agents.test_generation import TestGenerationAgent
-from .agents.test_execution import TestExecutionAgent
 from .config import WorkflowConfig
-from .demo.client import FixtureClient
 from .demo.agents import FakeExecutionAgent, FakeGenerationAgent
-from .definitions import DEMO_WORKFLOW, TESTING_WORKFLOW, SUMMARY_WORKFLOW
-from .nodes.result_summary import ResultSummaryNode
+from .definitions import DEMO_WORKFLOW
 from .reporting import inspect_summary
 from .registry import AgentRegistry
 from .state import StateStore
 from .workflow import WorkflowRunner, create_run
+from .service import fixture_client, run_workflow
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -33,17 +30,25 @@ def main(argv: list[str] | None = None) -> int:
     run.add_argument("--source", type=Path, required=True)
     run.add_argument("--spec", type=Path, required=True)
     run.add_argument("--output", type=Path, help="New exact run directory; existing paths are rejected")
-    run.add_argument("--max-rounds", type=int, default=3, choices=range(1, 4))
-    run.add_argument("--timeout", type=int, default=30, help="Per-round pytest timeout, 1..300 seconds")
+    run.add_argument("--max-rounds", type=int, choices=range(1, 4), help="Override configured rounds, 1..3")
+    run.add_argument("--timeout", type=int, help="Override per-round pytest timeout, 1..300 seconds")
     run.add_argument("--demo", action="store_true", help="Offline fixture generation with real pytest/coverage")
     run.add_argument("--fixture", type=Path, action="append", help="Offline JSON response, repeat in round order")
     run.add_argument("--env-file", type=Path, help="Explicit model settings file for real mode")
     run.add_argument("--with-summary", action="store_true", help="Register a model-free summary extension before export")
+    web = commands.add_parser("web", help="Start the local workflow Web workbench")
+    web.add_argument("--host", choices=("127.0.0.1", "localhost"), default="127.0.0.1")
+    web.add_argument("--port", type=int, default=8765)
+    web.add_argument("--project-root", type=Path, default=Path.cwd())
+    web.add_argument("--env-file", type=Path)
     inspect = commands.add_parser("inspect", help="Validate and print persisted state; does not resume")
     inspect.add_argument("run_dir", type=Path)
     inspect.add_argument("--summary", action="store_true", help="Verify saved evidence and print a read-only summary")
     args = parser.parse_args(argv)
     try:
+        if args.command == "web":
+            from .web import serve
+            return serve(args.host, args.port, args.project_root, args.env_file)
         if args.command == "inspect":
             state = StateStore(args.run_dir).load()
             print(json.dumps(inspect_summary(state), ensure_ascii=False, indent=2) if args.summary else state.canonical_json(indent=2))
@@ -53,35 +58,20 @@ def main(argv: list[str] | None = None) -> int:
                 raise ValueError("fixtures require offline demo mode")
             if args.demo and args.env_file:
                 raise ValueError("offline mode does not use environment files")
-            config = WorkflowConfig(mode="offline" if args.demo else "real", max_rounds=args.max_rounds,
-                                    execution_timeout_seconds=args.timeout)
             if args.demo:
-                data = Path(__file__).parent / "demo" / "data"
-                defaults = {
-                    "calculation": ("calculation_complete.json",),
-                    "validation": ("validation_round_01.json", "validation_round_02.json"),
-                    "discount": ("discount_defect.json",),
-                }
-                names = defaults.get(args.source.stem)
-                fixtures = tuple(args.fixture or (tuple(data / name for name in names) if names else ()))
-                if not fixtures:
-                    raise ValueError("this source requires an explicit offline fixture")
-                for path in fixtures:
-                    GeneratedTests.model_validate_json(path.read_text(encoding="utf-8"))
-                client = FixtureClient(fixtures)
+                config = WorkflowConfig(mode="offline", max_rounds=args.max_rounds if args.max_rounds is not None else 3,
+                                        execution_timeout_seconds=args.timeout if args.timeout is not None else 30)
+                client = fixture_client(args.source.stem, tuple(args.fixture or ()))
             else:
                 model_config = load_config(env_file=args.env_file)
-                config = config.updated(model=ModelInfo.from_config(model_config))
+                config = WorkflowConfig(mode="real", model=ModelInfo.from_config(model_config),
+                                        max_rounds=args.max_rounds if args.max_rounds is not None else model_config.max_rounds,
+                                        execution_timeout_seconds=args.timeout if args.timeout is not None else model_config.execution_timeout_seconds)
                 client = DeepSeekClient(model_config)
-            registry = AgentRegistry()
-            registry.register("test_generation", TestGenerationAgent(client, client_mode="offline" if args.demo else "real"))
-            registry.register("test_execution", TestExecutionAgent())
-            if args.with_summary:
-                registry.register("result_summary", ResultSummaryNode())
-            state = create_run(source=args.source, specification=args.spec,
-                               output=args.output if args.output is not None else Path("outputs/workflow"),
-                               config=config, exact_output=args.output is not None)
-            state = WorkflowRunner(registry, SUMMARY_WORKFLOW if args.with_summary else TESTING_WORKFLOW).run(state)
+            state = run_workflow(source=args.source, specification=args.spec,
+                                 output=args.output if args.output is not None else Path("outputs/workflow"),
+                                 config=config, client=client, exact_output=args.output is not None,
+                                 with_summary=args.with_summary)
             print(f"run_id={state.run_id} mode={state.config.mode} workflow_status={state.workflow_status} task_status={state.task_status}")
             print(f"stop_reason={state.stop_reason} selected_round={state.selected_round}")
             print(f"report={state.run_dir / 'report.md'}")

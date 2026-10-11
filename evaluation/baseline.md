@@ -43,7 +43,7 @@
 | pip check | 退出码 0，No broken requirements found | p0_results.json/checks |
 | compileall | 退出码 0 | p0_results.json/checks |
 | 旧完整测试 | 422 passed、1 failed，137.23s；基线脚本首次因此退出 1 | p0_initial_tests.txt |
-| 唯一失败复验 | 1 passed，4.40s，退出码 0 | p0_recheck.txt / p0_recheck.xml |
+| 唯一失败复验 | 1 passed，4.40s，退出码 0 | p0_recheck.xml |
 
 失败用例为 `test_agent_loop.py::test_duplicate_with_comment_changes_stops_before_second_execution`。原预期 no_progress，实际因 pytest 插件保存结果时 `pytest_result.tmp → pytest_result.json` 发生 `PermissionError [WinError 5]`，使首轮执行被归因为需复核。定位证据来自该轮 stdout 与 summary。定向复验命令：
 

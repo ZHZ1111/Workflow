@@ -4,6 +4,7 @@ import hashlib
 import os
 from pathlib import Path
 import tempfile
+import time
 
 from .contracts import ArtifactRef, relative_path
 
@@ -15,7 +16,16 @@ def atomic_write(path: Path, text: str) -> None:
             stream.write(text)
             stream.flush()
             os.fsync(stream.fileno())
-        os.replace(temporary, path)
+        # Windows readers briefly hold handles that prevent replacement. Web
+        # polling must not turn a transient sharing violation into a failed run.
+        for attempt in range(8):
+            try:
+                os.replace(temporary, path)
+                break
+            except PermissionError:
+                if os.name != "nt" or attempt == 7:
+                    raise
+                time.sleep(0.025)
     finally:
         Path(temporary).unlink(missing_ok=True)
 

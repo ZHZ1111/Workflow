@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>测试 Workflow 工作台</title><link rel="stylesheet" href="/styles.css"><script src="/app.js" defer></script></head>
+<body>
+<header><div><span class="eyebrow">MULTI-AGENT TEST WORKFLOW</span><h1>测试工作流</h1><p>从行为规格到可验证的测试，让生成、执行与反馈形成闭环。</p></div><span id="config-status" class="badge">读取配置中</span></header>
+<main>
+<section class="panel input"><h2>创建任务</h2>
+<form id="run-form">
+<div class="settings"><label>样例<select id="sample"><option value="calculation">计算 · 正常完成</option><option value="validation">验证 · 反馈修订</option><option value="discount">折扣 · 缺陷复核</option></select></label><label>生成方式<select id="mode"><option value="real">DeepSeek</option><option value="offline">离线样例</option></select></label><label>最多轮次<input id="max-rounds" type="number" min="1" max="3" value="3" required></label><label>每轮执行超时（秒）<input id="timeout" type="number" min="1" max="300" value="30" required></label></div>
+<div class="editors"><label>Python 源码<textarea id="source" spellcheck="false" required></textarea></label><label>行为规格<textarea id="spec" required></textarea></label></div>
+<p id="mode-hint" class="muted">DeepSeek 将接收源码、规格和反馈；密钥从服务器本地配置读取。</p>
+<div class="actions"><button id="submit" type="submit" disabled>运行工作流</button><span id="request-error" role="alert"></span></div>
+</form></section>
+<section class="panel" aria-live="polite"><div class="section-heading"><h2>任务结果</h2><span id="job-status" class="badge">等待开始</span></div><p id="output-dir" class="muted">运行后显示保存位置、逐轮结论和可下载产物。</p>
+<div class="metrics"><div><span>业务结论</span><strong id="task-status">—</strong></div><div><span>停止原因</span><strong id="stop-reason">—</strong></div><div><span>选中轮次</span><strong id="selected-round">—</strong></div><div><span>模型请求 / pytest</span><strong id="calls">—</strong></div></div>
+<div id="rounds" class="rounds"></div><nav id="downloads" class="downloads" aria-label="下载产物"></nav>
+<details open><summary>工作流事件</summary><pre id="events">暂无事件</pre></details>
+<details><summary>Agent 反馈消息</summary><pre id="messages">暂无消息</pre></details>
+<details><summary>最终测试代码</summary><pre id="test-code">暂无测试</pre></details>
+<details><summary>完整报告</summary><pre id="report">暂无报告</pre></details>
+</section>
+</main><footer>支持单文件 Python、1–5 个顶层同步函数。生成测试会在本机执行，请使用可信源码。</footer>
+</body></html>

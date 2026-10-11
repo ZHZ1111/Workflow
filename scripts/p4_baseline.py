@@ -133,7 +133,9 @@ def main():
     for model in (AgentContext, AgentResult, ExecutionAssessment, Message, WorkflowState, Event):
         atomic_write(exports / f"{model.__name__}.schema.json", json.dumps(model.model_json_schema(), ensure_ascii=False, indent=2) + "\n")
     manifest = json.loads((ROOT / "evaluation/reuse_manifest.json").read_text(encoding="utf-8"))
-    assert all(file_digest(ROOT / "vendor/agentdev" / entry["path"]) == entry["sha256"] for entry in manifest["files"])
+    from vendor_audit import audit_vendor
+    vendor_audit = audit_vendor(ROOT)
+    assert vendor_audit["verified"]
     checks = {}
     if not args.skip_tests:
         checks = run_checks(root)
@@ -141,7 +143,9 @@ def main():
                 "python": sys.version.split()[0], "generation_mode": "offline", "execution_mode": "real",
                 "automatic_feedback_scheduler": True, "external_model_requests": 0,
                 "pytest_processes": sum(item["pytest_processes"] for item in samples.values()),
-                "vendor_files_unchanged": len(manifest["files"]), "checks": checks, "samples": samples}
+                "vendor_manifest_files": len(manifest["files"]),
+                "vendor_files_unchanged": vendor_audit["unchanged"],
+                "vendor_files_verified": vendor_audit["verified"], "checks": checks, "samples": samples}
     atomic_write(ROOT / "evaluation/p4_results.json", json.dumps(evidence, ensure_ascii=False, indent=2) + "\n")
     return 0 if all(item["exit_code"] == 0 for item in checks.values()) else 1
 

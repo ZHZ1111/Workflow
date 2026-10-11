@@ -1,0 +1,532 @@
+{
+  "verified_on": "2026-10-11 Asia/Shanghai",
+  "regression": {
+    "passed": 645,
+    "failures": 0,
+    "junit": "outputs/verification-tests.xml"
+  },
+  "workflow_cases": [
+    {
+      "interface": "cli",
+      "sample": "calculation",
+      "output": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\verification\\4b02ec07b5304fab916effbb0310a7b7\\offline-cli-calculation",
+      "run_id": "run-0e8db4f9e95845a9bf07b73d9588366e",
+      "mode": "offline",
+      "task_status": "completed",
+      "stop_reason": "coverage_target_met",
+      "rounds": 1,
+      "selected_round": 1,
+      "selected_execution": {
+        "kind": "passed",
+        "exit_code": 0,
+        "collected": 3,
+        "executed": 3,
+        "passed": 3,
+        "failed": 0,
+        "errors": 0,
+        "all_passed": true
+      },
+      "selected_coverage": {
+        "target_file": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\verification\\4b02ec07b5304fab916effbb0310a7b7\\offline-cli-calculation\\agent_workspace\\subject.py",
+        "status": "available",
+        "covered_lines": 2,
+        "total_lines": 2,
+        "covered_branches": 0,
+        "total_branches": 0,
+        "missing_lines": [],
+        "missing_branches": [],
+        "error": null,
+        "line_percent": 100.0,
+        "branch_percent": null,
+        "meets_target": true
+      },
+      "external_requests": 0,
+      "pytest_processes": 1
+    },
+    {
+      "interface": "cli",
+      "sample": "validation",
+      "output": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\verification\\4b02ec07b5304fab916effbb0310a7b7\\offline-cli-validation",
+      "run_id": "run-217476ee025e490b945e1fc9414aa28e",
+      "mode": "offline",
+      "task_status": "completed",
+      "stop_reason": "coverage_target_met",
+      "rounds": 2,
+      "selected_round": 2,
+      "selected_execution": {
+        "kind": "passed",
+        "exit_code": 0,
+        "collected": 12,
+        "executed": 12,
+        "passed": 12,
+        "failed": 0,
+        "errors": 0,
+        "all_passed": true
+      },
+      "selected_coverage": {
+        "target_file": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\verification\\4b02ec07b5304fab916effbb0310a7b7\\offline-cli-validation\\agent_workspace\\subject.py",
+        "status": "available",
+        "covered_lines": 10,
+        "total_lines": 10,
+        "covered_branches": 8,
+        "total_branches": 8,
+        "missing_lines": [],
+        "missing_branches": [],
+        "error": null,
+        "line_percent": 100.0,
+        "branch_percent": 100.0,
+        "meets_target": true
+      },
+      "external_requests": 0,
+      "pytest_processes": 2
+    },
+    {
+      "interface": "cli",
+      "sample": "discount",
+      "output": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\verification\\4b02ec07b5304fab916effbb0310a7b7\\offline-cli-discount",
+      "run_id": "run-50cbd9bf860145d9a4e4022669e38acb",
+      "mode": "offline",
+      "task_status": "needs_review",
+      "stop_reason": "suspected_source_defect",
+      "rounds": 1,
+      "selected_round": 1,
+      "selected_execution": {
+        "kind": "assertion_failed",
+        "exit_code": 1,
+        "collected": 1,
+        "executed": 1,
+        "passed": 0,
+        "failed": 1,
+        "errors": 0,
+        "all_passed": false
+      },
+      "selected_coverage": {
+        "target_file": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\verification\\4b02ec07b5304fab916effbb0310a7b7\\offline-cli-discount\\agent_workspace\\subject.py",
+        "status": "available",
+        "covered_lines": 5,
+        "total_lines": 8,
+        "covered_branches": 3,
+        "total_branches": 6,
+        "missing_lines": [
+          10,
+          12,
+          14
+        ],
+        "missing_branches": [
+          {
+            "start": 9,
+            "end": 10
+          },
+          {
+            "start": 11,
+            "end": 12
+          },
+          {
+            "start": 13,
+            "end": 14
+          }
+        ],
+        "error": null,
+        "line_percent": 62.5,
+        "branch_percent": 50.0,
+        "meets_target": false
+      },
+      "external_requests": 0,
+      "pytest_processes": 1
+    },
+    {
+      "interface": "web",
+      "sample": "calculation",
+      "output": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\verification\\4b02ec07b5304fab916effbb0310a7b7\\outputs\\web\\982dcecd720e446098cf58a0418a95c5",
+      "run_id": "run-4febfb2565ff44f785242799f55805ca",
+      "mode": "offline",
+      "task_status": "completed",
+      "stop_reason": "coverage_target_met",
+      "rounds": 1,
+      "selected_round": 1,
+      "selected_execution": {
+        "kind": "passed",
+        "exit_code": 0,
+        "collected": 3,
+        "executed": 3,
+        "passed": 3,
+        "failed": 0,
+        "errors": 0,
+        "all_passed": true
+      },
+      "selected_coverage": {
+        "target_file": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\verification\\4b02ec07b5304fab916effbb0310a7b7\\outputs\\web\\982dcecd720e446098cf58a0418a95c5\\agent_workspace\\subject.py",
+        "status": "available",
+        "covered_lines": 2,
+        "total_lines": 2,
+        "covered_branches": 0,
+        "total_branches": 0,
+        "missing_lines": [],
+        "missing_branches": [],
+        "error": null,
+        "line_percent": 100.0,
+        "branch_percent": null,
+        "meets_target": true
+      },
+      "external_requests": 0,
+      "pytest_processes": 1
+    },
+    {
+      "interface": "web",
+      "sample": "validation",
+      "output": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\verification\\4b02ec07b5304fab916effbb0310a7b7\\outputs\\web\\9f84b4180ca34dde82e62a240d41b946",
+      "run_id": "run-68d731ecc73145bd89f7314f14a83ef4",
+      "mode": "offline",
+      "task_status": "completed",
+      "stop_reason": "coverage_target_met",
+      "rounds": 2,
+      "selected_round": 2,
+      "selected_execution": {
+        "kind": "passed",
+        "exit_code": 0,
+        "collected": 12,
+        "executed": 12,
+        "passed": 12,
+        "failed": 0,
+        "errors": 0,
+        "all_passed": true
+      },
+      "selected_coverage": {
+        "target_file": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\verification\\4b02ec07b5304fab916effbb0310a7b7\\outputs\\web\\9f84b4180ca34dde82e62a240d41b946\\agent_workspace\\subject.py",
+        "status": "available",
+        "covered_lines": 10,
+        "total_lines": 10,
+        "covered_branches": 8,
+        "total_branches": 8,
+        "missing_lines": [],
+        "missing_branches": [],
+        "error": null,
+        "line_percent": 100.0,
+        "branch_percent": 100.0,
+        "meets_target": true
+      },
+      "external_requests": 0,
+      "pytest_processes": 2
+    },
+    {
+      "interface": "web",
+      "sample": "discount",
+      "output": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\verification\\4b02ec07b5304fab916effbb0310a7b7\\outputs\\web\\a8ef3d27d9354669bbea6c5543892a9e",
+      "run_id": "run-0ecf206ad648467397ff0002826ba426",
+      "mode": "offline",
+      "task_status": "needs_review",
+      "stop_reason": "suspected_source_defect",
+      "rounds": 1,
+      "selected_round": 1,
+      "selected_execution": {
+        "kind": "assertion_failed",
+        "exit_code": 1,
+        "collected": 1,
+        "executed": 1,
+        "passed": 0,
+        "failed": 1,
+        "errors": 0,
+        "all_passed": false
+      },
+      "selected_coverage": {
+        "target_file": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\verification\\4b02ec07b5304fab916effbb0310a7b7\\outputs\\web\\a8ef3d27d9354669bbea6c5543892a9e\\agent_workspace\\subject.py",
+        "status": "available",
+        "covered_lines": 5,
+        "total_lines": 8,
+        "covered_branches": 3,
+        "total_branches": 6,
+        "missing_lines": [
+          10,
+          12,
+          14
+        ],
+        "missing_branches": [
+          {
+            "start": 9,
+            "end": 10
+          },
+          {
+            "start": 11,
+            "end": 12
+          },
+          {
+            "start": 13,
+            "end": 14
+          }
+        ],
+        "error": null,
+        "line_percent": 62.5,
+        "branch_percent": 50.0,
+        "meets_target": false
+      },
+      "external_requests": 0,
+      "pytest_processes": 1
+    },
+    {
+      "interface": "cli",
+      "sample": "calculation",
+      "output": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\verification\\4b02ec07b5304fab916effbb0310a7b7\\real-cli-calculation",
+      "run_id": "run-54f728d7bcaf4dc09051ddc2fe35bdcf",
+      "mode": "real",
+      "task_status": "completed",
+      "stop_reason": "coverage_target_met",
+      "rounds": 1,
+      "selected_round": 1,
+      "selected_execution": {
+        "kind": "passed",
+        "exit_code": 0,
+        "collected": 6,
+        "executed": 6,
+        "passed": 6,
+        "failed": 0,
+        "errors": 0,
+        "all_passed": true
+      },
+      "selected_coverage": {
+        "target_file": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\verification\\4b02ec07b5304fab916effbb0310a7b7\\real-cli-calculation\\agent_workspace\\subject.py",
+        "status": "available",
+        "covered_lines": 2,
+        "total_lines": 2,
+        "covered_branches": 0,
+        "total_branches": 0,
+        "missing_lines": [],
+        "missing_branches": [],
+        "error": null,
+        "line_percent": 100.0,
+        "branch_percent": null,
+        "meets_target": true
+      },
+      "external_requests": 1,
+      "pytest_processes": 1
+    },
+    {
+      "interface": "cli",
+      "sample": "validation",
+      "output": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\verification\\4b02ec07b5304fab916effbb0310a7b7\\real-cli-validation",
+      "run_id": "run-7d7d7e74dd4e4e33932aa56c3ca8d0ff",
+      "mode": "real",
+      "task_status": "completed",
+      "stop_reason": "coverage_target_met",
+      "rounds": 1,
+      "selected_round": 1,
+      "selected_execution": {
+        "kind": "passed",
+        "exit_code": 0,
+        "collected": 17,
+        "executed": 17,
+        "passed": 17,
+        "failed": 0,
+        "errors": 0,
+        "all_passed": true
+      },
+      "selected_coverage": {
+        "target_file": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\verification\\4b02ec07b5304fab916effbb0310a7b7\\real-cli-validation\\agent_workspace\\subject.py",
+        "status": "available",
+        "covered_lines": 10,
+        "total_lines": 10,
+        "covered_branches": 8,
+        "total_branches": 8,
+        "missing_lines": [],
+        "missing_branches": [],
+        "error": null,
+        "line_percent": 100.0,
+        "branch_percent": 100.0,
+        "meets_target": true
+      },
+      "external_requests": 2,
+      "pytest_processes": 1
+    },
+    {
+      "interface": "cli",
+      "sample": "discount",
+      "output": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\verification\\4b02ec07b5304fab916effbb0310a7b7\\real-cli-discount",
+      "run_id": "run-d514613ce23d4a829f2716d21af9fa11",
+      "mode": "real",
+      "task_status": "needs_review",
+      "stop_reason": "suspected_source_defect",
+      "rounds": 1,
+      "selected_round": 1,
+      "selected_execution": {
+        "kind": "assertion_failed",
+        "exit_code": 1,
+        "collected": 12,
+        "executed": 12,
+        "passed": 11,
+        "failed": 1,
+        "errors": 0,
+        "all_passed": false
+      },
+      "selected_coverage": {
+        "target_file": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\verification\\4b02ec07b5304fab916effbb0310a7b7\\real-cli-discount\\agent_workspace\\subject.py",
+        "status": "available",
+        "covered_lines": 8,
+        "total_lines": 8,
+        "covered_branches": 6,
+        "total_branches": 6,
+        "missing_lines": [],
+        "missing_branches": [],
+        "error": null,
+        "line_percent": 100.0,
+        "branch_percent": 100.0,
+        "meets_target": true
+      },
+      "external_requests": 1,
+      "pytest_processes": 1
+    },
+    {
+      "interface": "web",
+      "sample": "validation",
+      "output": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\verification\\4b02ec07b5304fab916effbb0310a7b7\\outputs\\web\\c4dabe208a574445b36c120d685fa622",
+      "run_id": "run-ac222183c73d4099a5103e7b74989a45",
+      "mode": "real",
+      "task_status": "completed",
+      "stop_reason": "coverage_target_met",
+      "rounds": 1,
+      "selected_round": 1,
+      "selected_execution": {
+        "kind": "passed",
+        "exit_code": 0,
+        "collected": 15,
+        "executed": 15,
+        "passed": 15,
+        "failed": 0,
+        "errors": 0,
+        "all_passed": true
+      },
+      "selected_coverage": {
+        "target_file": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\verification\\4b02ec07b5304fab916effbb0310a7b7\\outputs\\web\\c4dabe208a574445b36c120d685fa622\\agent_workspace\\subject.py",
+        "status": "available",
+        "covered_lines": 10,
+        "total_lines": 10,
+        "covered_branches": 8,
+        "total_branches": 8,
+        "missing_lines": [],
+        "missing_branches": [],
+        "error": null,
+        "line_percent": 100.0,
+        "branch_percent": 100.0,
+        "meets_target": true
+      },
+      "external_requests": 1,
+      "pytest_processes": 1
+    },
+    {
+      "interface": "web",
+      "sample": "discount",
+      "output": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\verification\\4b02ec07b5304fab916effbb0310a7b7\\outputs\\web\\de3f3b9fb4ee4a7ca642ee391cd3fb91",
+      "run_id": "run-3f465f92ecee4098be02c8066fb4d2b1",
+      "mode": "real",
+      "task_status": "needs_review",
+      "stop_reason": "suspected_source_defect",
+      "rounds": 1,
+      "selected_round": 1,
+      "selected_execution": {
+        "kind": "assertion_failed",
+        "exit_code": 1,
+        "collected": 11,
+        "executed": 11,
+        "passed": 10,
+        "failed": 1,
+        "errors": 0,
+        "all_passed": false
+      },
+      "selected_coverage": {
+        "target_file": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\verification\\4b02ec07b5304fab916effbb0310a7b7\\outputs\\web\\de3f3b9fb4ee4a7ca642ee391cd3fb91\\agent_workspace\\subject.py",
+        "status": "available",
+        "covered_lines": 8,
+        "total_lines": 8,
+        "covered_branches": 6,
+        "total_branches": 6,
+        "missing_lines": [],
+        "missing_branches": [],
+        "error": null,
+        "line_percent": 100.0,
+        "branch_percent": 100.0,
+        "meets_target": true
+      },
+      "external_requests": 1,
+      "pytest_processes": 1
+    },
+    {
+      "interface": "web",
+      "sample": "calculation",
+      "output": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\verification\\8dbbed80926845b3acad72e5b1366c3c\\outputs\\web\\724a574293934f72b1b6b677025789b3",
+      "run_id": "run-c77396156ac9475189f1aceceacba44a",
+      "mode": "real",
+      "task_status": "completed",
+      "stop_reason": "coverage_target_met",
+      "rounds": 1,
+      "selected_round": 1,
+      "selected_execution": {
+        "kind": "passed",
+        "exit_code": 0,
+        "collected": 6,
+        "executed": 6,
+        "passed": 6,
+        "failed": 0,
+        "errors": 0,
+        "all_passed": true
+      },
+      "selected_coverage": {
+        "target_file": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\verification\\8dbbed80926845b3acad72e5b1366c3c\\outputs\\web\\724a574293934f72b1b6b677025789b3\\agent_workspace\\subject.py",
+        "status": "available",
+        "covered_lines": 2,
+        "total_lines": 2,
+        "covered_branches": 0,
+        "total_branches": 0,
+        "missing_lines": [],
+        "missing_branches": [],
+        "error": null,
+        "line_percent": 100.0,
+        "branch_percent": null,
+        "meets_target": true
+      },
+      "external_requests": 1,
+      "pytest_processes": 1
+    }
+  ],
+  "first_attempt_failures": [
+    {
+      "interface": "web",
+      "sample": "calculation",
+      "mode": "real",
+      "error": "AssertionError"
+    }
+  ],
+  "retry_result": "outputs/verification/8dbbed80926845b3acad72e5b1366c3c/results.json",
+  "all_workflow_cases_passed": true,
+  "vendor_audit": {
+    "unchanged": false,
+    "verified": true,
+    "files": 57,
+    "patches": [
+      "src/testgen_agent/tools/_pytest_results.py"
+    ]
+  },
+  "clean_install": {
+    "directory": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\install-verification\\7d473e7bafa842248cd767979c8a754b",
+    "checks": [
+      "build",
+      "dependencies",
+      "packages",
+      "pip-check",
+      "resources",
+      "cli",
+      "inspect",
+      "installed-web-feedback-workflow"
+    ],
+    "success": true
+  },
+  "cleanup": {
+    "duplicate_text_logs": 11,
+    "cache_build_directories": 14
+  },
+  "browser_verification": {
+    "offline_feedback_output": "outputs/web/0f5c88ee9dbd421a9e0089dfd42116a4",
+    "real_output": "outputs/web/0d914a1988de409f9888392f1610050d",
+    "real_model_requests": 1,
+    "real_passed": 6,
+    "real_line_percent": 100,
+    "workbench_url": "http://127.0.0.1:8765"
+  }
+}

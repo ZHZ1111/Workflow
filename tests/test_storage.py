@@ -1,4 +1,5 @@
 import json
+import os
 from unittest.mock import patch
 
 import pytest
@@ -16,6 +17,24 @@ def test_atomic_save_interruption_preserves_readable_state(initial):
             store.save(initial.updated(current_round=1))
     assert store.path.read_bytes() == before
     assert store.load() == initial
+    assert not list(initial.run_dir.glob(".state.json.*.tmp"))
+
+
+@pytest.mark.skipif(os.name != "nt", reason="Windows sharing violations")
+def test_atomic_save_recovers_from_reader_sharing_violation(initial):
+    real_replace = os.replace
+    attempts = 0
+
+    def replace_after_reader_closes(source, destination):
+        nonlocal attempts
+        attempts += 1
+        if attempts < 3:
+            raise PermissionError("reader still holds a file handle")
+        real_replace(source, destination)
+
+    with patch("test_workflow.storage.os.replace", side_effect=replace_after_reader_closes):
+        StateStore(initial.run_dir).save(initial.updated(current_round=1))
+    assert attempts == 3 and StateStore(initial.run_dir).load().current_round == 1
     assert not list(initial.run_dir.glob(".state.json.*.tmp"))
 
 

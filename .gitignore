@@ -13,3 +13,4 @@ outputs/
 htmlcov/
 *.log
 /TASK_CHECKLIST.md
+/evaluation/*.txt

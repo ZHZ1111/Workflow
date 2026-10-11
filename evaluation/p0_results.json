@@ -44,10 +44,11 @@
         "test": "test_agent_loop.py::test_duplicate_with_comment_changes_stops_before_second_execution",
         "exit_code": 0,
         "summary": "1 passed in 4.40s",
-        "log": "evaluation/p0_recheck.txt",
+        "log": null,
         "junit": "evaluation/p0_recheck.xml",
         "cause_observed": "PermissionError [WinError 5] replacing pytest_result.tmp with pytest_result.json in _pytest_results.py",
-        "source_modified": false
+        "source_modified": false,
+        "log_cleanup_note": "Duplicate text summary removed; p0_recheck.xml retained."
       },
       "aggregate_status": "422 passed initially; the one failed test passed on focused recheck"
     }

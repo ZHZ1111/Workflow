@@ -12,12 +12,14 @@ dependencies = ["testgen-agent==0.1.0", "pydantic==2.13.5"]
 
 [project.scripts]
 test-workflow = "test_workflow.cli:main"
+test-workflow-web = "test_workflow.web:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [tool.setuptools.package-data]
-"test_workflow.demo" = ["data/*.json"]
+"test_workflow.demo" = ["data/*.json", "data/*.py", "data/*.md"]
+"test_workflow" = ["web_static/*.html", "web_static/*.css", "web_static/*.js"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

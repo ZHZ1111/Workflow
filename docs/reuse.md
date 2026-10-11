@@ -1,6 +1,6 @@
 # AgentDev 复用审计与接入说明
 
-版本：P6 / 2026-10-11。来源审计保留 P0 事实，适配记录更新至 P6。以下审计依据本次复制的实际源码，不仅依据旧文档。模块路径均相对 `vendor/agentdev/src/testgen_agent/`。
+版本：工程整理 / 2026-10-11。P0–P6 来源和阶段审计保留为历史事实；当前依赖补丁见文末。模块路径均相对 `vendor/agentdev/src/testgen_agent/`。
 
 ## 来源与快照
 
@@ -107,7 +107,7 @@ P2 已将首轮、修订上下文、一次客户端调用和保存封装到 `tes
 
 原候选文件不修改；相对 test_path 映射为 Workflow 绝对 test_path 后另存 `handoffs/<round>/candidate.json`。原始计划、候选、LLM 结果和测试文件继续保留，并注册相对文件引用及摘要。原工具结果直接放入原 CandidateRound 模型，不复制执行/coverage 模型。失败次数、用量保留旧客户端可提供的证据；未知字段为空，外层不重试。新代码和协议增加集中在 Workflow 包，vendor 和旧 hw1 工程未修改。
 
-P2 相关生成、客户端、提示词回归共 74 项通过，证据见 `evaluation/p2_vendor_tests.xml` 和 `evaluation/p2_vendor_tests.txt`。P4 负责完整历史选择、自动路由和导出。旧 `_export_results()` 是私有入口，P0 仅记录；后续优先使用公开 reporting/模型组合输出，必要快照修改必须在此补记差异与回归结果。
+P2 相关生成、客户端、提示词回归共 74 项通过，证据见 `evaluation/p2_vendor_tests.xml`。P4 负责完整历史选择、自动路由和导出。旧 `_export_results()` 是私有入口，P0 仅记录；后续优先使用公开 reporting/模型组合输出，必要快照修改必须在此补记差异与回归结果。
 
 ## P3 执行适配已完成
 
@@ -124,3 +124,9 @@ WorkflowRunner 复用 choose_action/select_best_candidate 校验业务建议并�
 P6 的 test_workflow.reporting 从已有 CandidateRound/ExecutionAssessment 读取实际测试和覆盖数据，新增两 Agent 职责、节点调用/提交、消息消费、路由、逐轮证据链接及只读检查。它不直接套用旧报告作为新协作证明，也不重新实现测试执行/覆盖/归因或改写原工具结果。最终候选测试与源码副本按原字节复制。
 
 ResultSummaryNode 是本项目新增的无模型扩展，使用原统一 AgentContext/AgentResult 和 ArtifactRef；只注册并追加流程定义，不增加调度业务特例。P6 修改集中于 Workflow 包、测试、验收脚本和文档，vendor 源码未修改。P5 相关 vendor 回归 180 passed 保留为历史记录；P6 再校验 57 文件摘要，实际结果见 evaluation/p6_results.json，当前 Workflow 回归见 evaluation/p6_tests.xml。
+
+## 当前工程补丁
+
+2026-10-11 的 Web/DeepSeek 实测发现 Windows 下 `_pytest_results.py` 原子替换检查点可能短暂触发 PermissionError，导致 pytest 内部错误。当前仅修改该文件：至多八次、间隔 25 ms 重试原子替换；其他异常仍抛出，不重复执行测试，不改变评估策略。Workflow 自身状态保存采用同样处理。
+
+原始 57 文件哈希仍保留于 `evaluation/reuse_manifest.json`。`evaluation/vendor_patches.json` 独立记录原始/补丁哈希与原因，`scripts/vendor_audit.py` 校验未修改文件及已记录补丁。历史脚本的 `vendor_files_unchanged` 可为 false，另用 `vendor_files_verified` 判定是否匹配可审计版本。补丁有共享占用故障注入回归和完整 vendor 回归，实际结果见 [当前工程验收](../evaluation/verification.md)。
