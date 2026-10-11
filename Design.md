@@ -1,6 +1,6 @@
 # 多 Agent 测试 Workflow 工程设计
 
-版本：P5 / 2026-10-10。**已实现两个 Agent、结构化协议、状态持久化、顺序调度、最多三轮自动反馈、停止路由、历史选择与基本报告导出，并完成系统及三个必需真实模型案例的验证。** 测试生成与执行能力来自 AgentDev，本项目新增节点边界、结构化交接、状态所有权和统一路由。报告强化、正式扩展示例和干净安装仍留在 P6/P7。
+版本：P6 / 2026-10-11。**已实现两个 Agent、结构化协议、状态持久化、顺序调度、最多三轮反馈、停止路由、历史选择、可追溯报告与无模型扩展示例。** P5 三个必需真实模型案例独立保留；P6 本次验证日志、报告、只读查看和正式扩展。测试生成与执行能力来自 AgentDev，本项目新增节点边界、结构化交接、状态所有权和统一路由。干净安装、演示与交付整理留给 P7。
 
 ## 架构与职责
 
@@ -14,6 +14,8 @@ flowchart LR
     GA --> V[AgentDev 运行源码快照]
     EA --> V
     W --> S[Workflow 状态、事件、消息]
+    W --> N[可选 ResultSummaryNode：读取业务结论]
+    N --> S
     W --> R[最终候选选择与报告]
 ```
 
@@ -29,7 +31,7 @@ flowchart TD
     A --> G[生成 Agent：单轮候选]
     G --> E[执行 Agent：门禁、执行、覆盖与归因]
     E --> D{Workflow 校验动作与预算}
-    D -->|全通过且达标| R[选择最终候选并导出]
+    D -->|全通过且达标| R[提交业务结论并选择最终候选]
     D -->|可修复或覆盖不足| B{剩余轮次且有进展}
     B -->|是| F[反馈关联来源候选和执行]
     F --> G
@@ -38,6 +40,8 @@ flowchart TD
     D -->|超时/不可恢复错误| X[明确停止原因]
     H --> R
     X --> R
+    R --> N[可选尾部摘要节点]
+    N --> O[统一导出报告与最终测试]
 ```
 
 门禁失败由执行节点返回修复建议且不启动 pytest。每个有效候选只执行一次带 coverage 的 pytest，从同次执行数据库导出目标 `subject.py` 数据。反馈的 `round` 是来源轮次，Workflow 指定下一次生成 `round + 1`。禁止将先前执行结果贴到新候选上。
@@ -88,7 +92,17 @@ Workflow 轨迹和 AgentDev 工具轨迹分开写入，各自唯一写入者。�
 | 不增加覆盖率阈值参数 | 原模型固定 90%/80%，统一门禁和报告 | P3/P5 |
 | 无模型 ResultSummaryNode 作为扩展示例 | 证明注册/流程定义扩展，不虚报第三个 Agent | P6 |
 
-P1–P5 已完成；P6 完善报告与扩展证明，P7 做干净安装与提交。已实现契约见 [docs/protocol.md](docs/protocol.md)、[docs/generation.md](docs/generation.md)、[docs/execution.md](docs/execution.md) 和 [docs/workflow.md](docs/workflow.md)，阶段证据见 evaluation/p1.md 至 evaluation/p4.md，以及 [P5 系统与真实验收](evaluation/acceptance.md)。
+P1–P6 的实现和验证分别保留阶段记录；P7 做干净安装与提交。已实现契约见 [docs/protocol.md](docs/protocol.md)、[docs/generation.md](docs/generation.md)、[docs/execution.md](docs/execution.md) 和 [docs/workflow.md](docs/workflow.md)，阶段证据见 evaluation/p1.md 至 evaluation/p4.md、[P5 系统与真实验收](evaluation/acceptance.md) 和 [P6 验收](evaluation/p6.md)。报告格式与扩展接入见 [docs/reporting.md](docs/reporting.md)、[docs/extensions.md](docs/extensions.md)。
+
+## P6 轨迹、报告与扩展
+
+节点返回的 Result 先落盘并记录 node_output_saved，再验证任务/轮次/消息/文件/候选一致性；验证通过才消费输入、提交状态和记录 node_finished。message_sent/message_consumed 分别记录来源/接收轮次，同一 message_id/candidate_id/artifact_path 将第 N 轮 assessment 与第 N+1 轮生成输入关联。workflow_stopped 表示业务停止结论已确定；workflow_finished 只在最终报告保存后记录。跨文件写入并非事务，突然退出可能留下日志领先的快照，基础版只读查看、不续跑。
+
+报告与机器摘要从已提交 CandidateRound、assessment、Context/Result 和 Event 生成，展示每轮测试数、执行/覆盖、动作建议、问题及摘要证据。selected 和 latest 单独展示；coverage unavailable 保留原因和实际 pytest 结果。原工具报告/日志不重写，最终文件保留选中候选原字节。
+
+ResultSummaryNode 用相同同步接口注册到 SUMMARY_WORKFLOW 尾部，通过共享快照观察已确定的 task_status/stop_reason/selected_round，返回 report ArtifactRef，不修改业务状态、不调用模型或执行工具。CLI --with-summary 仅选择注册和定义，Workflow 的尾部通用循环不增加业务特例。它是扩展节点，不增加 Agent 数量。真正参与决策的评审 Agent 仍需明确扩充契约、路由与预算。
+
+inspect --summary 校验登记产物与最终副本摘要并读取当前事件/节点记录，不写文件、不调用生成或执行。summary.json 的契约版本 1.1 是导出格式，保留原摘要键；Event 新增可选字段与事件类型，旧记录仍可读取。导出前摘要不包含最后一个 workflow_finished，最终快照/日志与只读 inspect 提供最终序号。
 
 ## P2 生成边界与路径映射
 

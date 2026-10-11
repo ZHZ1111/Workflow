@@ -1,6 +1,6 @@
-# P4 自动编排与有限反馈
+# 自动编排与有限反馈
 
-版本：P4 / 2026-10-10。入口为 `test_workflow run`，`WorkflowRunner.run()` 是唯一调度入口。`--demo` 使用离线 FixtureClient，真实模式使用 DeepSeekClient；两种模式共用 TESTING_WORKFLOW、两个生产节点、真实执行工具和导出路径。P1 `demo` 子命令仍用假节点，不产生实测结论。
+版本：P6 / 2026-10-11。入口为 `test_workflow run`，`WorkflowRunner.run()` 是唯一调度入口。`--demo` 使用离线 FixtureClient，真实模式使用 DeepSeekClient；两种模式共用两个生产节点、真实执行工具和导出路径。默认使用 TESTING_WORKFLOW，`--with-summary` 选择 SUMMARY_WORKFLOW 并注册无模型尾部节点。P1 `demo` 子命令仍用假节点，不产生实测结论。
 
 ## 顺序与交接
 
@@ -47,4 +47,6 @@ report.md 和 summary.json 完成后才记录 workflow_finished；导出失败�
 
 P5 的 `scripts/p5_acceptance.py` 进一步保存统一系统矩阵和真实模型索引：--offline --tests 执行本地案例与回归，--real 明确启用三个必需真实模型案例，--collect-real 读取指定既有任务，--refresh 重新校验索引里的文件与交接。离线与读取模式不读取密钥、不发出模型请求；每个新案例使用独立目录，历史记录不覆盖。结果见 [../evaluation/acceptance.md](../evaluation/acceptance.md)。
 
-流程定义可以追加无消息依赖的尾部节点：实现同步接口、注册稳定标识并追加 NodeDefinition 即可。P4 自动测试验证该接入方式；P6 再交付正式扩展示例和更完整的报告能力。
+流程定义可以追加无消息依赖的尾部节点：实现同步接口、注册稳定标识并追加 NodeDefinition 即可。P6 已交付 ResultSummaryNode 和 --with-summary CLI，记录导出前业务结论并返回摘要产物，不修改主循环的业务路由。实现步骤见 [extensions.md](extensions.md)。
+
+P6 显式记录 node_output_saved、message_consumed 和 workflow_stopped。消息事件关联候选与 assessment 路径，消费事件轮次是接收轮次；无消息任务也保留空 messages.jsonl。报告包含逐轮计数、实测覆盖可用性、节点职责/调用、消息、路由和原始文件链接；inspect --summary 校验证据并只读重建摘要，不改写旧记录。完整字段和持久化边界见 [reporting.md](reporting.md)。

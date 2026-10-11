@@ -1,6 +1,7 @@
 """Testing workflow CLI, P1 handoff demonstration and read-only inspection."""
 
 import argparse
+import json
 from pathlib import Path
 
 from testgen_agent.config import load_config
@@ -12,7 +13,9 @@ from .agents.test_execution import TestExecutionAgent
 from .config import WorkflowConfig
 from .demo.client import FixtureClient
 from .demo.agents import FakeExecutionAgent, FakeGenerationAgent
-from .definitions import DEMO_WORKFLOW, TESTING_WORKFLOW
+from .definitions import DEMO_WORKFLOW, TESTING_WORKFLOW, SUMMARY_WORKFLOW
+from .nodes.result_summary import ResultSummaryNode
+from .reporting import inspect_summary
 from .registry import AgentRegistry
 from .state import StateStore
 from .workflow import WorkflowRunner, create_run
@@ -35,13 +38,15 @@ def main(argv: list[str] | None = None) -> int:
     run.add_argument("--demo", action="store_true", help="Offline fixture generation with real pytest/coverage")
     run.add_argument("--fixture", type=Path, action="append", help="Offline JSON response, repeat in round order")
     run.add_argument("--env-file", type=Path, help="Explicit model settings file for real mode")
+    run.add_argument("--with-summary", action="store_true", help="Register a model-free summary extension before export")
     inspect = commands.add_parser("inspect", help="Validate and print persisted state; does not resume")
     inspect.add_argument("run_dir", type=Path)
+    inspect.add_argument("--summary", action="store_true", help="Verify saved evidence and print a read-only summary")
     args = parser.parse_args(argv)
     try:
         if args.command == "inspect":
             state = StateStore(args.run_dir).load()
-            print(state.canonical_json(indent=2))
+            print(json.dumps(inspect_summary(state), ensure_ascii=False, indent=2) if args.summary else state.canonical_json(indent=2))
             return 0
         if args.command == "run":
             if args.fixture and not args.demo:
@@ -71,10 +76,12 @@ def main(argv: list[str] | None = None) -> int:
             registry = AgentRegistry()
             registry.register("test_generation", TestGenerationAgent(client, client_mode="offline" if args.demo else "real"))
             registry.register("test_execution", TestExecutionAgent())
+            if args.with_summary:
+                registry.register("result_summary", ResultSummaryNode())
             state = create_run(source=args.source, specification=args.spec,
                                output=args.output if args.output is not None else Path("outputs/workflow"),
                                config=config, exact_output=args.output is not None)
-            state = WorkflowRunner(registry, TESTING_WORKFLOW).run(state)
+            state = WorkflowRunner(registry, SUMMARY_WORKFLOW if args.with_summary else TESTING_WORKFLOW).run(state)
             print(f"run_id={state.run_id} mode={state.config.mode} workflow_status={state.workflow_status} task_status={state.task_status}")
             print(f"stop_reason={state.stop_reason} selected_round={state.selected_round}")
             print(f"report={state.run_dir / 'report.md'}")

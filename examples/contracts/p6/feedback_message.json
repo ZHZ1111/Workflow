@@ -1,0 +1,82 @@
+{
+  "schema_version": "1.0",
+  "message_id": "msg-feedback-01",
+  "run_id": "run-75c5a46c5ec84ccd86e92aca13a07e89",
+  "round": 1,
+  "sender": "test_execution",
+  "receiver": "test_generation",
+  "type": "execution_feedback",
+  "payload": {
+    "candidate_id": "run-75c5a46c5ec84ccd86e92aca13a07e89:1",
+    "artifact": {
+      "path": "evaluations/01/assessment.json",
+      "kind": "assessment",
+      "sha256": "e2702dc899d746507018e77a1e7432a47e0919d2665615fb581ef35a3daa999d",
+      "round": 1,
+      "candidate_id": "run-75c5a46c5ec84ccd86e92aca13a07e89:1"
+    },
+    "reason": "测试通过但覆盖目标未达到；结合缺失函数与调用链选择补充场景。",
+    "recommended_action": "add_missing_cases",
+    "feedback": {
+      "candidate_id": "run-75c5a46c5ec84ccd86e92aca13a07e89:1",
+      "execution": {
+        "kind": "passed",
+        "exit_code": 0,
+        "collected": 1,
+        "executed": 1,
+        "passed": 1,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "xfailed": 0,
+        "xpassed": 0,
+        "stdout": ".                                                                        [100%]\r\n=================================== PASSES ====================================\r\n=========================== short test summary info ===========================\r\nPASSED rounds/01/test_subject.py::test_score_pass\r\n1 passed in 0.17s\r\n",
+        "stderr": "",
+        "timed_out": false,
+        "stdout_truncated": false,
+        "stderr_truncated": false,
+        "duration_seconds": 1.077962600014871,
+        "failures": []
+      },
+      "coverage": {
+        "target_file": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\p6\\acceptance-5caa481201\\feedback\\agent_workspace\\subject.py",
+        "status": "available",
+        "covered_lines": 6,
+        "total_lines": 10,
+        "covered_branches": 4,
+        "total_branches": 8,
+        "missing_lines": [
+          11,
+          13,
+          15,
+          18
+        ],
+        "missing_branches": [
+          {
+            "start": 10,
+            "end": 11
+          },
+          {
+            "start": 12,
+            "end": 13
+          },
+          {
+            "start": 14,
+            "end": 15
+          },
+          {
+            "start": 16,
+            "end": 18
+          }
+        ],
+        "error": null
+      },
+      "validation_error": null,
+      "issues": [],
+      "protected_tests": [
+        "test_score_pass"
+      ],
+      "source_hints_json": "{\"affected_functions\": [\"classify_score\"], \"caller_chain_functions\": [\"classify_score\"], \"coverage_source_hints\": {\"missing_branches\": [{\"end\": 11, \"end_location\": {\"function\": \"classify_score\", \"kind\": \"source_line\", \"line\": 11, \"source\": \"        raise TypeError(\\\"score must be an integer, excluding bool\\\")\"}, \"start\": 10, \"start_location\": {\"function\": \"classify_score\", \"kind\": \"source_line\", \"line\": 10, \"source\": \"    if isinstance(score, bool) or not isinstance(score, int):\"}}, {\"end\": 13, \"end_location\": {\"function\": \"classify_score\", \"kind\": \"source_line\", \"line\": 13, \"source\": \"        raise ValueError(\\\"score must be between 0 and 100\\\")\"}, \"start\": 12, \"start_location\": {\"function\": \"classify_score\", \"kind\": \"source_line\", \"line\": 12, \"source\": \"    if score < 0 or score > 100:\"}}, {\"end\": 15, \"end_location\": {\"function\": \"classify_score\", \"kind\": \"source_line\", \"line\": 15, \"source\": \"        return \\\"fail\\\"\"}, \"start\": 14, \"start_location\": {\"function\": \"classify_score\", \"kind\": \"source_line\", \"line\": 14, \"source\": \"    if score < 60:\"}}, {\"end\": 18, \"end_location\": {\"function\": \"classify_score\", \"kind\": \"source_line\", \"line\": 18, \"source\": \"    return \\\"excellent\\\"\"}, \"start\": 16, \"start_location\": {\"function\": \"classify_score\", \"kind\": \"source_line\", \"line\": 16, \"source\": \"    if score < 90:\"}}], \"missing_lines\": [{\"function\": \"classify_score\", \"kind\": \"source_line\", \"line\": 11, \"source\": \"        raise TypeError(\\\"score must be an integer, excluding bool\\\")\"}, {\"function\": \"classify_score\", \"kind\": \"source_line\", \"line\": 13, \"source\": \"        raise ValueError(\\\"score must be between 0 and 100\\\")\"}, {\"function\": \"classify_score\", \"kind\": \"source_line\", \"line\": 15, \"source\": \"        return \\\"fail\\\"\"}, {\"function\": \"classify_score\", \"kind\": \"source_line\", \"line\": 18, \"source\": \"    return \\\"excellent\\\"\"}], \"status\": \"available\", \"target_file\": \"E:\\\\File-Document\\\\SE\\\\hw2\\\\Workflow\\\\outputs\\\\p6\\\\acceptance-5caa481201\\\\feedback\\\\agent_workspace\\\\subject.py\"}, \"direct_call_evidence\": [], \"prior_strategy\": [{\"decision\": \"unit_test\", \"function_name\": \"classify_score\", \"reason\": \"Explicit behavior specification\", \"relationship_id\": null, \"subject_kind\": \"function\"}], \"test_selection_instruction\": \"结合缺失位置、真实调用链和已有策略，判断补充单元边界或入口协作行为，说明新增行为及预期依据；不要机械地为每条调用边添加测试。\"}"
+    }
+  }
+}

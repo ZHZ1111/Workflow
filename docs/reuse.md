@@ -1,6 +1,6 @@
 # AgentDev 复用审计与接入说明
 
-版本：P0 / 2026-10-09。以下审计依据本次复制的实际源码，不仅依据旧文档。模块路径均相对 `vendor/agentdev/src/testgen_agent/`。
+版本：P6 / 2026-10-11。来源审计保留 P0 事实，适配记录更新至 P6。以下审计依据本次复制的实际源码，不仅依据旧文档。模块路径均相对 `vendor/agentdev/src/testgen_agent/`。
 
 ## 来源与快照
 
@@ -116,3 +116,11 @@ TestExecutionAgent 复用 run_tests_with_coverage、CoverageRunResult、validate
 适配器添加任务/消息/文件门禁、一次执行约束、执行前后源码和测试一致性、任务相对证据引用，以及独立评估和结构化消息。source_hints 来自原 choose_action 的反馈重新计算，未根据控制台字符串造计数。工具/保存异常保留已有目录并提供受控错误码；不修改 vendor 实现或采用旧完整闭环。
 
 相关执行、覆盖、归因、决策回归 128 项通过，新 Workflow 148 项通过；证据见 evaluation/p3_tests.xml、evaluation/p3_vendor_tests.xml 和 evaluation/p3.md。2026-10-10 复核 reuse_manifest.json 中 57 文件的 SHA-256，全数一致，无快照变更。
+
+## P4–P6 编排和报告归属
+
+WorkflowRunner 复用 choose_action/select_best_candidate 校验业务建议并选择历史候选，新增同步注册/流程定义、跨节点文件和消息验证、轮次预算、自动反馈、事件与状态持久化。CLI 离线和真实模式只切换生成客户端；新流程没有调用旧 run_agent/run_initial_step 或旧私有导出入口。
+
+P6 的 test_workflow.reporting 从已有 CandidateRound/ExecutionAssessment 读取实际测试和覆盖数据，新增两 Agent 职责、节点调用/提交、消息消费、路由、逐轮证据链接及只读检查。它不直接套用旧报告作为新协作证明，也不重新实现测试执行/覆盖/归因或改写原工具结果。最终候选测试与源码副本按原字节复制。
+
+ResultSummaryNode 是本项目新增的无模型扩展，使用原统一 AgentContext/AgentResult 和 ArtifactRef；只注册并追加流程定义，不增加调度业务特例。P6 修改集中于 Workflow 包、测试、验收脚本和文档，vendor 源码未修改。P5 相关 vendor 回归 180 passed 保留为历史记录；P6 再校验 57 文件摘要，实际结果见 evaluation/p6_results.json，当前 Workflow 回归见 evaluation/p6_tests.xml。

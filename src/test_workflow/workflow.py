@@ -196,7 +196,9 @@ class WorkflowRunner:
         def invoke(node):
             nonlocal state, node_started
             state = state.updated(current_node=node.agent_id)
-            save_event("node_started", node=node.agent_id, round=state.current_round)
+            node_path = f"node_results/{state.current_round:02d}/{node.agent_id}"
+            save_event("node_started", node=node.agent_id, round=state.current_round,
+                       context_path=f"{node_path}/context.json")
             started = perf_counter()
             node_started = started
             inbox = tuple(message for message in state.messages
@@ -225,6 +227,8 @@ class WorkflowRunner:
                 raise HandoffError("node must return an AgentResult")
             result = AgentResult.model_validate_json(result.canonical_json())
             atomic_write(directory / "result.json", result.canonical_json(indent=2) + "\n")
+            save_event("node_output_saved", node=node.agent_id, round=state.current_round,
+                       result_path=f"{node_path}/result.json")
             if (result.run_id, result.round, result.agent_id) != (state.run_id, state.current_round, state.current_node):
                 raise HandoffError("result belongs to another task, round or node")
             if result.status == "error":
@@ -240,10 +244,15 @@ class WorkflowRunner:
             for message in result.messages:
                 messages.append(message)
                 events.append("message_sent", node=node.agent_id, round=message.round,
-                              message_id=message.message_id)
+                              message_id=message.message_id, candidate_id=message.payload.candidate_id,
+                              artifact_path=message.payload.artifact.path)
+            for message in inbox:
+                events.append("message_consumed", node=node.agent_id, round=state.current_round,
+                              message_id=message.message_id, candidate_id=message.payload.candidate_id,
+                              artifact_path=message.payload.artifact.path)
             state = proposed.updated(last_event_seq=events.seq)
             save_event("node_finished", node=node.agent_id, round=state.current_round,
-                       duration_seconds=perf_counter() - started)
+                       duration_seconds=perf_counter() - started, result_path=f"{node_path}/result.json")
             node_started = None
             return result
 
@@ -300,6 +309,8 @@ class WorkflowRunner:
                     finalize(assessment.task_status, assessment.stop_reason, assessment.action)
                     break
                 # Optional trailing nodes extend the definition without changing the loop.
+                save_event("workflow_stopped", round=state.current_round,
+                           action=state.agent_state.next_action.value, stop_reason=state.stop_reason.value)
                 for node in self.definition.nodes[2:]:
                     invoke(node)
             state = state.updated(workflow_status="finished", current_node=None, finished_at=utc_now())
@@ -316,7 +327,7 @@ class WorkflowRunner:
             state = state.updated(workflow_status="error", error_code=code,
                                   stop_reason=StopReason.UNRECOVERABLE_ERROR, finished_at=utc_now())
             save_event("workflow_error", node=state.current_node,
-                       round=state.current_round, error_code=code)
+                       round=state.current_round, error_code=code, stop_reason=state.stop_reason.value)
         if measured:
             from .reporting import export_result
             # Persistence/export failures propagate: never claim an unwritten report.

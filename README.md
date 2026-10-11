@@ -1,8 +1,8 @@
 # 多 Agent 测试 Workflow
 
-面向单文件 Python 代码的测试工作流项目。计划由测试生成 Agent 规划并生成 pytest 候选，测试执行与评估 Agent 执行、采集覆盖率和归因，Workflow 统一调度二者并执行有限反馈，最后导出测试和报告。
+面向单文件 Python 代码的测试工作流项目。测试生成 Agent 根据源码事实和行为规格规划并生成 pytest 候选，测试执行与评估 Agent 执行、采集覆盖率并保守归因，Workflow 统一调度二者并执行有限反馈，最后导出测试和报告。
 
-**当前阶段：P5 已完成。** `WorkflowRunner` 自动调度两个 Agent，支持最多三轮反馈、停止分支、历史候选选择与最终导出。192 项 Workflow 测试、180 项相关复用代码回归、15 个离线 CLI 案例及三个必需真实模型案例已完成，证据见 [P5 验收记录](evaluation/acceptance.md)。离线模式只替换生成客户端，pytest/coverage 真实执行；现有 `demo` 子命令保留 P1 假节点交接行为。报告强化、正式扩展示例和干净安装属于 P6/P7。
+**当前阶段：P6 已完成。** 两个生产 Agent、最多三轮反馈、历史候选选择、可追溯报告、只读检查与无模型 `ResultSummaryNode` 示例已实现。204 项 Workflow 回归和五个 P6 离线 CLI 案例通过，证据见 [日志/报告/扩展验收](evaluation/p6.md)。运行下面的离线命令即可查看协作与真实 pytest/coverage；P5 的三个真实模型案例独立保留在 [验收记录](evaluation/acceptance.md)。干净安装、演示和提交整理属于 P7。
 
 ## 环境与安装
 
@@ -36,6 +36,34 @@ python -m venv .venv
 
 每次运行保存 `state.json`、节点 Context/Result、事件耗时、结构化消息、各轮原始测试与实测证据，以及 `summary.json` 和 `report.md`。可用候选按旧策略选择，原字节复制到 `final/test_subject.py`，同目录带 `subject.py`。报告分别列出选中与最新候选的通过状态；后轮失败不会被历史通过记录掩盖。无可用候选时没有 `final/`。
 
+报告包含两个 Agent 的职责与调用/提交数、每轮收集/执行/通过/失败/错误/跳过计数、覆盖可用性与缺口、建议理由、消息和路由，以及对应原始证据的链接。停止原因、生成客户端调用、HTTP 请求和 pytest 启动分别记录；未知量保留 null。查看方式见 [报告说明](docs/reporting.md)。
+
+## P6 扩展节点与只读查看
+
+```powershell
+# 在最终导出前注册无模型摘要节点，主循环共用原调度
+.\.venv\Scripts\python.exe -m test_workflow run --demo --with-summary --source examples/validation.py --spec examples/validation.md
+# 使用上条命令打印的任务目录，只读取已有状态
+.\.venv\Scripts\python.exe -m test_workflow inspect <任务目录>
+# 校验登记证据和最终副本，输出带逐轮详情的摘要；不改写文件
+.\.venv\Scripts\python.exe -m test_workflow inspect <任务目录> --summary
+# 五个新 CLI 案例、报告链接/只读验证及全量 Workflow 回归；不调用外部模型
+.\.venv\Scripts\python.exe scripts/p6_acceptance.py
+```
+
+扩展节点不计作第三个 Agent，不调用模型或 pytest，不改变业务结论。产物在 `extensions/NN/result_summary.json`，返回统一 ArtifactRef 并经编排器校验；它记录的是导出前结论，最终完成状态看 `state.json`。实现、注册和定义示例见 [扩展指南](docs/extensions.md)。默认任务目录唯一；若显式指定 `--output`，复跑时请选择新目录。
+
+| 常见情况 | 处理 |
+|---|---|
+| 输出路径已存在，退出 2 | 使用新目录或省略 `--output`，不会覆盖历史 |
+| 非内置样例用离线模式，退出 2 | 提供与源码/规格匹配的 `--fixture` JSON；内置只支持 calculation/validation/discount |
+| 输入/配置/产物读取或保存失败，退出 2 | 检查 UTF-8 非空规格、支持范围、文件权限和目录；不在日志打印密钥 |
+| 有覆盖率但结论为 partial 或 needs_review | 查看停止原因、最新候选和逐轮评估，覆盖率不代表所有行为正确 |
+| coverage unavailable 或测试超时 | 保留真实执行记录；不报告达标，不自动延长预算 |
+| inspect --summary 校验失败 | 检查产物是否缺失或被改写；不通过重新执行覆盖原证据 |
+
+任务工作区隔离不是执行安全沙箱；生成测试会在当前解释器环境运行。支持范围及归因边界见下方与 [docs/scope.md](docs/scope.md)。
+
 真实模型模式去掉 `--demo`，使用现有 DeepSeek 配置适配器：
 
 ```powershell
@@ -65,7 +93,7 @@ python -m venv .venv
 
 本次三个真实案例：calculation 为 6 passed、行覆盖 100%；validation 为 15 passed、行/分支覆盖 100%/100%；discount 为 15 passed、2 failed，保留 `calculate_discount(100) == 90` 并输出 `needs_review/suspected_source_defect`。共发出 4 次真实模型请求，其中 validation 有一次客户端格式修复。两个成功案例都在首轮达标，自动反馈能力由独立离线案例证明。
 
-[evaluation/acceptance.md](evaluation/acceptance.md) 和 [机器可读索引](evaluation/acceptance.json) 区分离线生成、真实测试、Mock/故障注入和真实模型流量，并关联每轮候选、消息、覆盖及实际 JUnit testcase。可选关系样例和重复稳定性测试本次未执行；正式扩展示例、报告强化和干净安装继续留在 P6/P7。
+[evaluation/acceptance.md](evaluation/acceptance.md) 和 [机器可读索引](evaluation/acceptance.json) 区分离线生成、真实测试、Mock/故障注入和真实模型流量，并关联每轮候选、消息、覆盖及实际 JUnit testcase。可选关系样例和重复稳定性测试本次未执行。P6 另行验证报告与正式扩展示例；干净安装仍留在 P7。
 
 ## 运行 P1 节点交接
 
@@ -159,9 +187,13 @@ Copy-Item .env.example .env
 | [docs/generation.md](docs/generation.md) | P2 单步生成/修订接口与错误、计数约定 |
 | [evaluation/p2.md](evaluation/p2.md) | P2 五组离线验收、测试与复用回归 |
 | [docs/workflow.md](docs/workflow.md) | P4 自动路由、轮次预算、状态与结果选择 |
+| [docs/reporting.md](docs/reporting.md) | 逐轮报告、事件语义、只读证据检查 |
+| [docs/extensions.md](docs/extensions.md) | ResultSummaryNode 与新增节点方法 |
 | [evaluation/p4.md](evaluation/p4.md) | P4 CLI 闭环、停止分支与回归证据 |
 | [evaluation/acceptance.md](evaluation/acceptance.md) | P5 系统矩阵、真实模型结果与边界 |
 | [evaluation/acceptance.json](evaluation/acceptance.json) | P5 逐轮指标、输入摘要及 JUnit 证据索引 |
+| [evaluation/p6.md](evaluation/p6.md) | P6 日志、报告与正式扩展示例验收 |
+| [evaluation/p6_results.json](evaluation/p6_results.json) | P6 CLI、链接、只读检查及回归结果 |
 | [TASK_CHECKLIST.md](TASK_CHECKLIST.md) | 60–70 小时全阶段清单 |
 
 ## 当前目录
@@ -170,7 +202,7 @@ Copy-Item .env.example .env
 docs/                       需求、复用、样例、测试计划、开发管理
 evaluation/                 基线报告、结果索引、快照哈希清单
 examples/                   四组源码与规格、离线候选 JSON
-scripts/                    P0–P5 复现、验收与准备脚本
+scripts/                    P0–P6 复现、验收与准备脚本
 src/test_workflow/           两 Agent、适配器、协议、有限反馈编排、CLI 与导出
 tests/                      新 Workflow 协议、节点、编排与 CLI 测试
 vendor/agentdev/             原运行源码、依赖、文档、样例、测试

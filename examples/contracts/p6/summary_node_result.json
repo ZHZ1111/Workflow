@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "run_id": "run-75c5a46c5ec84ccd86e92aca13a07e89",
+  "round": 2,
+  "agent_id": "result_summary",
+  "status": "ok",
+  "patch": {
+    "candidate": null,
+    "issues": [],
+    "next_action": null,
+    "api_calls_delta": 0,
+    "token_usage": null,
+    "token_usage_reported": false
+  },
+  "messages": [],
+  "artifacts": [
+    {
+      "path": "extensions/02/result_summary.json",
+      "kind": "report",
+      "sha256": "f4f1a0544ea5eca8331aafad42e28d56ecbcbcd00be8e8dd42613bacf40227bb",
+      "round": 2,
+      "candidate_id": "run-75c5a46c5ec84ccd86e92aca13a07e89:2"
+    }
+  ],
+  "error_code": null,
+  "diagnostic_paths": [],
+  "generation": null,
+  "assessment": null
+}

@@ -51,3 +51,7 @@ EVALUATION_WORKFLOW = DEMO_WORKFLOW.updated(name="p3_evaluation", feedback_route
 ))
 
 TESTING_WORKFLOW = EVALUATION_WORKFLOW.updated(name="testing_workflow")
+
+SUMMARY_WORKFLOW = TESTING_WORKFLOW.updated(name="testing_with_summary", nodes=(
+    *TESTING_WORKFLOW.nodes, NodeDefinition(agent_id="result_summary"),
+))

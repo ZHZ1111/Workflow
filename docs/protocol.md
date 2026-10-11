@@ -88,3 +88,11 @@ WorkflowConfig.mode 增加 offline，表示离线生成、真实测试执行；d
 Event 增加 node_failed、route_selected，以及可空 duration_seconds、action、stop_reason；旧事件依靠默认值继续有效。每次节点调用在 node_results/NN/<agent>/ 保存 Context/Result，评估建议经过 Workflow 校验后才决定循环或停止。
 
 当前契约示例与 Schema 在 examples/contracts/p4/，包括完成任务、两轮反馈、后轮执行错误的历史选择状态，以及第二轮生成 Context 和其来源反馈消息。P1–P3 的契约样例保留为历史证据。详见 [workflow.md](workflow.md)。
+
+## P6 的兼容增加
+
+Event 增加 node_output_saved、message_consumed、workflow_stopped；增加可空 candidate_id、context_path、result_path、artifact_path，路径必须是任务内相对路径。旧事件仍使用 schema_version=1.0，可依默认值恢复；本次 Event Schema 和实测消息、Result、事件在 examples/contracts/p6/。
+
+message_consumed 只在接收节点有效提案后记录，其 round 是接收节点目标轮次，candidate_id/artifact_path 仍指向消息来源候选。messages.jsonl 无消息时为空文件。发送/消费事件不承诺跨文件事务或分布式 exactly-once，state.consumed_message_ids 是已提交快照中的消费记录。
+
+ResultSummaryNode 返回空 StatePatch、无消息、单个 kind=report 的 ArtifactRef，使用已有提案/摘要校验。摘要 JSON 的 phase 明确是业务停止、最终导出前；节点不可修改共享状态。summary.json 另使用导出 schema_version=1.1，保留 P4 键并增加逐轮/节点/消息/路由指标，不改 WorkflowState 或 AgentDev 模型。只读检查详见 [reporting.md](reporting.md)。

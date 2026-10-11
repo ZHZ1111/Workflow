@@ -1,6 +1,6 @@
 # 测试与验收计划
 
-版本：P5 / 2026-10-10。本表是新 Workflow 的完整验收计划；旧项目基线见 `evaluation/baseline.md`，P1–P4 历史证据保留。当前 192 项 Workflow 测试、15 个本次离线 CLI 案例和 3 个真实模型案例见 `evaluation/acceptance.md`；逐项结果与实际 JUnit testcase 在 `evaluation/acceptance.json`。验收以行为和证据为准，不以方法名字或旧项目测试通过代替。
+版本：P6 / 2026-10-11。本表是新 Workflow 的完整验收计划；旧项目基线见 `evaluation/baseline.md`，P1–P5 历史证据保留。当前 204 项 Workflow 回归、五个 P6 CLI 案例与日志/报告/正式扩展证明见 `evaluation/p6.md` / `p6_results.json`。P5 的 15 个离线案例和 3 个真实模型案例及其矩阵在 `evaluation/acceptance.md` / `acceptance.json`。验收以行为和证据为准，不以方法名字或旧项目测试通过代替。
 
 ## 测试分层
 
@@ -10,6 +10,7 @@
 | 协议与状态 | 类型、任务归属、来源轮次、状态提交、持久化 | P1/P5 |
 | 单节点 | 生成不执行、执行不生成、校验门禁与历史保护 | P2/P3 |
 | 新编排集成 | 顺序、分支、预算、历史选择、失败保存、扩展节点 | P4/P5/P6 |
+| 轨迹和报告 | 消费事件、决策证据、报告链接、只读产物校验、正式尾部摘要节点 | P6 |
 | 真实模型 | 正常、多分支、明确缺陷；如可行加入关联样例 | P5 |
 | 干净环境 | 解包后相对安装，不依赖 hw1 环境/文件 | P7 |
 
@@ -60,4 +61,6 @@ P5：`python scripts/p5_acceptance.py --offline --tests` 用当前 Workflow 重�
 
 三个必需真实样例在用户明确授权具体数据发往 api.deepseek.com 后执行：calculation 为 6 passed、100% 行覆盖；validation 为 15 passed、100%/100%；discount 为 15 passed、2 failed，needs_review/suspected_source_defect。请求数分别 1、2、1，validation 有一次客户端格式修复，候选仍只有一轮；本次没有真实 Workflow 反馈提升，不作跨次稳定性结论。可选关系样例未调用。
 
-A01–A15 的核心矩阵关联新实测或本次回归证据；正式扩展示例 W17 和干净安装 W18 分别留在 P6/P7。持久化持续失败时无法保证新 error 状态写入，验证的是抛错、保留最后成功快照、不继续依赖执行且不虚报产物已保存。
+P5 时 A01–A15 的核心矩阵关联新实测或本次回归证据；正式扩展示例 W17 和干净安装 W18 分别留在 P6/P7。持久化持续失败时无法保证新 error 状态写入，验证的是抛错、保留最后成功快照、不继续依赖执行且不虚报产物已保存。
+
+P6：`python scripts/p6_acceptance.py` 运行五个新离线 CLI 任务并验证每个报告链接和 inspect 前后全部文件摘要/修改时间不变，共六次真实 pytest，零外部请求。新增 12 项 tests/test_reporting.py 验证 ResultSummaryNode 不改变业务状态、五类结论、反馈发送/消费归属、历史选择、不可用覆盖、未消费反馈及缺失/篡改产物；完整 Workflow 回归 204 passed。正式 W17 已完成，P5 历史矩阵不追改当时的待交付状态。旧 P5 三个真实任务兼容读取、文件未变；当前 pip check 通过，W18 的干净安装仍待 P7。证据见 evaluation/p6.md、p6_results.json、p6_tests.xml 和 p6_compatibility.json。
