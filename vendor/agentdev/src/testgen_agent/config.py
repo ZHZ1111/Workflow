@@ -40,7 +40,7 @@ class AppConfig(BaseModel):
     request_timeout_seconds: int = Field(default=60, ge=1, le=600)
     max_tokens: int = Field(default=8192, ge=1024, le=32_768)
     max_rounds: int = Field(default=3, ge=1, le=3)
-    execution_timeout_seconds: int = Field(default=30, ge=1, le=300)
+    execution_timeout_seconds: int = Field(default=60, ge=1, le=300)
 
     @field_validator("model")
     @classmethod

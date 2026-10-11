@@ -46,7 +46,7 @@ P0 的 `scripts/p0_baseline.py` 允许调用完整 `run_agent()` 来验证旧系
 | `GenerationClient.generate_tests(context: GenerationContext)` | `LLMGenerationResult` | 结构化客户端协议；真实实现 `DeepSeekClient(config, *, retry_policy=None, transport=None, sleep=..., max_tokens=None)`，离线客户端同接口 |
 | `generation.stage_revision_candidate(*, source, llm_result, workspace, history, expected_oracle_mode=None)` | **`InitialCandidateArtifacts`** | 返回类型名虽含 Initial，实际也用于轮次 2/3；不是只返回 CandidateRound |
 | `generation.validate_generated_tests(generated, source)` | `None`，不通过抛异常 | 要求计划 1.1、全部目标函数、真实关系证据、映射与有效断言、宿主可接受代码 |
-| `tools.coverage_runner.run_tests_with_coverage(workspace, timeout=30, *, round_number=1)` | `CoverageRunResult` | 执行 Agent：execution、coverage、artifacts、source_hints；必须传本轮 round_number |
+| `tools.coverage_runner.run_tests_with_coverage(workspace, timeout=60, *, round_number=1)` | `CoverageRunResult` | 执行 Agent：execution、coverage、artifacts、source_hints；必须传本轮 round_number |
 | `failure_analysis.classify_failures(state, candidate)` | `tuple[Issue, ...]` | 执行 Agent 保守归因；缺陷、歧义、生成错误、环境问题 |
 | `agent.choose_action(state)` | `ActionDecision` | 执行 Agent 建议策略；含 action/reason/stop_reason/feedback/issues/status。它也检查旧轮次预算，Workflow 仍需验证预算 |
 | `agent.apply_decision(state, decision)` | 新 `AgentState` | 可在编排提交处复用，不让 Agent 修改共享状态 |

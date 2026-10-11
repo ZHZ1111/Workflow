@@ -29,7 +29,7 @@ class ExecutionArtifactError(OSError):
     """Host diagnostics could not be created or saved."""
 
 
-def run_tests(workspace: str | Path, timeout: int = 30, *, round_number: int = 1) -> ExecutionResult:
+def run_tests(workspace: str | Path, timeout: int = 60, *, round_number: int = 1) -> ExecutionResult:
     """Run only rounds/NN/test_subject.py (NN defaults to 01).
 
     ``workspace`` is a trusted, host-prepared task directory with ``subject.py``.

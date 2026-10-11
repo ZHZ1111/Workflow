@@ -33,7 +33,7 @@ def validate_payload(value) -> dict:
     if value.get("mode", "real") != "real":
         raise ValueError("Web 工作台只使用 DeepSeek。")
     config = WorkflowConfig(mode="real", max_rounds=value.get("max_rounds", 3),
-                            execution_timeout_seconds=value.get("timeout", 30))
+                            execution_timeout_seconds=value.get("timeout", 60))
     return {"source": source, "spec": spec, "config": config}
 
 
@@ -173,7 +173,7 @@ class WebHandler(BaseHTTPRequestHandler):
                 settings = {"ready": True, "model": config.model, "max_rounds": config.max_rounds,
                             "timeout": config.execution_timeout_seconds}
             except ValueError:
-                settings = {"ready": False, "model": None, "max_rounds": 3, "timeout": 30}
+                settings = {"ready": False, "model": None, "max_rounds": 3, "timeout": 60}
             self._json({"config": settings})
             return
         parts = path.strip("/").split("/")

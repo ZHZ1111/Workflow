@@ -31,7 +31,7 @@ final = runner.run(initial_state)
 公开配置构造样例：
 
 ```json
-{"mode":"demo","max_rounds":3,"execution_timeout_seconds":30,"model":null}
+{"mode":"demo","max_rounds":3,"execution_timeout_seconds":60,"model":null}
 ```
 
 P1 demo 子命令使用该默认配置。P4 `run --demo` 使用 mode=offline，真实 `run` 使用 mode=real 并通过 --env-file 配置模型；离线模式不读取配置文件。模型为空时，旧 TaskInput 使用明确的离线模型标识以满足旧 Schema；这不是一次模型调用。

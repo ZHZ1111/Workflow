@@ -60,7 +60,7 @@ def main(argv: list[str] | None = None) -> int:
                 raise ValueError("offline mode does not use environment files")
             if args.demo:
                 config = WorkflowConfig(mode="offline", max_rounds=args.max_rounds if args.max_rounds is not None else 3,
-                                        execution_timeout_seconds=args.timeout if args.timeout is not None else 30)
+                                        execution_timeout_seconds=args.timeout if args.timeout is not None else 60)
                 client = fixture_client(args.source.stem, tuple(args.fixture or ()))
             else:
                 model_config = load_config(env_file=args.env_file)

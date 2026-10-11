@@ -6,6 +6,36 @@
       "original_sha256": "7137121a5b293c27cbc3f3993778b47556df64574b0ca4371cc436e688c37710",
       "sha256": "b5623e4bb051d1a95f98f02ad3a681ddcdd16e4abcbcbc5085b737563f2eb15c",
       "reason": "Retry transient Windows PermissionError when atomically replacing pytest execution checkpoints; test execution and decision policies are unchanged."
+    },
+    {
+      "path": "src/testgen_agent/config.py",
+      "original_sha256": "789df0d5e06a5c1dc11f233ca7a56712c5b7e9f5f2a8a9232ba4141199b25cb1",
+      "sha256": "6d1d4fed99bc467477611a8c7a26d4e065a0bba6a8fff16ef6b9b001accef018",
+      "reason": "Set the default per-round test execution timeout to 60 seconds; explicit overrides and the 1..300 second range remain supported."
+    },
+    {
+      "path": "src/testgen_agent/models.py",
+      "original_sha256": "1ad2c5ee5a6ea7c39888ef66ee63723013007fdb54c198e7d1d1dce61d06866c",
+      "sha256": "f072aa4aaf06347b0e32e04c1e74e97e1c2d8d32bf46b3ce39ef78e90936cec7",
+      "reason": "Set the default per-round test execution timeout to 60 seconds; explicit overrides and the 1..300 second range remain supported."
+    },
+    {
+      "path": "src/testgen_agent/tools/test_runner.py",
+      "original_sha256": "a0637e5c247d2d477be66229b7c4151885c4fc67f0c0bdb26aabaee2f3ae318c",
+      "sha256": "054b3ebe9c7c75ec6adddc354ed26646cfa4cbbb8d98bd8f56d828a82f675d0d",
+      "reason": "Set the default per-round test execution timeout to 60 seconds; explicit overrides and the 1..300 second range remain supported."
+    },
+    {
+      "path": "src/testgen_agent/tools/coverage_runner.py",
+      "original_sha256": "775cb9ee8fe26220c5d8d154189f1d14ce638ab5010edc316d35d81dfc216bc8",
+      "sha256": "cfd476384dd9f013ba17baac07a730f3c44f1006653832ddeaa5aeb0758a3bf3",
+      "reason": "Set the default per-round test execution timeout to 60 seconds; explicit overrides and the 1..300 second range remain supported."
+    },
+    {
+      "path": ".env.example",
+      "original_sha256": "b233b1f65be7e4cd723cbf8f61b90532879e96538d69162e80213b301b538d9e",
+      "sha256": "1d1ae4042fbd8ac9c65cd158c9efc0539ab19dd322778875530fc67da0913f95",
+      "reason": "Set the default per-round test execution timeout to 60 seconds; explicit overrides and the 1..300 second range remain supported."
     }
   ]
 }

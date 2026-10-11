@@ -35,7 +35,7 @@ class CoverageRunResult:
         return self.execution.all_passed
 
 
-def run_tests_with_coverage(workspace: str | Path, timeout: int = 30, *, round_number: int = 1) -> CoverageRunResult:
+def run_tests_with_coverage(workspace: str | Path, timeout: int = 60, *, round_number: int = 1) -> CoverageRunResult:
     """Run the same D1 candidate once, under coverage, then export only subject.py.
 
     The pytest timeout remains 1..300 seconds; export has a separate timeout of

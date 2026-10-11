@@ -123,7 +123,7 @@ class TaskInput(ContractModel):
     spec_path: Path | None = None
     output_dir: Path = Field(default="outputs")
     max_rounds: RoundNumber = 3
-    execution_timeout_seconds: Annotated[StrictInt, Field(ge=1, le=300)] = 30
+    execution_timeout_seconds: Annotated[StrictInt, Field(ge=1, le=300)] = 60
 
 
 class FunctionInfo(ContractModel):
