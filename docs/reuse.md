@@ -127,6 +127,8 @@ ResultSummaryNode 是本项目新增的无模型扩展，使用原统一 AgentCo
 
 ## 当前工程补丁
 
-2026-10-11 的 Web/DeepSeek 实测发现 Windows 下 `_pytest_results.py` 原子替换检查点可能短暂触发 PermissionError，导致 pytest 内部错误。当前仅修改该文件：至多八次、间隔 25 ms 重试原子替换；其他异常仍抛出，不重复执行测试，不改变评估策略。Workflow 自身状态保存采用同样处理。
+2026-10-11 的 Web/DeepSeek 实测发现 Windows 下 `_pytest_results.py` 原子替换检查点可能短暂触发 PermissionError，导致 pytest 内部错误。该次初验仅修改该文件：至多八次、间隔 25 ms 重试原子替换；其他异常仍抛出，不重复执行测试，不改变评估策略。Workflow 自身状态保存采用同样处理。
+
+截至 2026-10-13，登记补丁共 6 项：上述检查点修复，以及 `config.py`、`models.py`、`tools/test_runner.py`、`tools/coverage_runner.py`、`.env.example` 的默认执行超时 60 秒更新。修改原因及当前哈希以补丁清单为准，不描述为全部原样未改。
 
 原始 57 文件哈希仍保留于 `evaluation/reuse_manifest.json`。`evaluation/vendor_patches.json` 独立记录原始/补丁哈希与原因，`scripts/vendor_audit.py` 校验未修改文件及已记录补丁。历史脚本的 `vendor_files_unchanged` 可为 false，另用 `vendor_files_verified` 判定是否匹配可审计版本。补丁有共享占用故障注入回归和完整 vendor 回归，实际结果见 [当前工程验收](../evaluation/verification.md)。

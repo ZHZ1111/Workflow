@@ -104,10 +104,13 @@ def test_http_assets_and_request_boundaries(server):
     app, base = server
     html = call(base, "/")[1]
     assert b"/app.js" in html
+    assert b"/workflow-view.js" in html
+    assert b'data-node="feedback"' in html
     assert b'<select' not in html
     assert b'<textarea id="source" spellcheck="false" required></textarea>' in html
     assert b'<textarea id="spec" required></textarea>' in html
     assert b"fetch(" in call(base, "/app.js")[1]
+    assert b"derive" in call(base, "/workflow-view.js")[1]
     assert call(base, "/styles.css")[0] == 200
     for headers, expected in [({"Origin": "https://elsewhere.example"}, 403),
                                ({"Host": "elsewhere.example"}, 403),

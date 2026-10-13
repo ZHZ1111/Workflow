@@ -4,7 +4,7 @@
 
 本记录保留工程初验时的功能与实测结果。随后按用户要求，Web 改为仅使用 DeepSeek、空白源码/规格输入，移除页面及 API 的离线样例功能；CLI 离线功能保留，当前使用方式以 README 为准。
 
-## 当前结果
+## 工程初验结果（2026-10-11）
 
 - Workflow 与完整 vendor 回归：**645 passed，0 failures/errors**，耗时 221.77 秒；原始 JUnit 在 `outputs/verification-tests.xml`。
 - CLI 和 HTTP 各通过 calculation、validation、discount 的离线和真实 DeepSeek 验收，共 **12 个成功符合预期的案例**。
@@ -23,7 +23,7 @@
 
 完整双入口运行索引：`outputs/verification/4b02ec07b5304fab916effbb0310a7b7/results.json`。其中首次 Web calculation 因 Windows pytest 检查点替换受阻失败，保留该失败记录；修复后的成功索引为 `outputs/verification/8dbbed80926845b3acad72e5b1366c3c/results.json`。精简结果合并成功案例，单独保留首次失败与复验来源。
 
-最新 wheel 干净安装索引：`outputs/install-verification/7d473e7bafa842248cd767979c8a754b/results.json`。该次构建包含两个 Windows 文件占用修复。
+该次 wheel 干净安装索引：`outputs/install-verification/7d473e7bafa842248cd767979c8a754b/results.json`。该次构建包含两个 Windows 文件占用修复。
 
 ## 修复与工程调整
 
@@ -33,7 +33,13 @@
 4. Workflow 状态和 vendor pytest 检查点遇到 Windows 临时 PermissionError 时，最多八次、间隔 25 ms 重试原子替换；永久失败仍保留错误，不重跑模型或测试。共享占用有故障注入回归，频繁 HTTP 轮询有真实执行回归。
 5. Web 资源与样例随 wheel 打包，新增 bootstrap、双入口验收、干净安装验收、编辑器配置和 GitHub Actions 离线回归配置。
 
-vendor 仅修改 `src/testgen_agent/tools/_pytest_results.py`。原始来源哈希未覆盖，[补丁清单](vendor_patches.json) 单独记录当前哈希。旧阶段脚本区分“与原始快照一致”和“匹配原始快照加已记录补丁”，完整 vendor 回归纳入本次 645 项。
+初验当时 vendor 仅修改 `src/testgen_agent/tools/_pytest_results.py`。原始来源哈希未覆盖，[补丁清单](vendor_patches.json) 单独记录当前哈希。旧阶段脚本区分“与原始快照一致”和“匹配原始快照加已记录补丁”，完整 vendor 回归纳入本次 645 项。
+
+## 当前状态补充（2026-10-13）
+
+当前默认单轮 pytest 超时为 60 秒；vendor 共有 6 项登记修改：`tools/_pytest_results.py` 的 Windows 替换重试，以及 `config.py`、`models.py`、`tools/test_runner.py`、`tools/coverage_runner.py`、`.env.example` 的默认超时更新。原始来源哈希保留，当前版本以 [vendor_patches.json](vendor_patches.json) 为准。
+
+最近一次评审全量回归为 711 passed，12 个既有任务产物校验及依赖检查通过，见 [review_20261013.md](review_20261013.md)。最新已有安装索引为 `outputs/install-verification/21824a81a7404615bf9dc486ae507b2b/results.json`，不能把它写成此次重新安装的结果。本次运行图与交接可视化的单独验证见 [run_visualization_20261013.md](run_visualization_20261013.md)。上文 645 项、历史 Web 离线和初验时单项补丁均保留当时事实；当前 Web 仅使用 DeepSeek。
 
 ## 清理范围
 

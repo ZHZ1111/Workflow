@@ -69,7 +69,7 @@ Copy-Item .env.example .env
 .\.venv\Scripts\test-workflow-web.exe --port 8765
 ```
 
-打开 [本机工作台](http://127.0.0.1:8765)。源码和行为规格初始为空，填写后点击“运行工作流”，由 DeepSeek 生成测试。没有样例或生成方式选择；未配置 DeepSeek 时不能提交。页面显示结论、停止原因、选中轮次、模型请求/pytest 启动数、逐轮覆盖和反馈，提供测试与报告下载。
+打开 [本机工作台](http://127.0.0.1:8765)。源码和行为规格初始为空，填写后点击“运行工作流”，由 DeepSeek 生成测试。没有样例或生成方式选择；未配置 DeepSeek 时不能提交。页面提供固定运行图，按真实事件高亮输入、生成、执行、反馈、摘要和导出；点击节点查看对应轮次与证据，交接卡片显示候选和消息消费状态。结论、停止原因、选中轮次、模型请求/pytest 启动数、逐轮覆盖和测试/报告下载同时保留。见 [运行可视化说明](docs/run-visualization.md)。
 
 复杂例子见 [checkout.py](examples/checkout.py) 与 [checkout.md](examples/checkout.md)：包含购物车校验、会员折扣、优惠券门槛/叠加/封顶、优惠后的运费门槛和加急费。把两个文件全文分别粘贴到页面即可使用。
 
@@ -90,6 +90,8 @@ Copy-Item .env.example .env
 ## 验证与维护
 
 ```powershell
+# 前端运行状态投影回归（开发检查需要 Node.js）
+node --test tests/web/workflow-view.test.cjs
 # 全量 Workflow + vendor 回归
 .\.venv\Scripts\python.exe -m pytest tests vendor/agentdev/tests -q
 # CLI 正常、反馈、缺陷复核：三个离线任务

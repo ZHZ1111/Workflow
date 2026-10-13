@@ -40,7 +40,7 @@ def main():
     execute("pip-check", [str(python), "-m", "pip", "check"])
     locations = execute("resources", [str(python), "-c",
         "import json; from test_workflow.web import STATIC_ROOT; from test_workflow.service import DATA_ROOT, sample_inputs as samples; "
-        "assert len(samples()) == 3; assert all((STATIC_ROOT / p).is_file() for p in ('index.html','app.js','styles.css')); "
+        "assert len(samples()) == 3; assert all((STATIC_ROOT / p).is_file() for p in ('index.html','app.js','workflow-view.js','styles.css')); "
         "print(json.dumps({'data':str(DATA_ROOT), 'static':str(STATIC_ROOT)}))"])
     data_root = Path(json.loads(locations)["data"])
     assert data_root.is_relative_to(directory / "venv")

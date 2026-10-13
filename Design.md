@@ -1,12 +1,14 @@
 # 多 Agent 测试 Workflow 工程设计
 
-版本：P6 / 2026-10-11。**已实现两个 Agent、结构化协议、状态持久化、顺序调度、最多三轮反馈、停止路由、历史选择、可追溯报告与无模型扩展示例。** P5 三个必需真实模型案例独立保留；P6 本次验证日志、报告、只读查看和正式扩展。测试生成与执行能力来自 AgentDev，本项目新增节点边界、结构化交接、状态所有权和统一路由。干净安装、演示与交付整理留给 P7。
+版本：工程收尾与运行可视化 / 2026-10-13。**已实现两个 Agent、结构化协议、状态持久化、顺序调度、最多三轮反馈、停止路由、历史选择、可追溯报告与无模型扩展示例。** P5 三个必需真实模型案例独立保留；P6 本次验证日志、报告、只读查看和正式扩展。测试生成与执行能力来自 AgentDev，本项目新增节点边界、结构化交接、状态所有权和统一路由。P7.1 已有干净 wheel 安装及安装后 CLI/Web 验证记录；P7.2 已有全量回归和依赖检查，本次同步文档并实现运行图高亮。演示视频、最终提交版本和备用压缩包仍待实际交付。P0–P6 数字保留为历史证据，当前评审见 `evaluation/review_20261013.md`，本次更新见 `evaluation/run_visualization_20261013.md`。
 
 ## 架构与职责
 
 ```mermaid
 flowchart LR
-    CLI[CLI：源码、规格、公开配置] --> W[WorkflowRunner：唯一调度和状态提交者]
+    CLI[CLI：源码、规格、公开配置] --> SVC[共用应用服务]
+    WEB[Web：任务提交与运行可视化] --> SVC
+    SVC --> W[WorkflowRunner：唯一调度和状态提交者]
     W --> G[TestGenerationAgent]
     W --> E[TestExecutionAgent]
     G --> GA[生成适配器：Prompt、LLM、候选校验与保存]
@@ -14,6 +16,8 @@ flowchart LR
     GA --> V[AgentDev 运行源码快照]
     EA --> V
     W --> S[Workflow 状态、事件、消息]
+    S --> VIEW[只读流程图、节点高亮与交接面板]
+    VIEW --> WEB
     W --> N[可选 ResultSummaryNode：读取业务结论]
     N --> S
     W --> R[最终候选选择与报告]

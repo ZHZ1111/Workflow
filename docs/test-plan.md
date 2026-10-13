@@ -1,6 +1,6 @@
 # 测试与验收计划
 
-版本：P6 / 2026-10-11。本表是新 Workflow 的完整验收计划；旧项目基线见 `evaluation/baseline.md`，P1–P5 历史证据保留。当前 204 项 Workflow 回归、五个 P6 CLI 案例与日志/报告/正式扩展证明见 `evaluation/p6.md` / `p6_results.json`。P5 的 15 个离线案例和 3 个真实模型案例及其矩阵在 `evaluation/acceptance.md` / `acceptance.json`。验收以行为和证据为准，不以方法名字或旧项目测试通过代替。
+版本：P6 / 2026-10-11。本表是新 Workflow 的完整验收计划；旧项目基线见 `evaluation/baseline.md`，P1–P5 历史证据保留。P6 当时的 204 项 Workflow 回归、五个 P6 CLI 案例与日志/报告/正式扩展证明见 `evaluation/p6.md` / `p6_results.json`。P5 的 15 个离线案例和 3 个真实模型案例及其矩阵在 `evaluation/acceptance.md` / `acceptance.json`。验收以行为和证据为准，不以方法名字或旧项目测试通过代替。
 
 ## 测试分层
 
@@ -64,3 +64,9 @@ P5：`python scripts/p5_acceptance.py --offline --tests` 用当前 Workflow 重�
 P5 时 A01–A15 的核心矩阵关联新实测或本次回归证据；正式扩展示例 W17 和干净安装 W18 分别留在 P6/P7。持久化持续失败时无法保证新 error 状态写入，验证的是抛错、保留最后成功快照、不继续依赖执行且不虚报产物已保存。
 
 P6：`python scripts/p6_acceptance.py` 运行五个新离线 CLI 任务并验证每个报告链接和 inspect 前后全部文件摘要/修改时间不变，共六次真实 pytest，零外部请求。新增 12 项 tests/test_reporting.py 验证 ResultSummaryNode 不改变业务状态、五类结论、反馈发送/消费归属、历史选择、不可用覆盖、未消费反馈及缺失/篡改产物；完整 Workflow 回归 204 passed。正式 W17 已完成，P5 历史矩阵不追改当时的待交付状态。旧 P5 三个真实任务兼容读取、文件未变；当前 pip check 通过，W18 的干净安装仍待 P7。证据见 evaluation/p6.md、p6_results.json、p6_tests.xml 和 p6_compatibility.json。
+
+## 当前验收状态（2026-10-13）
+
+全量基线为 711 passed（Workflow 288、vendor 423），见 `evaluation/review_20261013.md`；历史阶段数字不追改。W18 已有新虚拟环境与 wheel 的 CLI/Web 验证记录：`outputs/install-verification/21824a81a7404615bf9dc486ae507b2b/results.json`。Web 注入固定模型响应完成安装后的两轮反馈，真实 DeepSeek 结果使用另外的任务证据。
+
+运行可视化验证覆盖等待、生成/执行高亮、下一轮状态重置、反馈待消费/已消费、复核、部分完成、节点失败、报告导出和新任务清空。前端状态测试使用 Node 内置测试运行器，HTTP 回归验证新增资源及既有双 Agent 流程，浏览器确认实时高亮、刷新恢复、下载与窄屏布局；证据见 `evaluation/run_visualization_20261013.md`。

@@ -161,7 +161,8 @@ class WebHandler(BaseHTTPRequestHandler):
             return
         path = urlsplit(self.path).path
         static = {"/": ("index.html", "text/html"), "/app.js": ("app.js", "text/javascript"),
-                  "/styles.css": ("styles.css", "text/css")}
+                  "/styles.css": ("styles.css", "text/css"),
+                  "/workflow-view.js": ("workflow-view.js", "text/javascript")}
         if path in static:
             name, mime = static[path]
             self._send((STATIC_ROOT / name).read_bytes(), mime + "; charset=utf-8")
