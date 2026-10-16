@@ -96,3 +96,9 @@ Event 增加 node_output_saved、message_consumed、workflow_stopped；增加可
 message_consumed 只在接收节点有效提案后记录，其 round 是接收节点目标轮次，candidate_id/artifact_path 仍指向消息来源候选。messages.jsonl 无消息时为空文件。发送/消费事件不承诺跨文件事务或分布式 exactly-once，state.consumed_message_ids 是已提交快照中的消费记录。
 
 ResultSummaryNode 返回空 StatePatch、无消息、单个 kind=report 的 ArtifactRef，使用已有提案/摘要校验。摘要 JSON 的 phase 明确是业务停止、最终导出前；节点不可修改共享状态。summary.json 另使用导出 schema_version=1.1，保留 P4 键并增加逐轮/节点/消息/路由指标，不改 WorkflowState 或 AgentDev 模型。只读检查详见 [reporting.md](reporting.md)。
+
+## 质量审查 S1 的兼容增加（2026-10-16）
+
+配置增加默认 false 的严格 bool `quality_review_enabled`；状态增加默认 disabled 的质量状态、可空停止原因及最多三份 QualityAssessment。消息增加 `review_ready` 和类型化 `quality_feedback`，产物增加 quality_assessment/quality_response，AgentResult 增加可空 quality_assessment/review。旧版本与旧样例仍通过缺省字段读取，schema_version 保持 1.0。
+
+模型业务输出 ReviewDecision 与宿主身份/引用 QualityAssessment 分开。结果只允许审查节点提交，error 不能携带成功结论，审查不能更改业务候选或生成用量。开启审查的 completed 终态要求所选当前候选存在可核验的 approve，候选与规格摘要、已登记执行证据及落盘批准记录均一致。契约限制、状态配对、证据来源校验和 JSON 样例详见 [S0–S1 实施记录](quality-review-s0-s1.md)。当前只完成协议与终态约束；正式生产审查调用、循环路由、统计与 CLI/Web 入口仍属后续阶段。

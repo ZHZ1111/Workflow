@@ -4,6 +4,8 @@
 
 **CLI 和 Web 共用同一工作流服务。** Web 仅使用 DeepSeek，用户自行输入源码与行为规格；CLI 另外保留离线固定候选，仍真实执行 pytest/coverage。工程初验结果和修复记录见 [工程验收](evaluation/verification.md)。
 
+质量审查 Agent 的 S0–S1 已完成基线冻结、严格契约与完成状态门禁，配置默认关闭；审查调用、调度和入口仍待后续阶段接入，见 [实施记录](docs/quality-review-s0-s1.md)。
+
 ## 安装
 
 需要 **CPython 3.13**，从仓库根目录运行：

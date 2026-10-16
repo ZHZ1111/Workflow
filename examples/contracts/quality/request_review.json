@@ -1,0 +1,18 @@
+{
+  "verdict": "request_review",
+  "summary": "规格对金额恰好为 100 的结果存在冲突，需要人工澄清。",
+  "findings": [
+    {
+      "finding_id": "threshold-conflict",
+      "category": "ambiguous_specification",
+      "blocking": true,
+      "target_functions": ["discounted_total"],
+      "related_tests": [],
+      "spec_quote": "金额大于等于 100 时按九折计算；金额为 100 时返回 100。",
+      "test_code_quote": null,
+      "description": "同一规格片段同时要求金额 100 折扣后返回 90 和直接返回 100。",
+      "suggested_case": null
+    }
+  ],
+  "questions": ["金额恰好为 100 时应返回 90 还是 100？"]
+}

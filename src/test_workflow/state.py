@@ -8,7 +8,9 @@ from pydantic import Field, StrictInt, model_validator
 from testgen_agent.models import AgentState, ContractModel, Count, RoundNumber, StopReason, TaskStatus
 
 from .config import WorkflowConfig
-from .contracts import ArtifactRef, Message, StableId
+from .contracts import ArtifactRef, Message, QualityAssessment, StableId
+from .quality_contracts import QualityStatus, QualityStopReason
+from .quality_state import validate_quality_completion
 from .storage import atomic_write
 
 
@@ -35,6 +37,20 @@ class WorkflowState(ContractModel):
     started_at: datetime = Field(default_factory=utc_now)
     finished_at: datetime | None = None
     error_code: StableId | None = None
+    quality_status: QualityStatus = "disabled"
+    quality_stop_reason: QualityStopReason | None = None
+    quality_assessments: Annotated[tuple[QualityAssessment, ...], Field(max_length=3)] = ()
+
+    @model_validator(mode="before")
+    @classmethod
+    def default_quality_status(cls, value):
+        if isinstance(value, dict) and "quality_status" not in value:
+            config = value.get("config")
+            enabled = config.quality_review_enabled if isinstance(config, WorkflowConfig) else (
+                isinstance(config, dict) and config.get("quality_review_enabled") is True
+            )
+            value = {**value, "quality_status": "not_run" if enabled else "disabled"}
+        return value
 
     @model_validator(mode="after")
     def consistent_state(self):
@@ -65,6 +81,29 @@ class WorkflowState(ContractModel):
             raise ValueError("artifact paths must be unique")
         if self.selected_round != business.best_available_round:
             raise ValueError("selected round differs from business state")
+        if not self.config.quality_review_enabled:
+            if self.quality_status != "disabled" or self.quality_stop_reason is not None or self.quality_assessments:
+                raise ValueError("disabled review cannot carry quality conclusions")
+        else:
+            if self.quality_status == "disabled":
+                raise ValueError("enabled review must have an explicit quality state")
+            rounds = [item.round for item in self.quality_assessments]
+            if rounds != sorted(set(rounds)) or any(
+                item.run_id != self.run_id or item.round > self.current_round or item.round > len(business.history)
+                for item in self.quality_assessments
+            ):
+                raise ValueError("quality assessments must uniquely identify committed candidates in round order")
+            reasons = {"not_run": {None}, "passed": {"approved"},
+                       "changes_requested": {"quality_gaps", "quality_budget_reached", "quality_no_progress"},
+                       "needs_review": {"ambiguous_specification"}, "error": {"review_error"}}
+            if self.quality_stop_reason not in reasons[self.quality_status]:
+                raise ValueError("quality status and stop reason disagree")
+            verdict = {"passed": "approve", "changes_requested": "request_revision", "needs_review": "request_review"}.get(self.quality_status)
+            if verdict and (not self.quality_assessments or self.quality_assessments[-1].round != self.current_round
+                            or self.quality_assessments[-1].decision.verdict != verdict):
+                raise ValueError("quality conclusion requires the current candidate's matching assessment")
+            if self.quality_status == "not_run" and self.quality_assessments and self.quality_assessments[-1].round == self.current_round:
+                raise ValueError("a reviewed candidate cannot be marked not_run")
         if (self.workflow_status in {"finished", "error"}) != (self.finished_at is not None):
             raise ValueError("terminal states require a finish time")
         if (self.workflow_status == "error") != (self.error_code is not None):
@@ -80,6 +119,7 @@ class WorkflowState(ContractModel):
                         or latest is None or latest.execution is None or not latest.execution.all_passed
                         or latest.coverage is None or not latest.coverage.meets_target):
                     raise ValueError("completion requires the latest real passing and target coverage evidence")
+                validate_quality_completion(self)
         return self
 
 
