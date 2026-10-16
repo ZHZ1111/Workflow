@@ -1,7 +1,7 @@
 # 增加质量审查 Agent：详细实施步骤
 
 > 编写日期：2026-10-16。
-> 编写时基于本地提交 `97fde32` 的源码结构。2026-10-16 从实际提交 `b2920aabce408a64841f1cd3eabe97d4c3ea8c76` 开始实施，S0–S1 和 S2 已完成，见 [S0–S1 记录](quality-review-s0-s1.md)、[S2 记录](quality-review-s2.md)；S3–S9 仍为待实现计划。
+> 编写时基于本地提交 `97fde32` 的源码结构。2026-10-16 从实际提交 `b2920aabce408a64841f1cd3eabe97d4c3ea8c76` 开始实施，S0–S3 已完成，见 [S0–S1 记录](quality-review-s0-s1.md)、[S2 记录](quality-review-s2.md)、[S3 记录](quality-review-s3.md)；S4–S9 仍为待实现计划。
 > 本次范围：在现有测试生成 Agent、测试执行 Agent 之间的协作基础上，增加一个能提出质量反馈的审查 Agent，形成三 Agent 闭环。
 > 输入继续沿用“单文件 Python 源码 + 非空行为规格”；保留现有候选最多三轮的限制。本次不包含变异测试、属性测试、多文件支持、自动源码修复、通用 DAG 或断点恢复。
 
@@ -323,15 +323,15 @@ ReviewTelemetry 至少区分客户端调用、实际外部请求、格式修复�
 
 ### S3：实现审查节点与证据保存 — 1.5h
 
-- [ ] 核对 Context 身份、轮次、启用配置和 workflow_status=running。
-- [ ] 接收当前轮执行节点发来的唯一 review_ready，校验其已登记的 assessment。
-- [ ] 确认基础执行建议确实为完成、候选全通过且覆盖达标、没有完整性错误。
-- [ ] 核对候选、规格与已登记产物摘要；不能仅凭模型返回的 candidate_id 关联。
-- [ ] 验证发现涉及的函数/测试真实存在；缺失场景不要求“缺失测试名”存在，但 related_tests 只能引用现有测试。
-- [ ] 核对 spec_quote 是真实规格片段、test_code_quote 若提供则为当前测试片段。片段存在只证明引用来源，不证明语义判断正确。
-- [ ] 保存宿主封装的 assessment、原始业务响应与安全遥测。
-- [ ] 以 QualityAssessment、ArtifactRef 和质量反馈返回结果；不直接保存 WorkflowState。
-- [ ] 审查调用失败返回明确 error Result，不返回空 findings + approve。
+- [x] 核对 Context 身份、轮次、启用配置和 workflow_status=running。
+- [x] 接收当前轮执行节点发来的唯一 review_ready，校验其已登记的 assessment。
+- [x] 确认基础执行建议确实为完成、候选全通过且覆盖达标、没有完整性错误。
+- [x] 核对候选、规格与已登记产物摘要；不能仅凭模型返回的 candidate_id 关联。
+- [x] 验证发现涉及的函数/测试真实存在；缺失场景不要求“缺失测试名”存在，但 related_tests 只能引用现有测试。
+- [x] 核对 spec_quote 是真实规格片段、test_code_quote 若提供则为当前测试片段。片段存在只证明引用来源，不证明语义判断正确。
+- [x] 保存宿主封装的 assessment、原始业务响应与安全遥测。
+- [x] 以 QualityAssessment、ArtifactRef 和质量反馈返回结果；不直接保存 WorkflowState。
+- [x] 审查调用失败返回明确 error Result，不返回空 findings + approve。
 
 **产出：**可独立运行的 TestQualityReviewAgent。**验收：**无 pytest 调用、源文件和候选未修改，身份/引用错误在模型调用前被拒绝。
 

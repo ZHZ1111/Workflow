@@ -106,3 +106,9 @@ ResultSummaryNode 返回空 StatePatch、无消息、单个 kind=report 的 Arti
 ## 质量审查 S2 的兼容增加（2026-10-16）
 
 ReviewTelemetry 增加可空 latency_seconds，旧遥测缺省为 null。新增客户端接口 `ReviewClient.review(ReviewContext) -> ReviewResponse`；成功结果包含严格的 ReviewDecision、与其一致的原始业务 JSON 和独立遥测，失败通过固定 ReviewClientError 和安全遥测交给后续节点处理。真实及离线实现共享接口；每候选审查的 HTTP 尝试最多 3 次，暂态重试与最多一次格式修复共用预算。Prompt、输入约束、错误分类与验证见 [S2 实施记录](quality-review-s2.md)。生产节点与流程路由仍未接入。
+
+## 质量审查 S3：单节点落盘（2026-10-16）
+
+新增 TestQualityReviewAgent，消费唯一已登记、未消费的当前轮 review_ready，核验候选、规格、真实执行与全部登记证据后调用一次审查客户端。返回后复核输入、发现引用来源及响应契约，保存 `quality_reviews/NN/response.json`（ReviewResponse，含 raw_response 与安全遥测）和 `assessment.json`（宿主 QualityAssessment）；引用种类沿用 quality_response/quality_assessment。写入后回读核验，失败文件只作为诊断，error Result 不提交成功产物。
+
+节点返回空 StatePatch，质量状态与消息消费仍由编排器拥有。request_revision 在剩余候选预算内提出类型化 quality_feedback；最后一轮只保留发现，approve/request_review 均不提出生成反馈。错误遥测区分零次请求与未知次数，同候选已创建的审查目录禁止再次请求。严格门禁、文件格式和单节点验证见 [S3 实施记录](quality-review-s3.md)；S4 自动路由尚未接入。

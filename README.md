@@ -4,7 +4,7 @@
 
 **CLI 和 Web 共用同一工作流服务。** Web 仅使用 DeepSeek，用户自行输入源码与行为规格；CLI 另外保留离线固定候选，仍真实执行 pytest/coverage。工程初验结果和修复记录见 [工程验收](evaluation/verification.md)。
 
-质量审查 Agent 的 S0–S2 已完成基线冻结、严格契约、完成状态门禁及独立 Prompt/客户端，配置默认关闭；生产审查节点、调度和入口仍待后续阶段接入，见 [S0–S1 记录](docs/quality-review-s0-s1.md)、[S2 记录](docs/quality-review-s2.md)。
+质量审查 Agent 的 S0–S3 已完成契约、完成门禁、独立客户端及带证据校验的单次审查节点，配置默认关闭；Workflow 调度和入口仍待后续阶段接入，见 [实施步骤](docs/quality-review-agent-plan.md)、[S3 记录](docs/quality-review-s3.md)。
 
 ## 安装
 
