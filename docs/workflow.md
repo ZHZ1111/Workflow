@@ -41,7 +41,7 @@ report.md 和 summary.json 完成后才记录 workflow_finished；导出失败�
 
 ## S4 质量调度（2026-10-16）
 
-底层可选择 QUALITY_WORKFLOW 或带尾部摘要的 QUALITY_SUMMARY_WORKFLOW，并显式开启 quality_review_enabled、注册三个节点。服务与 CLI/Web 开关尚未接入（S6）；生产生成节点的质量反馈上下文尚待 S5。S4 的第二轮验收使用受控生成节点，仍通过原候选保护门禁和真实 pytest/coverage。
+底层可选择 QUALITY_WORKFLOW 或带尾部摘要的 QUALITY_SUMMARY_WORKFLOW，并显式开启 quality_review_enabled、注册三个节点。服务与 CLI/Web 开关尚未接入（S6）。S4 的第二轮验收使用受控生成节点；S5 已让生产生成节点直接接收 quality_feedback 并构造 quality_extension 上下文，三个生产节点可配合固定客户端完成第二/三轮闭环，仍通过原候选保护门禁和真实 pytest/coverage。
 
 原执行建议通过 choose_action 校验且准备 completed 时，先消费执行节点的 review_ready 运行审查；基础未达标、缺陷复核、超时等继续原分支。approve 完成并导出本轮测试；request_review 转人工复核；request_revision 有预算且有进展时向下一轮交付唯一 quality_feedback。业务 next_action 更新为 ADD_MISSING_CASES，不提前设置 stop_reason，执行 assessment 的 FINISH 建议原样保留。
 

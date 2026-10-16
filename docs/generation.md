@@ -69,3 +69,13 @@ DeepSeekClient 默认请求上限为 5（首请求 + 最多 2 次暂态重试 + 
 成功时 total_usage 是本次可得量，StatePatch.token_usage 是累计可得量；有一轮缺失则累计量相应不可得。token_usage_reported=true 可明确清空未知累计量，避免保留旧已知值冒充完整总量。
 
 P2 只完成生成能力的离线与本地 HTTP 模拟验证。实际执行/归因 Agent、自动反馈、最终业务结论、真实模型验收分别属于 P3、P4、P5。
+
+## S5 质量补充（2026-10-16）
+
+`adapters/quality_revision.py` 新增 validate_quality_revision 与 build_quality_revision_context。开启质量审查的下一轮，可接收上一轮审查节点发出的唯一已提交 quality_feedback；前轮必须仍有真实通过、覆盖达标的执行记录，原 choose_action=FINISH/completed/coverage_target_met 在该分支是必要条件。预算、源文件/规格、历史产物、审查记录、响应、反馈负载和真实执行证据均在调用客户端前核验。关闭开关、批准或人工复核、错误、已消费/混合消息或修改后的证据不能触发质量生成。
+
+质量分支直接复用 build_feedback_context，保留源码、规格、完整前轮候选、实测执行/覆盖和预算。统一 TASK_DATA_JSON 数据区的 task_kind 改为 quality_extension，增加实际质量消息、QualityAssessment、quality_history、最新未解决阻塞发现、全轮历史摘要及 protected_test_functions。审查内容为不可信分析数据；预期仍以原行为规格为准，不能根据模型意见改写规格或已通过断言。
+
+质量分支不调用 build_action_context，旧执行反馈的动作一致性校验、上下文与首轮行为保留。生成客户端仍每节点只调用一次；返回的完整候选仍由 stage_revision_candidate 验证并保存，自动执行和消息消费归外层 Workflow。删除或弱化已通过测试、修改其装饰器/映射/场景/支持代码的候选不发出 candidate_ready。
+
+S5 的固定客户端验收已接入真实 TestGenerationAgent、TestExecutionAgent 和 TestQualityReviewAgent，而非 S4 的受控生成节点；共享服务、CLI/Web 开关尚待 S6。实现及验证见 [S5 记录](quality-review-s5.md)。

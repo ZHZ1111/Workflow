@@ -121,4 +121,12 @@ QUALITY_WORKFLOW 与 QUALITY_SUMMARY_WORKFLOW 显式声明执行→审查依赖�
 
 request_revision 允许继续时仅由 Workflow 设置 ADD_MISSING_CASES；原执行 assessment 仍为 FINISH。预算或无进展停止时保存质量记录但不提交下一轮反馈。Result 文件保留节点提案，state/messages.jsonl 仅保存通过提交策略的消息；消息提交后才记录消费，延续单写者与非跨文件事务边界。质量 route_selected 使用独立动作名称。
 
-approve 强制选择当前获批候选并保留到尾部摘要及导出。候选重复而在第二次审查前被原门禁停止时，质量状态保持 not_run，允许 partial/no_progress 对应 quality_no_progress，保留上一轮未解决发现。生成质量上下文仍属 S5，入口与完整质量报告仍属后续阶段。分支表和验证见 [S4 实施记录](quality-review-s4.md)。
+approve 强制选择当前获批候选并保留到尾部摘要及导出。候选重复而在第二次审查前被原门禁停止时，质量状态保持 not_run，允许 partial/no_progress 对应 quality_no_progress，保留上一轮未解决发现。分支表和验证见 [S4 实施记录](quality-review-s4.md)。
+
+## 质量审查 S5：生成补充（2026-10-16）
+
+生成适配器在原执行反馈路径外新增 quality_feedback 分支。修订前必须开启质量审查、当前仍在运行且未停止、有候选预算，接收唯一已登记未消费的上一轮审查反馈。审查决定必须是 request_revision，状态 next_action 必须是 ADD_MISSING_CASES，同时旧 choose_action 仍须给出 FINISH/completed/coverage_target_met；质量意见不能覆盖基础执行未完成或错误结论。
+
+独立门禁核验反馈、宿主 QualityAssessment、ReviewResponse、候选/规格摘要、计划、真实执行观察及落盘证据一致，再检查质量预算与无进展策略。`build_quality_revision_context()` 直接复用 vendor build_feedback_context，在同一个 TASK_DATA_JSON 数据封装中设置 task_kind=quality_extension，增加实际质量消息、审查记录、最新未解决阻塞发现、全部历史摘要、剩余预算和 protected_test_functions；保留基础 FINISH 判断作为前置证据，不调用旧 build_action_context。
+
+首轮和 execution_feedback 的旧检查与上下文不变。模型仍只生成一份完整候选，返回后复用原 stage_revision_candidate；已通过函数、断言、装饰器、映射、场景与支持代码均受保护，拒绝候选保留诊断但不交接执行。入口与完整质量统计仍属后续阶段，详见 [S5 实施记录](quality-review-s5.md)。

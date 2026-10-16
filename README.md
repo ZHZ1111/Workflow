@@ -4,7 +4,7 @@
 
 **CLI 和 Web 共用同一工作流服务。** Web 仅使用 DeepSeek，用户自行输入源码与行为规格；CLI 另外保留离线固定候选，仍真实执行 pytest/coverage。工程初验结果和修复记录见 [工程验收](evaluation/verification.md)。
 
-质量审查 Agent 的 S0–S4 已完成契约、完成门禁、独立客户端、单次审查节点及 Workflow 质量路由，配置默认关闭。S4 使用受控生成节点验证质量反馈闭环；生产生成节点的质量反馈上下文、服务和 CLI/Web 入口仍待 S5/S6 接入，见 [实施步骤](docs/quality-review-agent-plan.md)、[S4 记录](docs/quality-review-s4.md)。
+质量审查 Agent 的 S0–S5 已完成契约、完成门禁、独立客户端、审查节点、Workflow 路由及生产生成节点的质量补充上下文，配置默认关闭。固定客户端配合三个生产节点可完成质量反馈、补充测试、真实执行及再次审查；共享服务和 CLI/Web 开关留待 S6 接入，见 [实施步骤](docs/quality-review-agent-plan.md)、[S5 记录](docs/quality-review-s5.md)。
 
 ## 安装
 

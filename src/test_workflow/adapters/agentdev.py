@@ -14,6 +14,7 @@ from testgen_agent.workspace import round_directory
 
 from ..contracts import AgentContext, ArtifactRef
 from ..storage import atomic_write, file_digest, task_path, verify_artifact
+from .quality_revision import build_quality_revision_context, validate_quality_revision
 
 
 class GenerationAdapterError(ValueError):
@@ -108,6 +109,12 @@ def preflight(context: AgentContext) -> AgentState:
     if len(context.inbox) != 1:
         raise GenerationAdapterError("missing_revision_feedback", "contract")
     message = context.inbox[0]
+    if message.type == "quality_feedback":
+        try:
+            validate_quality_revision(context)
+        except (ValueError, OSError, StopIteration, SyntaxError):
+            raise GenerationAdapterError("invalid_quality_feedback", "contract") from None
+        return business
     if (message.type != "execution_feedback" or message.sender not in {"test_execution", "workflow"}
             or message.round != business.current_round or message not in state.messages
             or message.message_id in state.consumed_message_ids
@@ -124,6 +131,8 @@ def preflight(context: AgentContext) -> AgentState:
 
 
 def revision_context(context: AgentContext, business: AgentState) -> GenerationContext:
+    if context.inbox[0].type == "quality_feedback":
+        return build_quality_revision_context(context)
     prompt = build_action_context(business)
     # Consume the actual verified handoff; its text is data, not host instructions.
     return prompt.updated(user_prompt=prompt.user_prompt + "\n<WORKFLOW_HANDOFF_DATA>\n"

@@ -1,7 +1,7 @@
 # 增加质量审查 Agent：详细实施步骤
 
 > 编写日期：2026-10-16。
-> 编写时基于本地提交 `97fde32` 的源码结构。2026-10-16 从实际提交 `b2920aabce408a64841f1cd3eabe97d4c3ea8c76` 开始实施，S0–S4 已完成，见 [S0–S1 记录](quality-review-s0-s1.md)、[S2 记录](quality-review-s2.md)、[S3 记录](quality-review-s3.md)、[S4 记录](quality-review-s4.md)；S5–S9 仍为待实现计划。
+> 编写时基于本地提交 `97fde32` 的源码结构。2026-10-16 从实际提交 `b2920aabce408a64841f1cd3eabe97d4c3ea8c76` 开始实施，S0–S5 已完成，见 [S0–S1 记录](quality-review-s0-s1.md)、[S2 记录](quality-review-s2.md)、[S3 记录](quality-review-s3.md)、[S4 记录](quality-review-s4.md)、[S5 记录](quality-review-s5.md)；S6–S9 仍为待实现计划。
 > 本次范围：在现有测试生成 Agent、测试执行 Agent 之间的协作基础上，增加一个能提出质量反馈的审查 Agent，形成三 Agent 闭环。
 > 输入继续沿用“单文件 Python 源码 + 非空行为规格”；保留现有候选最多三轮的限制。本次不包含变异测试、属性测试、多文件支持、自动源码修复、通用 DAG 或断点恢复。
 
@@ -350,7 +350,7 @@ ReviewTelemetry 至少区分客户端调用、实际外部请求、格式修复�
 - [x] 成功提交消息后才标记消费；延续原事件和状态保存机制。
 - [x] 对每个合法质量转换追加事件或扩展 route_selected 的可表达动作，不能伪装为原执行节点已经要求补充。
 
-S4 已通过受控生成节点、真实 pytest/coverage 和 S3 审查节点验证闭环；生产生成节点接纳质量反馈的实现仍属于 S5，详见 [S4 实施记录](quality-review-s4.md)。
+S4 当时通过受控生成节点、真实 pytest/coverage 和 S3 审查节点验证闭环，详见 [S4 实施记录](quality-review-s4.md)；生产生成节点接纳质量反馈随后在 S5 完成。
 
 以下为控制顺序伪代码，不是可直接复制的现有 API：
 
@@ -393,18 +393,20 @@ export_results()
 
 这是最容易出现“新节点有日志，但不能继续生成”的阶段。
 
-- [ ] 保留旧 execution_feedback 分支的全部检查。
-- [ ] 对 quality_feedback 增加单独门禁：开启审查、来源正确、上一轮、未消费、产物已提交、request_revision、有预算。
-- [ ] 允许的前一轮执行结果应仍为真实通过且覆盖达标；基础 choose_action=FINISH 在这里是预期情况。
-- [ ] 不删掉 choose_action 校验后对所有消息一律放行；仅对通过质量门禁的补充动作建立例外策略。
-- [ ] 不调用旧 build_action_context 来构造质量补充，因为它会因基础 FINISH 拒绝。
-- [ ] 新建 `build_quality_revision_context()`，复用旧 `prompts.build_feedback_context()` 的源码、规格、前轮候选和真实执行数据。
-- [ ] 追加 QualityAssessment、已验证质量消息、完整历史摘要、未解决发现、剩余轮次和 protected_tests。
-- [ ] 明确这是 `quality_extension`，即使覆盖达标仍需要补充规定场景；预期依据仍由原规格决定。
-- [ ] 模型返回后继续调用原 stage_revision_candidate，保持历史通过测试、映射、装饰器和支持代码保护。
-- [ ] 首轮与执行错误修复分支保持原实现，不因质量模式改变全部生成行为。
+- [x] 保留旧 execution_feedback 分支的全部检查。
+- [x] 对 quality_feedback 增加单独门禁：开启审查、来源正确、上一轮、未消费、产物已提交、request_revision、有预算。
+- [x] 允许的前一轮执行结果应仍为真实通过且覆盖达标；基础 choose_action=FINISH 在这里是预期情况。
+- [x] 不删掉 choose_action 校验后对所有消息一律放行；仅对通过质量门禁的补充动作建立例外策略。
+- [x] 不调用旧 build_action_context 来构造质量补充，因为它会因基础 FINISH 拒绝。
+- [x] 新建 `build_quality_revision_context()`，复用旧 `prompts.build_feedback_context()` 的源码、规格、前轮候选和真实执行数据。
+- [x] 追加 QualityAssessment、已验证质量消息、完整历史摘要、未解决发现、剩余轮次和 protected_tests。
+- [x] 明确这是 `quality_extension`，即使覆盖达标仍需要补充规定场景；预期依据仍由原规格决定。
+- [x] 模型返回后继续调用原 stage_revision_candidate，保持历史通过测试、映射、装饰器和支持代码保护。
+- [x] 首轮与执行错误修复分支保持原实现，不因质量模式改变全部生成行为。
 
 **验收：**受控客户端第二次实际收到质量反馈；候选追加有效测试；删除已通过断言的修改仍被拒绝。
+
+实现、上下文格式、三轮生产节点闭环及保护门禁证据见 [S5 实施记录](quality-review-s5.md)。
 
 ### S6：接入服务、CLI 与 Web — 1h
 

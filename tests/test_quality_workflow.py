@@ -1,7 +1,4 @@
-"""S4 routing with controlled generation, real pytest and the S3 review node.
-
-The production generation adapter's quality prompt is intentionally left to S5.
-"""
+"""S4 routing with controlled generation and S5 production-node acceptance."""
 
 import json
 from pathlib import Path
@@ -367,12 +364,16 @@ def test_execution_completion_cannot_skip_review_ready_handoff(tmp_path):
     assert candidate_message.message_id not in final.consumed_message_ids
 
 
-def test_production_generation_quality_prompt_is_still_reserved_for_s5(tmp_path):
+def test_production_generation_consumes_quality_feedback_and_reaches_approval(tmp_path):
     initial, _, client, runner = prepare(tmp_path, ("revision", "approve"))
-    generator = TestGenerationAgent(FixtureClient((DATA / "calculation_complete.json",)), client_mode="offline")
+    second_path = tmp_path / "quality_extension.json"
+    atomic_write(second_path, calculation_candidates()[1].canonical_json())
+    generation_client = FixtureClient((DATA / "calculation_complete.json", second_path))
+    generator = TestGenerationAgent(generation_client, client_mode="offline")
     runner.registry._agents["test_generation"] = generator
     final = runner.run(initial)
-    assert final.workflow_status == "error" and final.error_code == "invalid_revision_feedback"
-    assert final.task_status == "partial" and len(client.contexts) == 1
+    assert final.workflow_status == "finished" and final.task_status == "completed", final.error_code
+    assert final.selected_round == 2 and len(client.contexts) == len(generation_client.contexts) == 2
+    assert "quality_extension" in generation_client.contexts[1].user_prompt
     feedback = next(item for item in final.messages if item.type == "quality_feedback")
-    assert feedback.message_id not in final.consumed_message_ids
+    assert feedback.message_id in final.consumed_message_ids
