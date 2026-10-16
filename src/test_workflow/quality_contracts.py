@@ -72,6 +72,7 @@ class ReviewTelemetry(ContractModel):
     max_request_attempts: Annotated[StrictInt, Field(ge=1, le=3)] = 3
     format_repairs: Annotated[StrictInt, Field(ge=0, le=2)] | None = 0
     total_usage: TokenUsage | None = None
+    latency_seconds: Annotated[float, Field(ge=0)] | None = None
     error_category: Literal["transient", "authentication", "configuration", "format",
                             "workspace", "budget", "contract", "internal"] | None = None
     provider_code: FindingId | None = None

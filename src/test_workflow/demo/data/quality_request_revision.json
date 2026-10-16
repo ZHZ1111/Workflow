@@ -1,0 +1,18 @@
+{
+  "verdict": "request_revision",
+  "summary": "缺少恰好达到折扣门槛的明确规格场景。",
+  "findings": [
+    {
+      "finding_id": "boundary-100",
+      "category": "missing_boundary",
+      "blocking": true,
+      "target_functions": ["discounted_total"],
+      "related_tests": ["test_below_threshold", "test_above_threshold"],
+      "spec_quote": "金额大于等于 100 时按九折计算。",
+      "test_code_quote": null,
+      "description": "已有 50 和 150 的测试，但缺少金额恰好为 100 的验证。",
+      "suggested_case": "保留现有测试，新增 discounted_total(100) == 90 的独立测试。"
+    }
+  ],
+  "questions": []
+}

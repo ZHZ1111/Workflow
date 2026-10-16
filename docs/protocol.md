@@ -102,3 +102,7 @@ ResultSummaryNode 返回空 StatePatch、无消息、单个 kind=report 的 Arti
 配置增加默认 false 的严格 bool `quality_review_enabled`；状态增加默认 disabled 的质量状态、可空停止原因及最多三份 QualityAssessment。消息增加 `review_ready` 和类型化 `quality_feedback`，产物增加 quality_assessment/quality_response，AgentResult 增加可空 quality_assessment/review。旧版本与旧样例仍通过缺省字段读取，schema_version 保持 1.0。
 
 模型业务输出 ReviewDecision 与宿主身份/引用 QualityAssessment 分开。结果只允许审查节点提交，error 不能携带成功结论，审查不能更改业务候选或生成用量。开启审查的 completed 终态要求所选当前候选存在可核验的 approve，候选与规格摘要、已登记执行证据及落盘批准记录均一致。契约限制、状态配对、证据来源校验和 JSON 样例详见 [S0–S1 实施记录](quality-review-s0-s1.md)。当前只完成协议与终态约束；正式生产审查调用、循环路由、统计与 CLI/Web 入口仍属后续阶段。
+
+## 质量审查 S2 的兼容增加（2026-10-16）
+
+ReviewTelemetry 增加可空 latency_seconds，旧遥测缺省为 null。新增客户端接口 `ReviewClient.review(ReviewContext) -> ReviewResponse`；成功结果包含严格的 ReviewDecision、与其一致的原始业务 JSON 和独立遥测，失败通过固定 ReviewClientError 和安全遥测交给后续节点处理。真实及离线实现共享接口；每候选审查的 HTTP 尝试最多 3 次，暂态重试与最多一次格式修复共用预算。Prompt、输入约束、错误分类与验证见 [S2 实施记录](quality-review-s2.md)。生产节点与流程路由仍未接入。

@@ -1,7 +1,7 @@
 # 增加质量审查 Agent：详细实施步骤
 
 > 编写日期：2026-10-16。
-> 编写时基于本地提交 `97fde32` 的源码结构。2026-10-16 从实际提交 `b2920aabce408a64841f1cd3eabe97d4c3ea8c76` 开始实施，S0–S1 已完成，见 [实施记录](quality-review-s0-s1.md)；S2–S9 仍为待实现计划。
+> 编写时基于本地提交 `97fde32` 的源码结构。2026-10-16 从实际提交 `b2920aabce408a64841f1cd3eabe97d4c3ea8c76` 开始实施，S0–S1 和 S2 已完成，见 [S0–S1 记录](quality-review-s0-s1.md)、[S2 记录](quality-review-s2.md)；S3–S9 仍为待实现计划。
 > 本次范围：在现有测试生成 Agent、测试执行 Agent 之间的协作基础上，增加一个能提出质量反馈的审查 Agent，形成三 Agent 闭环。
 > 输入继续沿用“单文件 Python 源码 + 非空行为规格”；保留现有候选最多三轮的限制。本次不包含变异测试、属性测试、多文件支持、自动源码修复、通用 DAG 或断点恢复。
 
@@ -298,14 +298,14 @@ ReviewTelemetry 至少区分客户端调用、实际外部请求、格式修复�
 
 ### S2：实现 Prompt 与独立审查客户端 — 1.5h
 
-- [ ] 定义 `ReviewClient.review(context) -> ReviewResponse`，使真实与离线实现共享协议。
-- [ ] 定义 ReviewContext：规格快照、源码事实、当前候选与计划、执行/覆盖观察、历史审查发现和预算。
-- [ ] 真实客户端复用既有 AppConfig 和公开的 HTTP 客户端创建能力，采用已有请求方式；不直接调用 DeepSeekClient 的私有解析方法。
-- [ ] 返回 Schema 使用 ReviewDecision，不能复用强制 GeneratedTests 的 `generate_tests()`。
-- [ ] 第一版每次审查最多 3 次实际 HTTP 尝试，暂态重试和最多一次格式修复共同消耗该上限。
-- [ ] 可修复格式错误时只携带必要校验摘要；鉴权等永久错误立即失败。
-- [ ] 所有源码、规格、候选、日志与历史发现作为数据封装；模型不能指定命令或文件路径。
-- [ ] 把实际请求数、用量、耗时和错误分类返回给节点，不回显 Key 或认证头。
+- [x] 定义 `ReviewClient.review(context) -> ReviewResponse`，使真实与离线实现共享协议。
+- [x] 定义 ReviewContext：规格快照、源码事实、当前候选与计划、执行/覆盖观察、历史审查发现和预算。
+- [x] 真实客户端复用既有 AppConfig 和公开的 HTTP 客户端创建能力，采用已有请求方式；不直接调用 DeepSeekClient 的私有解析方法。
+- [x] 返回 Schema 使用 ReviewDecision，不能复用强制 GeneratedTests 的 `generate_tests()`。
+- [x] 第一版每次审查最多 3 次实际 HTTP 尝试，暂态重试和最多一次格式修复共同消耗该上限。
+- [x] 可修复格式错误时只携带必要校验摘要；鉴权等永久错误立即失败。
+- [x] 所有源码、规格、候选、日志与历史发现作为数据封装；模型不能指定命令或文件路径。
+- [x] 把实际请求数、用量、耗时和错误分类返回给节点，不回显 Key 或认证头。
 
 建议 System Prompt 明确：
 
