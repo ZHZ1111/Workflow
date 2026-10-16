@@ -230,8 +230,8 @@ def test_initial_quality_state_defaults_and_cross_run_rejection(initial):
     ("p4/revision_context.json", AgentContext), ("p4/feedback_message.json", Message),
     ("p6/summary_node_result.json", AgentResult),
 ])
-def test_saved_legacy_contracts_still_load(relative, model):
-    value = model.model_validate_json((ROOT / "examples/contracts" / relative).read_text(encoding="utf-8"))
+def test_saved_legacy_contracts_still_load(relative, model, contract_example):
+    value = contract_example(ROOT / "examples/contracts" / relative, model)
     assert model.model_validate_json(value.canonical_json()) == value
 
 

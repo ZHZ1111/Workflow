@@ -47,6 +47,8 @@
 
 ## 运行与回归策略
 
+历史契约样例可能包含录制机器的 Windows 绝对路径。引用 `examples/contracts` 中状态或上下文的测试统一使用 `tests/conftest.py` 的 `contract_example` fixture，由 `tests/contract_examples.py` 将路径及 `snapshot_json` 内的对应路径映射到测试临时目录，保留相对产物引用和生产校验。新增兼容测试也须复用该入口；Windows 全量通过不能代替 Ubuntu 验证。跨平台回归覆盖路径映射、上下文与工作区关系，以及非法相对运行目录仍被拒绝。
+
 P0：`python scripts/p0_baseline.py`（使用 README 中虚拟环境解释器）。P1：`python scripts/p1_baseline.py`，或仅执行 `python -m pytest tests -q`；根 pyproject 的默认测试范围是新 `tests/`，不包含 vendor 全量基线。P2/P3 修改适配器后跑相关节点测试与受影响 vendor 测试；P4 后跑新 Workflow 集成矩阵；P7 做最终全量回归和干净安装。
 
 P2：`python scripts/p2_baseline.py` 手动提供真实首轮执行证据，证明单步修订与通过测试保护，不视为 W02 自动路由已完成。新测试包含 MockTransport 客户端有限重试、格式修复、鉴权错误、未知次数/用量，均无外部请求。复用回归范围是 vendor 的 `test_generation.py`、`test_llm_client.py`、`test_prompts.py`。
