@@ -83,7 +83,9 @@ def build_summary(state: WorkflowState, final=None) -> dict:
         "started_at": state.started_at.isoformat(), "finished_at": state.finished_at.isoformat() if state.finished_at else None,
         "duration_seconds": (state.finished_at - state.started_at).total_seconds() if state.finished_at else None,
         "rounds": len(rounds), "round_details": rounds, "selected_round": state.selected_round,
-        "selection_reason": "全通过优先，再按目标覆盖、覆盖是否可用、分支/行覆盖和通过数排序；同分保留早轮。" if selected else "没有已执行且可用的候选。",
+        "selection_reason": ("选择当前已通过质量审查的候选；执行与批准证据对应同一轮。"
+                             if state.config.quality_review_enabled and state.quality_status == "passed"
+                             else "全通过优先，再按目标覆盖、覆盖是否可用、分支/行覆盖和通过数排序；同分保留早轮。") if selected else "没有已执行且可用的候选。",
         "selected_all_passed": selected.execution.all_passed if selected else None,
         "latest_all_passed": latest.execution.all_passed if latest and latest.execution else None,
         "selected_execution": selected.execution.model_dump(mode="json") if selected else None,

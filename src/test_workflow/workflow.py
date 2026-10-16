@@ -9,10 +9,11 @@ from testgen_agent.models import AgentAction, AgentState, CandidateRound, ModelI
 from testgen_agent.tools import analyze_source
 
 from .config import WorkflowConfig
-from .contracts import AgentContext, AgentResult, StatePatch, ExecutionAssessment
+from .contracts import AgentContext, AgentResult, StatePatch, ExecutionAssessment, QualityAssessment
 from .definitions import WorkflowDefinition
 from .events import EventWriter, MessageWriter
 from .registry import AgentRegistry
+from .quality_routing import validate_quality_result
 from .state import StateStore, WorkflowState, utc_now
 from .storage import atomic_write, verify_artifact
 
@@ -58,6 +59,53 @@ class WorkflowRunner:
         for node in definition.nodes:
             registry.get(node.agent_id)
 
+    def _inbox(self, state: WorkflowState, node):
+        pending = tuple(message for message in state.messages if message.receiver == node.agent_id
+                        and message.message_id not in state.consumed_message_ids)
+        revision = node.agent_id == "test_generation" and state.current_round > 1
+        sender, message_type, number = node.receives_from, None, state.current_round
+        if revision:
+            prior_quality = next((item for item in state.quality_assessments if item.round == state.current_round - 1), None)
+            quality_revision = state.config.quality_review_enabled and prior_quality is not None and prior_quality.decision.verdict == "request_revision"
+            sender = "test_quality_review" if quality_revision else "test_execution"
+            message_type = "quality_feedback" if quality_revision else "execution_feedback"
+            number -= 1
+        elif node.agent_id == "test_execution":
+            message_type = "candidate_ready"
+        elif node.agent_id == "test_quality_review":
+            message_type = "review_ready"
+        blocked = (state.config.mode != "demo" and node.agent_id == "test_execution" and state.agent_state.history
+                   and (state.agent_state.history[-1].validation_error or state.agent_state.history[-1].generated.questions))
+        if sender is not None and not pending and not blocked:
+            raise HandoffError("consumer did not receive its required handoff")
+        if (sender is None and pending) or (pending and len(pending) != 1):
+            raise HandoffError("consumer requires exactly one expected handoff")
+        for message in pending:
+            if (message.sender != sender or message.round != number
+                    or (message_type is not None and message.type != message_type)):
+                raise HandoffError("consumer received a foreign sender, type or source round")
+            verify_artifact(state.run_dir, message.payload.artifact)
+            if message_type == "quality_feedback":
+                saved = QualityAssessment.model_validate_json(verify_artifact(
+                    state.run_dir, message.payload.artifact).read_text(encoding="utf-8"))
+                if (message.payload.artifact not in state.artifacts or saved != prior_quality
+                        or saved.decision.verdict != "request_revision" or message.payload.reason != saved.decision.summary
+                        or message.payload.quality_feedback.findings != tuple(item for item in saved.decision.findings if item.blocking)):
+                    raise HandoffError("quality feedback differs from the committed source assessment")
+            elif message_type == "execution_feedback" and message.payload.artifact.kind == "assessment":
+                saved = ExecutionAssessment.model_validate_json(verify_artifact(
+                    state.run_dir, message.payload.artifact).read_text(encoding="utf-8"))
+                if saved.feedback != message.payload.feedback or saved.action != message.payload.recommended_action:
+                    raise HandoffError("execution feedback differs from its assessment")
+        return pending
+
+    @staticmethod
+    def _selected_candidate(state: WorkflowState):
+        if (state.config.quality_review_enabled and state.quality_status == "passed"
+                and state.quality_assessments and state.quality_assessments[-1].round == state.current_round):
+            return state.current_round
+        return select_best_candidate(state.agent_state.history)
+
     def _business_patch(self, state: WorkflowState, patch: StatePatch, result_artifacts):
         business = state.agent_state
         history = business.history
@@ -100,12 +148,18 @@ class WorkflowRunner:
         if not isinstance(result, AgentResult):
             raise HandoffError("node must return an AgentResult")
         result = AgentResult.model_validate_json(result.canonical_json())
+        state = WorkflowState.model_validate_json(state.canonical_json())
         if (result.run_id, result.round, result.agent_id) != (
             state.run_id, state.current_round, state.current_node,
         ):
             raise HandoffError("result belongs to another task, round or node")
         if result.status != "ok":
             raise HandoffError("node returned an error result")
+        node = next((node for node in self.definition.nodes if node.agent_id == result.agent_id), None)
+        if node is None:
+            raise HandoffError("result node is not declared in this workflow")
+        if consumed and consumed != tuple(message.message_id for message in self._inbox(state, node)):
+            raise HandoffError("consumption must match the current unique expected handoff")
         paths = {item.path for item in state.artifacts}
         for artifact in result.artifacts:
             if artifact.round != state.current_round or artifact.candidate_id != f"{state.run_id}:{state.current_round}":
@@ -122,7 +176,7 @@ class WorkflowRunner:
             ):
                 raise HandoffError("message belongs to another task, round or sender")
             destinations = [node for node in self.definition.nodes if node.agent_id == message.receiver]
-            feedback_route = message.type == "execution_feedback" and any(
+            feedback_route = message.type in {"execution_feedback", "quality_feedback"} and any(
                 route.sender == message.sender and route.receiver == message.receiver
                 for route in self.definition.feedback_routes)
             if not destinations or (destinations[0].receives_from != state.current_node and not feedback_route):
@@ -145,11 +199,11 @@ class WorkflowRunner:
                     verify_artifact(state.run_dir, reference).read_text(encoding="utf-8"))
                 if saved != business.history[-1]:
                     raise HandoffError("candidate artifact differs from the proposed business state")
-            elif message.type == "execution_feedback" and message.payload.artifact.kind == "assessment":
+            elif message.type in {"execution_feedback", "review_ready"} and message.payload.artifact.kind == "assessment":
                 saved = ExecutionAssessment.model_validate_json(verify_artifact(
                     state.run_dir, message.payload.artifact).read_text(encoding="utf-8"))
-                if (saved != result.assessment or saved.feedback != message.payload.feedback
-                        or saved.action != message.payload.recommended_action):
+                if (saved != result.assessment or (message.type == "execution_feedback" and (
+                        saved.feedback != message.payload.feedback or saved.action != message.payload.recommended_action))):
                     raise HandoffError("feedback differs from its recorded assessment")
         if result.assessment is not None:
             assessment = result.assessment
@@ -164,10 +218,40 @@ class WorkflowRunner:
                     or assessment.feedback.coverage != candidate.coverage
                     or assessment.action != result.patch.next_action):
                 raise HandoffError("assessment differs from the committed candidate or action")
+            ready = state.config.quality_review_enabled and assessment.task_status == TaskStatus.COMPLETED
+            if ready and (len(result.messages) != 1 or result.messages[0].type != "review_ready"):
+                raise HandoffError("quality-enabled completion requires one exclusive review_ready")
+            if not ready and any(message.type == "review_ready" for message in result.messages):
+                raise HandoffError("review_ready requires a completed execution and enabled review")
+        elif any(message.type == "review_ready" for message in result.messages):
+            raise HandoffError("review_ready requires an execution assessment")
+        quality_updates = {}
+        accepted_messages = result.messages
+        if result.quality_assessment is not None:
+            inbox = self._inbox(state, node)
+            stop = validate_quality_result(state, result, inbox)
+            quality = result.quality_assessment
+            verdict = quality.decision.verdict
+            if any(message.payload.reason != quality.decision.summary for message in result.messages):
+                raise HandoffError("quality feedback reason differs from its assessment")
+            quality_updates = {
+                "quality_assessments": (*state.quality_assessments, quality),
+                "quality_status": {"approve": "passed", "request_revision": "changes_requested", "request_review": "needs_review"}[verdict],
+                "quality_stop_reason": {"approve": "approved", "request_revision": stop or "quality_gaps",
+                                        "request_review": "ambiguous_specification"}[verdict],
+            }
+            if verdict == "request_revision" and stop is None:
+                business = business.updated(next_action=AgentAction.ADD_MISSING_CASES)
+            if stop is not None:
+                # Result messages are proposals; denied feedback is never journaled.
+                accepted_messages = ()
+        elif state.config.quality_review_enabled and result.patch.candidate is not None and result.agent_id == "test_generation":
+            quality_updates = {"quality_status": "not_run", "quality_stop_reason": None}
         return state.updated(
             agent_state=business, artifacts=artifacts,
-            messages=(*state.messages, *result.messages),
+            messages=(*state.messages, *accepted_messages),
             consumed_message_ids=(*state.consumed_message_ids, *consumed),
+            **quality_updates,
         )
 
     def run(self, initial: WorkflowState) -> WorkflowState:
@@ -181,6 +265,15 @@ class WorkflowRunner:
                        for route in self.definition.feedback_routes)
         ):
             raise ValueError("testing requires generation, execution and a declared feedback edge")
+        review_nodes = tuple(node for node in self.definition.nodes if node.agent_id == "test_quality_review")
+        if initial.config.quality_review_enabled:
+            if (not measured or len(review_nodes) != 1 or len(self.definition.nodes) < 3
+                    or self.definition.nodes[2] != review_nodes[0] or review_nodes[0].receives_from != "test_execution"
+                    or not any(route.sender == "test_quality_review" and route.receiver == "test_generation"
+                               for route in self.definition.feedback_routes)):
+                raise ValueError("enabled quality review requires its declared node, dependency and feedback route")
+        elif review_nodes:
+            raise ValueError("a quality workflow requires quality_review_enabled")
         state = WorkflowState.model_validate_json(initial.canonical_json())
         store = StateStore(state.run_dir)
         events = EventWriter(state.run_dir, state.run_id)
@@ -201,21 +294,7 @@ class WorkflowRunner:
                        context_path=f"{node_path}/context.json")
             started = perf_counter()
             node_started = started
-            inbox = tuple(message for message in state.messages
-                          if message.receiver == node.agent_id
-                          and message.message_id not in state.consumed_message_ids)
-            revision = measured and node.agent_id == "test_generation" and state.current_round > 1
-            expected_sender = "test_execution" if revision else node.receives_from
-            expected_round = state.current_round - 1 if revision else state.current_round
-            blocked = (measured and node.agent_id == "test_execution" and state.agent_state.history
-                       and (state.agent_state.history[-1].validation_error
-                            or state.agent_state.history[-1].generated.questions))
-            if (expected_sender is not None and not inbox and not blocked) or (revision and len(inbox) != 1):
-                raise HandoffError("consumer did not receive its required handoff")
-            for message in inbox:
-                if message.sender != expected_sender or message.round != expected_round:
-                    raise HandoffError("consumer received a foreign sender or source round")
-                verify_artifact(state.run_dir, message.payload.artifact)
+            inbox = self._inbox(state, node)
             context = AgentContext(run_id=state.run_id, round=state.current_round,
                                    agent_id=node.agent_id, run_dir=state.run_dir,
                                    snapshot_json=state.canonical_json(), inbox=inbox)
@@ -238,10 +317,10 @@ class WorkflowRunner:
                 raise NodeFailure(result.error_code)
             proposed = self.apply_result(state, result, tuple(item.message_id for item in inbox))
             if measured:
-                selected = select_best_candidate(proposed.agent_state.history)
+                selected = self._selected_candidate(proposed)
                 proposed = proposed.updated(selected_round=selected,
                                             agent_state=proposed.agent_state.updated(best_available_round=selected))
-            for message in result.messages:
+            for message in proposed.messages[len(state.messages):]:
                 messages.append(message)
                 events.append("message_sent", node=node.agent_id, round=message.round,
                               message_id=message.message_id, candidate_id=message.payload.candidate_id,
@@ -256,12 +335,14 @@ class WorkflowRunner:
             node_started = None
             return result
 
-        def finalize(status, stop, action=AgentAction.FINISH):
+        def finalize(status, stop, action=AgentAction.FINISH, **quality_updates):
             nonlocal state
-            selected = select_best_candidate(state.agent_state.history)
+            selected = self._selected_candidate(state)
+            if status == TaskStatus.COMPLETED and state.config.quality_review_enabled and state.quality_status != "passed":
+                raise HandoffError("quality-enabled completion requires approval")
             state = state.updated(task_status=status, stop_reason=stop, selected_round=selected,
                                   agent_state=state.agent_state.updated(best_available_round=selected,
-                                                                       stop_reason=stop, next_action=action))
+                                                                       stop_reason=stop, next_action=action), **quality_updates)
 
         try:
             state = state.updated(workflow_status="running", current_round=1)
@@ -306,18 +387,47 @@ class WorkflowRunner:
                         continue
                     if assessment.action not in {AgentAction.FINISH, AgentAction.REQUEST_REVIEW} or assessment.stop_reason is None:
                         raise HandoffError("unknown or incomplete terminal recommendation")
+                    if state.config.quality_review_enabled and assessment.task_status == TaskStatus.COMPLETED:
+                        reviewed = invoke(review_nodes[0])
+                        verdict = reviewed.quality_assessment.decision.verdict
+                        save_event("route_selected", node="test_quality_review", round=state.current_round,
+                                   action={"approve": "quality_approved", "request_revision": "quality_revision_requested",
+                                           "request_review": "quality_needs_review"}[verdict],
+                                   stop_reason=state.quality_stop_reason)
+                        if verdict == "approve":
+                            finalize(TaskStatus.COMPLETED, StopReason.COVERAGE_TARGET_MET)
+                        elif verdict == "request_review":
+                            finalize(TaskStatus.NEEDS_REVIEW, StopReason.AMBIGUOUS_SPECIFICATION, AgentAction.REQUEST_REVIEW)
+                        elif state.quality_stop_reason == "quality_budget_reached":
+                            finalize(TaskStatus.PARTIAL, StopReason.ROUND_LIMIT_REACHED)
+                        elif state.quality_stop_reason == "quality_no_progress":
+                            finalize(TaskStatus.PARTIAL, StopReason.NO_PROGRESS)
+                        else:
+                            state = state.updated(current_round=state.current_round + 1, quality_status="not_run", quality_stop_reason=None)
+                            continue
+                        break
+                    if (state.config.quality_review_enabled and assessment.stop_reason == StopReason.NO_PROGRESS
+                            and state.quality_assessments and state.quality_assessments[-1].decision.verdict == "request_revision"):
+                        finalize(assessment.task_status, assessment.stop_reason, assessment.action,
+                                 quality_stop_reason="quality_no_progress")
+                        save_event("route_selected", node="test_quality_review", round=state.current_round,
+                                   action="quality_no_progress", stop_reason="quality_no_progress")
+                        break
                     finalize(assessment.task_status, assessment.stop_reason, assessment.action)
                     break
                 # Optional trailing nodes extend the definition without changing the loop.
                 save_event("workflow_stopped", round=state.current_round,
                            action=state.agent_state.next_action.value, stop_reason=state.stop_reason.value)
                 for node in self.definition.nodes[2:]:
-                    invoke(node)
+                    if node.agent_id != "test_quality_review":
+                        invoke(node)
             state = state.updated(workflow_status="finished", current_node=None, finished_at=utc_now())
         except Exception as exc:
             # Exception messages may include credentials from injected clients.
             # Persist a controlled code and preserve every previously committed output.
             code = exc.code if isinstance(exc, NodeFailure) else "invalid_handoff" if isinstance(exc, (ValueError, TypeError)) else "node_exception"
+            if state.config.quality_review_enabled and state.current_node == "test_quality_review":
+                state = state.updated(quality_status="error", quality_stop_reason="review_error")
             if node_started is not None:
                 save_event("node_failed", node=state.current_node, round=state.current_round,
                            duration_seconds=perf_counter() - node_started, error_code=code)

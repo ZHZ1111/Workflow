@@ -1,6 +1,6 @@
 # 质量审查 Agent：S3 单节点与证据保存
 
-日期：2026-10-16。起始提交 `c8a9bdcf1b38a76a0f3c2b99a1b9030c667b62e4`，开始时工作区干净。S3 完成独立 TestQualityReviewAgent 及送审适配器，未接入 Workflow 自动循环、CLI 或 Web。
+日期：2026-10-16。起始提交 `c8a9bdcf1b38a76a0f3c2b99a1b9030c667b62e4`，开始时工作区干净。本文记录 S3 结束时的状态：完成独立 TestQualityReviewAgent 及送审适配器，当时未接入 Workflow 自动循环、CLI 或 Web。后续调度接入见 [S4 记录](quality-review-s4.md)。
 
 ## 接口与归属
 
@@ -77,4 +77,4 @@ error Result 不含成功补丁、QualityAssessment、消息或 ArtifactRef。�
 
 S3 九项任务均已勾选，README、protocol 和本地主清单同步更新。本阶段只使用固定审查响应及 MockTransport，未调用真实模型。
 
-S4 仍需让执行节点正式产生 review_ready、注册和调度审查、交叉核验 Result/文件/消息、提交质量状态和消息消费，并完成预算/无进展路由与批准候选选择。当前生产定义、主循环、服务和入口均未修改；独立节点测试不宣称已经完成自动三 Agent 闭环。
+S3 结束时，S4 仍需让执行节点正式产生 review_ready、注册和调度审查、交叉核验 Result/文件/消息、提交质量状态和消息消费，并完成预算/无进展路由与批准候选选择。当时生产定义、主循环、服务和入口均未修改；独立节点测试不宣称已经完成自动三 Agent 闭环。

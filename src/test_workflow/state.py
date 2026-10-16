@@ -96,7 +96,13 @@ class WorkflowState(ContractModel):
             reasons = {"not_run": {None}, "passed": {"approved"},
                        "changes_requested": {"quality_gaps", "quality_budget_reached", "quality_no_progress"},
                        "needs_review": {"ambiguous_specification"}, "error": {"review_error"}}
-            if self.quality_stop_reason not in reasons[self.quality_status]:
+            deferred_no_progress = (
+                self.quality_status == "not_run" and self.quality_stop_reason == "quality_no_progress"
+                and self.task_status == TaskStatus.PARTIAL and self.stop_reason == StopReason.NO_PROGRESS
+                and self.quality_assessments and self.quality_assessments[-1].round < self.current_round
+                and self.quality_assessments[-1].decision.verdict == "request_revision"
+            )
+            if self.quality_stop_reason not in reasons[self.quality_status] and not deferred_no_progress:
                 raise ValueError("quality status and stop reason disagree")
             verdict = {"passed": "approve", "changes_requested": "request_revision", "needs_review": "request_review"}.get(self.quality_status)
             if verdict and (not self.quality_assessments or self.quality_assessments[-1].round != self.current_round

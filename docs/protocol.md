@@ -101,14 +101,24 @@ ResultSummaryNode 返回空 StatePatch、无消息、单个 kind=report 的 Arti
 
 配置增加默认 false 的严格 bool `quality_review_enabled`；状态增加默认 disabled 的质量状态、可空停止原因及最多三份 QualityAssessment。消息增加 `review_ready` 和类型化 `quality_feedback`，产物增加 quality_assessment/quality_response，AgentResult 增加可空 quality_assessment/review。旧版本与旧样例仍通过缺省字段读取，schema_version 保持 1.0。
 
-模型业务输出 ReviewDecision 与宿主身份/引用 QualityAssessment 分开。结果只允许审查节点提交，error 不能携带成功结论，审查不能更改业务候选或生成用量。开启审查的 completed 终态要求所选当前候选存在可核验的 approve，候选与规格摘要、已登记执行证据及落盘批准记录均一致。契约限制、状态配对、证据来源校验和 JSON 样例详见 [S0–S1 实施记录](quality-review-s0-s1.md)。当前只完成协议与终态约束；正式生产审查调用、循环路由、统计与 CLI/Web 入口仍属后续阶段。
+模型业务输出 ReviewDecision 与宿主身份/引用 QualityAssessment 分开。结果只允许审查节点提交，error 不能携带成功结论，审查不能更改业务候选或生成用量。开启审查的 completed 终态要求所选当前候选存在可核验的 approve，候选与规格摘要、已登记执行证据及落盘批准记录均一致。契约限制、状态配对、证据来源校验和 JSON 样例详见 [S0–S1 实施记录](quality-review-s0-s1.md)。S1 当时仅完成协议与终态约束，后续客户端、节点与路由的实现见下文。
 
 ## 质量审查 S2 的兼容增加（2026-10-16）
 
-ReviewTelemetry 增加可空 latency_seconds，旧遥测缺省为 null。新增客户端接口 `ReviewClient.review(ReviewContext) -> ReviewResponse`；成功结果包含严格的 ReviewDecision、与其一致的原始业务 JSON 和独立遥测，失败通过固定 ReviewClientError 和安全遥测交给后续节点处理。真实及离线实现共享接口；每候选审查的 HTTP 尝试最多 3 次，暂态重试与最多一次格式修复共用预算。Prompt、输入约束、错误分类与验证见 [S2 实施记录](quality-review-s2.md)。生产节点与流程路由仍未接入。
+ReviewTelemetry 增加可空 latency_seconds，旧遥测缺省为 null。新增客户端接口 `ReviewClient.review(ReviewContext) -> ReviewResponse`；成功结果包含严格的 ReviewDecision、与其一致的原始业务 JSON 和独立遥测，失败通过固定 ReviewClientError 和安全遥测交给后续节点处理。真实及离线实现共享接口；每候选审查的 HTTP 尝试最多 3 次，暂态重试与最多一次格式修复共用预算。Prompt、输入约束、错误分类与验证见 [S2 实施记录](quality-review-s2.md)。
 
 ## 质量审查 S3：单节点落盘（2026-10-16）
 
 新增 TestQualityReviewAgent，消费唯一已登记、未消费的当前轮 review_ready，核验候选、规格、真实执行与全部登记证据后调用一次审查客户端。返回后复核输入、发现引用来源及响应契约，保存 `quality_reviews/NN/response.json`（ReviewResponse，含 raw_response 与安全遥测）和 `assessment.json`（宿主 QualityAssessment）；引用种类沿用 quality_response/quality_assessment。写入后回读核验，失败文件只作为诊断，error Result 不提交成功产物。
 
-节点返回空 StatePatch，质量状态与消息消费仍由编排器拥有。request_revision 在剩余候选预算内提出类型化 quality_feedback；最后一轮只保留发现，approve/request_review 均不提出生成反馈。错误遥测区分零次请求与未知次数，同候选已创建的审查目录禁止再次请求。严格门禁、文件格式和单节点验证见 [S3 实施记录](quality-review-s3.md)；S4 自动路由尚未接入。
+节点返回空 StatePatch，质量状态与消息消费仍由编排器拥有。request_revision 在剩余候选预算内提出类型化 quality_feedback；最后一轮只保留发现，approve/request_review 均不提出生成反馈。错误遥测区分零次请求与未知次数，同候选已创建的审查目录禁止再次请求。严格门禁、文件格式和单节点验证见 [S3 实施记录](quality-review-s3.md)。
+
+## 质量审查 S4：提交与调度（2026-10-16）
+
+QUALITY_WORKFLOW 与 QUALITY_SUMMARY_WORKFLOW 显式声明执行→审查依赖、审查→生成反馈边。质量开关与定义必须一致；执行节点仅在基础 completed 时发送唯一 review_ready，Workflow 校验原 choose_action 后送审。其他执行分支沿用既有路由。
+
+提交审查结果时重新核验 S3 送审输入、两份固定路径输出、Result、遥测及反馈与宿主证据一致。第 N+1 轮生成只接收当前期望来源、第 N 轮、未消费的唯一反馈；质量反馈必须引用已提交的同一份 QualityAssessment，其 reason 和阻塞发现必须完全一致。混入其他反馈、修改负载、错轮次或重复消费均拒绝。
+
+request_revision 允许继续时仅由 Workflow 设置 ADD_MISSING_CASES；原执行 assessment 仍为 FINISH。预算或无进展停止时保存质量记录但不提交下一轮反馈。Result 文件保留节点提案，state/messages.jsonl 仅保存通过提交策略的消息；消息提交后才记录消费，延续单写者与非跨文件事务边界。质量 route_selected 使用独立动作名称。
+
+approve 强制选择当前获批候选并保留到尾部摘要及导出。候选重复而在第二次审查前被原门禁停止时，质量状态保持 not_run，允许 partial/no_progress 对应 quality_no_progress，保留上一轮未解决发现。生成质量上下文仍属 S5，入口与完整质量报告仍属后续阶段。分支表和验证见 [S4 实施记录](quality-review-s4.md)。

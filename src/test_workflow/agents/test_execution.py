@@ -2,7 +2,7 @@
 
 from collections.abc import Callable
 
-from testgen_agent.models import AgentAction
+from testgen_agent.models import AgentAction, TaskStatus
 from testgen_agent.tools import ExecutionArtifactError, ExecutionWorkspaceError, run_tests_with_coverage
 
 from ..adapters.execution import (
@@ -67,6 +67,13 @@ class TestExecutionAgent:
                                         candidate_id=assessment.candidate_id, artifact=reference,
                                         reason=assessment.reason, recommended_action=assessment.action,
                                         feedback=assessment.feedback)),)
+            elif context.state.config.quality_review_enabled and assessment.task_status == TaskStatus.COMPLETED:
+                messages = (Message(message_id=f"msg-review-ready-{context.round:02d}", run_id=context.run_id,
+                                    round=context.round, sender=context.agent_id, receiver="test_quality_review",
+                                    type="review_ready", payload=MessagePayload(
+                                        candidate_id=assessment.candidate_id, artifact=reference,
+                                        reason="Passing execution and target coverage are ready for quality review.",
+                                        recommended_action=AgentAction.FINISH)),)
             return AgentResult(run_id=context.run_id, round=context.round, agent_id=context.agent_id,
                                patch=StatePatch(candidate=candidate if tool_calls else None,
                                                 issues=tuple(item for item in assessment.feedback.issues if item not in business.issues),

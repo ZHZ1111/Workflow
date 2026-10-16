@@ -1,7 +1,7 @@
 # 增加质量审查 Agent：详细实施步骤
 
 > 编写日期：2026-10-16。
-> 编写时基于本地提交 `97fde32` 的源码结构。2026-10-16 从实际提交 `b2920aabce408a64841f1cd3eabe97d4c3ea8c76` 开始实施，S0–S3 已完成，见 [S0–S1 记录](quality-review-s0-s1.md)、[S2 记录](quality-review-s2.md)、[S3 记录](quality-review-s3.md)；S4–S9 仍为待实现计划。
+> 编写时基于本地提交 `97fde32` 的源码结构。2026-10-16 从实际提交 `b2920aabce408a64841f1cd3eabe97d4c3ea8c76` 开始实施，S0–S4 已完成，见 [S0–S1 记录](quality-review-s0-s1.md)、[S2 记录](quality-review-s2.md)、[S3 记录](quality-review-s3.md)、[S4 记录](quality-review-s4.md)；S5–S9 仍为待实现计划。
 > 本次范围：在现有测试生成 Agent、测试执行 Agent 之间的协作基础上，增加一个能提出质量反馈的审查 Agent，形成三 Agent 闭环。
 > 输入继续沿用“单文件 Python 源码 + 非空行为规格”；保留现有候选最多三轮的限制。本次不包含变异测试、属性测试、多文件支持、自动源码修复、通用 DAG 或断点恢复。
 
@@ -337,18 +337,20 @@ ReviewTelemetry 至少区分客户端调用、实际外部请求、格式修复�
 
 ### S4：接入 Workflow 调度与路由 — 2.5h
 
-- [ ] 在 definitions 中增加 QUALITY_WORKFLOW：生成、执行、审查；增加执行→审查的依赖和审查→生成的反馈边。
-- [ ] 增加质量流程加 ResultSummaryNode 的组合，避免功能开关组合互相覆盖。
-- [ ] 修改 apply_result：允许已声明的 quality_feedback 路由，并核对文件、Result 和消息内容一致。
-- [ ] 仅允许 test_quality_review 提交质量结果；不允许它改 CandidateRound、执行观察或生成用量。
-- [ ] invoke 为生成节点选取“当前期望来源的上一轮未消费反馈”，不能只按 receiver 收取所有历史消息。
-- [ ] 第 N+1 轮只接受一个有效再生成触发：执行反馈或质量反馈；其他来源、错轮次、重复消费均拒绝。
-- [ ] 验证执行建议与旧 choose_action 一致后，若本应 completed 且开关开启，先审查，不调用 finalize。
-- [ ] 按第 5 节合并审查结果；继续前检查预算，结束时选择与审查一致的候选。
-- [ ] 允许质量补充时，由编排器将业务 next_action 更新为 ADD_MISSING_CASES，但不写入终止 stop_reason；原 ExecutionAssessment 的 FINISH 建议保持原样。
-- [ ] 审查节点从循环后的尾部调度中排除，ResultSummaryNode 仍只在最终业务结论确定后执行一次。
-- [ ] 成功提交消息后才标记消费；延续原事件和状态保存机制。
-- [ ] 对每个合法质量转换追加事件或扩展 route_selected 的可表达动作，不能伪装为原执行节点已经要求补充。
+- [x] 在 definitions 中增加 QUALITY_WORKFLOW：生成、执行、审查；增加执行→审查的依赖和审查→生成的反馈边。
+- [x] 增加质量流程加 ResultSummaryNode 的组合，避免功能开关组合互相覆盖。
+- [x] 修改 apply_result：允许已声明的 quality_feedback 路由，并核对文件、Result 和消息内容一致。
+- [x] 仅允许 test_quality_review 提交质量结果；不允许它改 CandidateRound、执行观察或生成用量。
+- [x] invoke 为生成节点选取“当前期望来源的上一轮未消费反馈”，不能只按 receiver 收取所有历史消息。
+- [x] 第 N+1 轮只接受一个有效再生成触发：执行反馈或质量反馈；其他来源、错轮次、重复消费均拒绝。
+- [x] 验证执行建议与旧 choose_action 一致后，若本应 completed 且开关开启，先审查，不调用 finalize。
+- [x] 按第 5 节合并审查结果；继续前检查预算，结束时选择与审查一致的候选。
+- [x] 允许质量补充时，由编排器将业务 next_action 更新为 ADD_MISSING_CASES，但不写入终止 stop_reason；原 ExecutionAssessment 的 FINISH 建议保持原样。
+- [x] 审查节点从循环后的尾部调度中排除，ResultSummaryNode 仍只在最终业务结论确定后执行一次。
+- [x] 成功提交消息后才标记消费；延续原事件和状态保存机制。
+- [x] 对每个合法质量转换追加事件或扩展 route_selected 的可表达动作，不能伪装为原执行节点已经要求补充。
+
+S4 已通过受控生成节点、真实 pytest/coverage 和 S3 审查节点验证闭环；生产生成节点接纳质量反馈的实现仍属于 S5，详见 [S4 实施记录](quality-review-s4.md)。
 
 以下为控制顺序伪代码，不是可直接复制的现有 API：
 

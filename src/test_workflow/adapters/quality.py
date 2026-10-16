@@ -43,7 +43,7 @@ def review_directory(context: AgentContext) -> Path:
     return task_path(root, f"quality_reviews/{context.round:02d}", must_exist=False)
 
 
-def _load_review_inputs(context: AgentContext, max_request_attempts: int) -> PreparedReview:
+def load_review_inputs(context: AgentContext, max_request_attempts: int) -> PreparedReview:
     state = context.state
     business = state.agent_state
     root, number = context.run_dir, context.round
@@ -171,14 +171,14 @@ def _load_review_inputs(context: AgentContext, max_request_attempts: int) -> Pre
 
 
 def preflight_quality(context: AgentContext, max_request_attempts: int = 3) -> PreparedReview:
-    prepared = _load_review_inputs(context, max_request_attempts)
+    prepared = load_review_inputs(context, max_request_attempts)
     if review_directory(context).exists():
         raise QualityGateError("candidate_already_reviewed")
     return prepared
 
 
 def validate_quality_response(context: AgentContext, prepared: PreparedReview, response: ReviewResponse) -> None:
-    if _load_review_inputs(context, prepared.review.max_request_attempts) != prepared:
+    if load_review_inputs(context, prepared.review.max_request_attempts) != prepared:
         raise QualityGateError("quality_input_changed_during_review")
     if any(review_directory(context).iterdir()):
         raise QualityGateError("quality_output_changed_during_review")

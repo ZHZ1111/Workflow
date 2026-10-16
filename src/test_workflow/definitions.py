@@ -55,3 +55,13 @@ TESTING_WORKFLOW = EVALUATION_WORKFLOW.updated(name="testing_workflow")
 SUMMARY_WORKFLOW = TESTING_WORKFLOW.updated(name="testing_with_summary", nodes=(
     *TESTING_WORKFLOW.nodes, NodeDefinition(agent_id="result_summary"),
 ))
+
+QUALITY_WORKFLOW = TESTING_WORKFLOW.updated(name="quality_workflow", nodes=(
+    *TESTING_WORKFLOW.nodes, NodeDefinition(agent_id="test_quality_review", receives_from="test_execution"),
+), feedback_routes=(
+    *TESTING_WORKFLOW.feedback_routes, FeedbackRoute(sender="test_quality_review", receiver="test_generation"),
+))
+
+QUALITY_SUMMARY_WORKFLOW = QUALITY_WORKFLOW.updated(name="quality_with_summary", nodes=(
+    *QUALITY_WORKFLOW.nodes, NodeDefinition(agent_id="result_summary"),
+))

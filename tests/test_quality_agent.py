@@ -16,7 +16,7 @@ from test_workflow.agents.test_generation import TestGenerationAgent
 from test_workflow.agents.test_quality_review import TestQualityReviewAgent
 from test_workflow.config import WorkflowConfig
 from test_workflow.contracts import AgentContext, AgentResult, ExecutionAssessment, Message, MessagePayload, QualityAssessment, StatePatch
-from test_workflow.definitions import EVALUATION_WORKFLOW
+from test_workflow.definitions import QUALITY_WORKFLOW
 from test_workflow.demo.client import FixtureClient
 from test_workflow.demo.quality_client import FixtureReviewClient
 from test_workflow.quality_client import DeepSeekReviewClient, ReviewResponse
@@ -51,7 +51,8 @@ def prepare(tmp_path, *, source="calculation", fixture="calculation_complete.jso
     registry = AgentRegistry()
     registry.register("test_generation", generator)
     registry.register("test_execution", executor)
-    runner = WorkflowRunner(registry, EVALUATION_WORKFLOW)
+    registry.register("test_quality_review", TestQualityReviewAgent(approval_client()))
+    runner = WorkflowRunner(registry, QUALITY_WORKFLOW)
     gc = make_context(state, "test_generation")
     generated = generator.run(gc)
     assert generated.status == "ok", generated.error_code
@@ -72,12 +73,14 @@ def prepare(tmp_path, *, source="calculation", fixture="calculation_complete.jso
         state = runner.apply_result(ec.state, executed, tuple(item.message_id for item in generated.messages))
         number = 2
     ref = next(item for item in executed.artifacts if item.kind == "assessment")
-    # S4 will produce/register this message in the real coordinator. This S3 host
-    # fixture supplies the registered handoff after committing real tool evidence.
-    ready = Message(message_id=f"review-ready-{number}", run_id=state.run_id, round=number,
+    # Production execution now emits review_ready. For adversarial base-failure
+    # tests only, supply a host-crafted handoff and verify the S3 gate rejects it.
+    ready = next((message for message in executed.messages if message.type == "review_ready"), None)
+    if ready is None:
+        ready = Message(message_id=f"review-ready-{number}", run_id=state.run_id, round=number,
                     sender="test_execution", receiver="test_quality_review", type="review_ready",
                     payload=MessagePayload(candidate_id=ref.candidate_id, artifact=ref, reason="Ready for review"))
-    state = state.updated(messages=(*state.messages, ready))
+        state = state.updated(messages=(*state.messages, ready))
     ctx = make_context(state, "test_quality_review", (ready,), number=number)
     StateStore(ctx.run_dir).save(ctx.state)
     return ctx

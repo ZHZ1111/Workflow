@@ -31,13 +31,21 @@ Workflow 在节点开始前保存状态及 Context；返回后保存 Result，�
 
 workflow_status 描述调度是否结束，task_status 描述测试业务结论。完成调度可以是 partial、needs_review 或 failed，只有 verified latest execution + coverage_target_met 才是 completed。流程结束后不能再次 run；inspect 仅重新读取状态。
 
-每次提交候选观察后复用 select_best_candidate()：全通过优先，其次目标覆盖、覆盖是否已知、分支/行覆盖、通过数；完全同分保留较早候选。Workflow 和 AgentState 的 selected_round / best_available_round 始终同步；历史按轮次追加，只有当前未执行候选可补充一次执行观察。
+每次提交候选观察后复用 select_best_candidate()：全通过优先，其次目标覆盖、覆盖是否已知、分支/行覆盖、通过数；完全同分保留较早候选。S4 质量流程批准时选择当前获批候选，包括与旧候选同分的情形。Workflow 和 AgentState 的 selected_round / best_available_round 始终同步；历史按轮次追加，只有当前未执行候选可补充一次执行观察。
 
 summary.json 保存 selected_round、selection_reason、selected_all_passed 和 latest_all_passed。后轮失败或被门禁拒绝时，可以导出先前可用测试，但 task_status 不会因历史通过而变 completed。最终测试和 subject.py 按原字节复制到 final/，所有 rounds/ 中的测试、计划、LLM 响应和执行证据保留。没有可用候选则不创建 final/。
 
 外部请求计数与客户端调用分开。结构化模型错误报告已知尝试数时也计入 api_calls；无法取得次数时 summary.external_requests=null，并另存 known_external_requests，不能把未知量写成 0。离线请求数为 0。执行模式从 assessment 记录，注入执行器明确标 injected。
 
 report.md 和 summary.json 完成后才记录 workflow_finished；导出失败会记录 export_error 并向调用方抛出，不能宣称报告已写入。状态原子替换失败时保留最后成功快照，不承诺续跑或跨文件事务。
+
+## S4 质量调度（2026-10-16）
+
+底层可选择 QUALITY_WORKFLOW 或带尾部摘要的 QUALITY_SUMMARY_WORKFLOW，并显式开启 quality_review_enabled、注册三个节点。服务与 CLI/Web 开关尚未接入（S6）；生产生成节点的质量反馈上下文尚待 S5。S4 的第二轮验收使用受控生成节点，仍通过原候选保护门禁和真实 pytest/coverage。
+
+原执行建议通过 choose_action 校验且准备 completed 时，先消费执行节点的 review_ready 运行审查；基础未达标、缺陷复核、超时等继续原分支。approve 完成并导出本轮测试；request_review 转人工复核；request_revision 有预算且有进展时向下一轮交付唯一 quality_feedback。业务 next_action 更新为 ADD_MISSING_CASES，不提前设置 stop_reason，执行 assessment 的 FINISH 建议原样保留。
+
+质量补充与执行修复共用最多三轮候选预算。预算耗尽或规范化阻塞发现未减少时停止为 partial；候选重复也可由旧门禁在再次审查前停止。审查异常使 Workflow error，不能默认批准。审查节点在循环内执行，结束后只运行其他尾部节点，ResultSummaryNode 正常结论下只执行一次。具体提交规则、状态映射与验证见 [S4 记录](quality-review-s4.md)。
 
 ## CLI 与复现
 
