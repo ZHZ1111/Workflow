@@ -129,4 +129,10 @@ approve 强制选择当前获批候选并保留到尾部摘要及导出。候选
 
 独立门禁核验反馈、宿主 QualityAssessment、ReviewResponse、候选/规格摘要、计划、真实执行观察及落盘证据一致，再检查质量预算与无进展策略。`build_quality_revision_context()` 直接复用 vendor build_feedback_context，在同一个 TASK_DATA_JSON 数据封装中设置 task_kind=quality_extension，增加实际质量消息、审查记录、最新未解决阻塞发现、全部历史摘要、剩余预算和 protected_test_functions；保留基础 FINISH 判断作为前置证据，不调用旧 build_action_context。
 
-首轮和 execution_feedback 的旧检查与上下文不变。模型仍只生成一份完整候选，返回后复用原 stage_revision_candidate；已通过函数、断言、装饰器、映射、场景与支持代码均受保护，拒绝候选保留诊断但不交接执行。入口与完整质量统计仍属后续阶段，详见 [S5 实施记录](quality-review-s5.md)。
+首轮和 execution_feedback 的旧检查与上下文不变。模型仍只生成一份完整候选，返回后复用原 stage_revision_candidate；已通过函数、断言、装饰器、映射、场景与支持代码均受保护，拒绝候选保留诊断但不交接执行。详见 [S5 实施记录](quality-review-s5.md)。
+
+## 质量审查 S6：应用入口（2026-10-17）
+
+WorkflowConfig 继续使用 S1 的默认 false 严格布尔字段。共享 run_workflow 新增可注入 review_client：启用时必须提供有效客户端并注册 test_quality_review，关闭时拒绝多余客户端；按质量/摘要开关选择四种定义，错误配置在创建任务目录前失败。
+
+CLI 新增 --with-quality-review 和可重复 --review-fixture，后者仅限显式离线质量模式。真实 CLI 与 Web 按同一 AppConfig 创建独立 DeepSeekReviewClient。Web /api/runs 新增 quality_review_enabled，缺省 false，非布尔值拒绝为 400，不创建任务；bootstrap 和表单均默认关闭，Web 不开放离线 fixture 模式。审查资源沿用既有 package-data，并验证 wheel 安装后能读取与运行。完整质量汇总和运行图仍留待 S7，见 [S6 实施记录](quality-review-s6.md)。

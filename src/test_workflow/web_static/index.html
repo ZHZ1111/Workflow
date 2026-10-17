@@ -7,6 +7,8 @@
 <section class="panel input"><h2>创建任务</h2>
 <form id="run-form">
 <div class="settings"><label for="max-rounds">最多轮次<input id="max-rounds" type="number" min="1" max="3" value="3" required></label><label for="timeout">每轮执行超时（秒）<input id="timeout" type="number" min="1" max="300" value="60" required></label></div>
+<label class="quality-option" for="quality-review"><input id="quality-review" type="checkbox" aria-describedby="quality-review-hint">启用质量审查</label>
+<p id="quality-review-hint" class="muted">测试与覆盖达标后检查规格场景，可能追加模型请求与测试轮次。</p>
 <div class="editors"><label>Python 源码<textarea id="source" spellcheck="false" required></textarea></label><label>行为规格<textarea id="spec" required></textarea></label></div>
 <p class="muted">DeepSeek 将接收源码、规格和反馈；密钥从服务器本地配置读取。</p>
 <div class="actions"><button id="submit" type="submit" disabled>运行工作流</button><span id="request-error" role="alert"></span></div>
@@ -32,7 +34,7 @@
 <div class="section-heading"><h3>Agent 交接</h3><span id="handoff-count" class="muted">暂无消息</span></div><div id="handoffs" class="handoffs"><p class="muted">生成候选和执行反馈会显示在这里。</p></div>
 </section>
 <section class="panel" aria-live="polite"><div class="section-heading"><h2>任务结果</h2><span id="job-status" class="badge">等待开始</span></div><p id="output-dir" class="muted">运行后显示保存位置、逐轮结论和可下载产物。</p>
-<div class="metrics"><div><span>业务结论</span><strong id="task-status">—</strong></div><div><span>停止原因</span><strong id="stop-reason">—</strong></div><div><span>选中轮次</span><strong id="selected-round">—</strong></div><div><span>模型请求 / pytest</span><strong id="calls">—</strong></div></div>
+<div class="metrics"><div><span>业务结论</span><strong id="task-status">—</strong></div><div><span>停止原因</span><strong id="stop-reason">—</strong></div><div><span>选中轮次</span><strong id="selected-round">—</strong></div><div><span>生成请求 / pytest</span><strong id="calls">—</strong></div></div>
 <div id="rounds" class="rounds"></div><nav id="downloads" class="downloads" aria-label="下载产物"></nav>
 <details open><summary>工作流事件</summary><pre id="events">暂无事件</pre></details>
 <details><summary>Agent 反馈消息</summary><pre id="messages">暂无消息</pre></details>

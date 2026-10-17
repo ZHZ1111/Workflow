@@ -1,10 +1,10 @@
 # 多 Agent 测试 Workflow
 
-为单文件 Python 源码生成并验证 pytest 测试。生成 Agent 负责规划与修订，执行 Agent 负责 pytest、覆盖率和评估，Workflow 负责交接、最多三轮反馈、历史候选选择和报告导出。
+为单文件 Python 源码生成并验证 pytest 测试。生成 Agent 负责规划与修订，执行 Agent 负责 pytest、覆盖率和评估，可选质量审查 Agent 在基础达标后检查规格场景遗漏。Workflow 负责交接、最多三轮反馈、历史候选选择和报告导出。
 
 **CLI 和 Web 共用同一工作流服务。** Web 仅使用 DeepSeek，用户自行输入源码与行为规格；CLI 另外保留离线固定候选，仍真实执行 pytest/coverage。工程初验结果和修复记录见 [工程验收](evaluation/verification.md)。
 
-质量审查 Agent 的 S0–S5 已完成契约、完成门禁、独立客户端、审查节点、Workflow 路由及生产生成节点的质量补充上下文，配置默认关闭。固定客户端配合三个生产节点可完成质量反馈、补充测试、真实执行及再次审查；共享服务和 CLI/Web 开关留待 S6 接入，见 [实施步骤](docs/quality-review-agent-plan.md)、[S5 记录](docs/quality-review-s5.md)。
+质量审查 Agent 的 S0–S6 已完成契约、客户端、审查节点、质量反馈生成及共享服务/CLI/Web 接入，默认关闭。CLI 使用 `--with-quality-review`，Web 勾选“启用质量审查”，可与摘要一起运行；详细质量报告、运行图和调用统计仍待 S7，见 [实施步骤](docs/quality-review-agent-plan.md)、[S6 记录](docs/quality-review-s6.md)。
 
 ## 安装
 
@@ -60,6 +60,14 @@ Copy-Item .env.example .env
 | `--demo` | 固定候选生成 + 真实测试执行 |
 | `--fixture 文件.json` | 离线候选，可按轮次重复指定 |
 | `--with-summary` | 注册无模型摘要扩展 |
+| `--with-quality-review` | 基础测试和覆盖达标后审查规格场景，可与摘要组合 |
+| `--review-fixture 文件.json` | 离线审查固定响应，按实际送审顺序重复提供；要求 `--demo --with-quality-review` |
+
+启用真实质量审查会使用当前 DeepSeek 配置创建独立客户端，可能增加模型请求。离线必须显式提供 ReviewDecision fixture，固定响应不代表真实模型判断；未提供或耗尽时明确失败，不默认批准。例如：
+
+```powershell
+.\.venv\Scripts\python.exe -m test_workflow run --demo --source examples/calculation.py --spec examples/calculation.md --with-quality-review --review-fixture src/test_workflow/demo/data/quality_approve.json --with-summary
+```
 
 默认输出：`outputs/workflow/<run_id>/`。退出码 0 表示 `completed`；1 表示 `partial`、`needs_review`、`failed` 或节点错误；2 表示输入、配置、参数或持久化错误。`demo` 子命令保留为历史假节点示例，完整离线运行使用 `run --demo`。
 
@@ -77,6 +85,8 @@ Copy-Item .env.example .env
 
 默认读取当前目录的 `.env`，可用 `--project-root` 指定输出项目目录、`--env-file` 指定配置。输出保存在 `outputs/web/<job_id>/`，输入保存在 `outputs/web-inputs/<job_id>/`。仅监听本机，一次执行一个任务，拒绝跨站提交。刷新页面可继续查看当前任务；服务重启后用 CLI `inspect` 读取持久化产物。
 
+质量审查开关默认不勾选，提交后仅在基础完成时调用第三个 Agent；Web 继续仅使用 DeepSeek，不提供离线 fixture 入口。审查事件、原始消息和状态下载已包含真实记录；完整质量运行图、统计与报告在 S7 完善。
+
 旧 `testgen-agent-web` 仍运行 vendor 的单 Agent；本项目使用 `test-workflow web` 或 `test-workflow-web`。
 
 ## 产物与检查
@@ -93,7 +103,7 @@ Copy-Item .env.example .env
 
 ```powershell
 # 前端运行状态投影回归（开发检查需要 Node.js）
-node --test tests/web/workflow-view.test.cjs
+node --test tests/web/*.test.cjs
 # 全量 Workflow + vendor 回归
 .\.venv\Scripts\python.exe -m pytest tests vendor/agentdev/tests -q
 # CLI 正常、反馈、缺陷复核：三个离线任务
@@ -102,6 +112,8 @@ node --test tests/web/workflow-view.test.cjs
 .\.venv\Scripts\python.exe scripts/verify_workflow.py --real --env-file .env
 # 新环境、wheel 安装、CLI 两轮反馈与 Web 注入模型响应的两轮验证
 .\.venv\Scripts\python.exe scripts/verify_install.py
+# S6：离线构建 wheel、隔离 --target 安装、审查资源与安装后质量 CLI（复用当前锁定依赖）
+.\.venv\Scripts\python.exe scripts/verify_quality_install.py
 ```
 
 每次验收保存新的 `outputs/verification/` 或 `outputs/install-verification/` 目录。可用 `--real --skip-offline --interfaces web --samples calculation` 只复验指定案例。GitHub Actions 配置 Windows/Linux 离线回归，远端是否成功以实际运行记录为准。
@@ -109,7 +121,7 @@ node --test tests/web/workflow-view.test.cjs
 不提交 `.env`、虚拟环境、缓存、构建目录或原始运行输出。删除历史重复 pytest 文本汇总，保留 JUnit、结构化索引、异常初验日志和协议样例。旧阶段脚本可重建证据。vendor 原始哈希保留在 `evaluation/reuse_manifest.json`，后续补丁独立记录在 `evaluation/vendor_patches.json`。
 
 ```text
-src/test_workflow/   协议、两个 Agent、编排、共享服务、CLI、Web、报告
+src/test_workflow/   协议、生成/执行/质量审查 Agent、编排、共享服务、CLI、Web、报告
 tests/              Workflow 回归与 HTTP 集成验证
 vendor/agentdev/     本地依赖、原测试与来源文档
 examples/           源码/规格、离线候选、协议样例

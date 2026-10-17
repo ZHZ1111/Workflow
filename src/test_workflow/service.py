@@ -6,9 +6,12 @@ from testgen_agent.models import GeneratedTests
 
 from .agents.test_execution import TestExecutionAgent
 from .agents.test_generation import TestGenerationAgent
+from .agents.test_quality_review import TestQualityReviewAgent
 from .config import WorkflowConfig
-from .definitions import SUMMARY_WORKFLOW, TESTING_WORKFLOW
+from .definitions import QUALITY_SUMMARY_WORKFLOW, QUALITY_WORKFLOW, SUMMARY_WORKFLOW, TESTING_WORKFLOW
 from .demo.client import FixtureClient
+from .demo.quality_client import FixtureReviewClient
+from .quality_client import ReviewClient, parse_review_decision
 from .nodes.result_summary import ResultSummaryNode
 from .registry import AgentRegistry
 from .state import WorkflowState
@@ -38,14 +41,32 @@ def fixture_client(sample: str, fixtures: tuple[Path, ...] = ()) -> FixtureClien
     return FixtureClient(paths)
 
 
+def fixture_review_client(fixtures: tuple[Path, ...]) -> FixtureReviewClient:
+    if not fixtures:
+        raise ValueError("offline quality review requires explicit review fixtures")
+    for path in fixtures:
+        parse_review_decision(path.read_text(encoding="utf-8"))
+    return FixtureReviewClient(fixtures)
+
+
 def run_workflow(*, source: Path, specification: Path, output: Path,
                  config: WorkflowConfig, client, exact_output: bool = True,
-                 with_summary: bool = False) -> WorkflowState:
+                 with_summary: bool = False, review_client: ReviewClient | None = None) -> WorkflowState:
+    if config.quality_review_enabled and review_client is None:
+        raise ValueError("quality review is enabled but review_client is missing")
+    if not config.quality_review_enabled and review_client is not None:
+        raise ValueError("review_client requires quality_review_enabled")
     registry = AgentRegistry()
     registry.register("test_generation", TestGenerationAgent(client, client_mode=config.mode))
     registry.register("test_execution", TestExecutionAgent())
+    if config.quality_review_enabled:
+        registry.register("test_quality_review", TestQualityReviewAgent(review_client))
     if with_summary:
         registry.register("result_summary", ResultSummaryNode())
     state = create_run(source=source, specification=specification, output=output,
                        config=config, exact_output=exact_output)
-    return WorkflowRunner(registry, SUMMARY_WORKFLOW if with_summary else TESTING_WORKFLOW).run(state)
+    if config.quality_review_enabled:
+        definition = QUALITY_SUMMARY_WORKFLOW if with_summary else QUALITY_WORKFLOW
+    else:
+        definition = SUMMARY_WORKFLOW if with_summary else TESTING_WORKFLOW
+    return WorkflowRunner(registry, definition).run(state)

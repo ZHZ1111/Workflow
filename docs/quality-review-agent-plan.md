@@ -1,7 +1,7 @@
 # 增加质量审查 Agent：详细实施步骤
 
 > 编写日期：2026-10-16。
-> 编写时基于本地提交 `97fde32` 的源码结构。2026-10-16 从实际提交 `b2920aabce408a64841f1cd3eabe97d4c3ea8c76` 开始实施，S0–S5 已完成，见 [S0–S1 记录](quality-review-s0-s1.md)、[S2 记录](quality-review-s2.md)、[S3 记录](quality-review-s3.md)、[S4 记录](quality-review-s4.md)、[S5 记录](quality-review-s5.md)；S6–S9 仍为待实现计划。
+> 编写时基于本地提交 `97fde32` 的源码结构。2026-10-16 从实际提交 `b2920aabce408a64841f1cd3eabe97d4c3ea8c76` 开始实施，截至 2026-10-17，S0–S6 已完成，见 [S0–S1 记录](quality-review-s0-s1.md)、[S2 记录](quality-review-s2.md)、[S3 记录](quality-review-s3.md)、[S4 记录](quality-review-s4.md)、[S5 记录](quality-review-s5.md)、[S6 记录](quality-review-s6.md)；S7–S9 仍为待实现计划。
 > 本次范围：在现有测试生成 Agent、测试执行 Agent 之间的协作基础上，增加一个能提出质量反馈的审查 Agent，形成三 Agent 闭环。
 > 输入继续沿用“单文件 Python 源码 + 非空行为规格”；保留现有候选最多三轮的限制。本次不包含变异测试、属性测试、多文件支持、自动源码修复、通用 DAG 或断点恢复。
 
@@ -410,25 +410,27 @@ export_results()
 
 ### S6：接入服务、CLI 与 Web — 1h
 
-- [ ] 在 WorkflowConfig 增加 `quality_review_enabled: bool = False`，按严格 bool 校验。
-- [ ] run_workflow 增加可注入的 review_client；启用时注册审查节点并选择相应定义。
-- [ ] 启用但缺少审查客户端/配置时明确报错，不悄悄退回双 Agent。
-- [ ] CLI 增加 `--with-quality-review`，保留 `--with-summary` 可组合使用。
-- [ ] CLI 离线模式增加受控审查 fixture；真实模式使用当前 AppConfig 创建独立 ReviewClient。
-- [ ] Web 增加“启用质量审查”开关，传递到共享服务；页面、API、后台配置与实际注册必须一致。
-- [ ] Web 原有仅 DeepSeek 入口保持一致；离线客户端用于 CLI 和测试注入，不额外开放新的 Web 模式。
-- [ ] 若审查 fixture 在安装后使用，将文件加入 package-data，验证 wheel 中可读取。
+- [x] 在 WorkflowConfig 增加 `quality_review_enabled: bool = False`，按严格 bool 校验（复用 S1 实现）。
+- [x] run_workflow 增加可注入的 review_client；启用时注册审查节点并选择相应定义。
+- [x] 启用但缺少审查客户端/配置时明确报错，不悄悄退回双 Agent。
+- [x] CLI 增加 `--with-quality-review`，保留 `--with-summary` 可组合使用。
+- [x] CLI 离线模式增加受控审查 fixture；真实模式使用当前 AppConfig 创建独立 ReviewClient。
+- [x] Web 增加“启用质量审查”开关，传递到共享服务；页面、API、后台配置与实际注册必须一致。
+- [x] Web 原有仅 DeepSeek 入口保持一致；离线客户端用于 CLI 和测试注入，不额外开放新的 Web 模式。
+- [x] 若审查 fixture 在安装后使用，将文件加入 package-data，验证 wheel 中可读取（既有 data/*.json 覆盖审查资源，已验证安装后读取）。
 
-以下为目标命令，必须等实现完成后才可运行：
+以下正式命令已支持，需要有效 DeepSeek 配置；本阶段验收使用固定客户端，不发起真实模型请求：
 
 ```powershell
 .\.venv\Scripts\python.exe -m test_workflow run `
-  --source examples/quality_boundary.py `
-  --spec examples/quality_boundary.md `
+  --source examples/calculation.py `
+  --spec examples/calculation.md `
   --with-quality-review --with-summary
 ```
 
 **验收：**关闭开关仍为两个生产 Agent；开启后出现第三节点，两个入口使用同一条质量流程。
+
+S6 的入口、失败处理、严格布尔字段和 wheel 验证见 [S6 实施记录](quality-review-s6.md)。完整质量报告及图仍留待 S7。
 
 ### S7：报告、流程图与调用统计 — 1h
 

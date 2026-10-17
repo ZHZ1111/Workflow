@@ -15,7 +15,8 @@ from .reporting import inspect_summary
 from .registry import AgentRegistry
 from .state import StateStore
 from .workflow import WorkflowRunner, create_run
-from .service import fixture_client, run_workflow
+from .service import fixture_client, fixture_review_client, run_workflow
+from .quality_client import DeepSeekReviewClient
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -36,6 +37,8 @@ def main(argv: list[str] | None = None) -> int:
     run.add_argument("--fixture", type=Path, action="append", help="Offline JSON response, repeat in round order")
     run.add_argument("--env-file", type=Path, help="Explicit model settings file for real mode")
     run.add_argument("--with-summary", action="store_true", help="Register a model-free summary extension before export")
+    run.add_argument("--with-quality-review", action="store_true", help="Review passing tests for specification gaps before completion")
+    run.add_argument("--review-fixture", type=Path, action="append", help="Explicit offline ReviewDecision JSON, repeat in review order; requires --demo --with-quality-review")
     web = commands.add_parser("web", help="Start the local workflow Web workbench")
     web.add_argument("--host", choices=("127.0.0.1", "localhost"), default="127.0.0.1")
     web.add_argument("--port", type=int, default=8765)
@@ -54,24 +57,33 @@ def main(argv: list[str] | None = None) -> int:
             print(json.dumps(inspect_summary(state), ensure_ascii=False, indent=2) if args.summary else state.canonical_json(indent=2))
             return 0
         if args.command == "run":
+            if args.review_fixture and (not args.demo or not args.with_quality_review):
+                print("--review-fixture requires --demo and --with-quality-review.")
+                return 2
+            if args.demo and args.with_quality_review and not args.review_fixture:
+                print("Offline quality review requires explicit --review-fixture JSON responses in review order.")
+                return 2
             if args.fixture and not args.demo:
                 raise ValueError("fixtures require offline demo mode")
             if args.demo and args.env_file:
                 raise ValueError("offline mode does not use environment files")
             if args.demo:
-                config = WorkflowConfig(mode="offline", max_rounds=args.max_rounds if args.max_rounds is not None else 3,
+                config = WorkflowConfig(mode="offline", quality_review_enabled=args.with_quality_review,
+                                        max_rounds=args.max_rounds if args.max_rounds is not None else 3,
                                         execution_timeout_seconds=args.timeout if args.timeout is not None else 60)
                 client = fixture_client(args.source.stem, tuple(args.fixture or ()))
+                review_client = fixture_review_client(tuple(args.review_fixture)) if args.with_quality_review else None
             else:
                 model_config = load_config(env_file=args.env_file)
-                config = WorkflowConfig(mode="real", model=ModelInfo.from_config(model_config),
+                config = WorkflowConfig(mode="real", model=ModelInfo.from_config(model_config), quality_review_enabled=args.with_quality_review,
                                         max_rounds=args.max_rounds if args.max_rounds is not None else model_config.max_rounds,
                                         execution_timeout_seconds=args.timeout if args.timeout is not None else model_config.execution_timeout_seconds)
                 client = DeepSeekClient(model_config)
+                review_client = DeepSeekReviewClient(model_config) if args.with_quality_review else None
             state = run_workflow(source=args.source, specification=args.spec,
                                  output=args.output if args.output is not None else Path("outputs/workflow"),
                                  config=config, client=client, exact_output=args.output is not None,
-                                 with_summary=args.with_summary)
+                                 with_summary=args.with_summary, review_client=review_client)
             print(f"run_id={state.run_id} mode={state.config.mode} workflow_status={state.workflow_status} task_status={state.task_status}")
             print(f"stop_reason={state.stop_reason} selected_round={state.selected_round}")
             print(f"report={state.run_dir / 'report.md'}")

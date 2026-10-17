@@ -41,7 +41,7 @@ report.md 和 summary.json 完成后才记录 workflow_finished；导出失败�
 
 ## S4 质量调度（2026-10-16）
 
-底层可选择 QUALITY_WORKFLOW 或带尾部摘要的 QUALITY_SUMMARY_WORKFLOW，并显式开启 quality_review_enabled、注册三个节点。服务与 CLI/Web 开关尚未接入（S6）。S4 的第二轮验收使用受控生成节点；S5 已让生产生成节点直接接收 quality_feedback 并构造 quality_extension 上下文，三个生产节点可配合固定客户端完成第二/三轮闭环，仍通过原候选保护门禁和真实 pytest/coverage。
+底层可选择 QUALITY_WORKFLOW 或带尾部摘要的 QUALITY_SUMMARY_WORKFLOW，并显式开启 quality_review_enabled、注册三个节点。S6 已通过共享服务统一注册与选择定义，CLI 使用 --with-quality-review，Web 使用默认关闭的复选框。S4 的第二轮验收使用受控生成节点；S5 已让生产生成节点直接接收 quality_feedback 并构造 quality_extension 上下文，三个生产节点可配合固定客户端完成第二/三轮闭环，仍通过原候选保护门禁和真实 pytest/coverage。
 
 原执行建议通过 choose_action 校验且准备 completed 时，先消费执行节点的 review_ready 运行审查；基础未达标、缺陷复核、超时等继续原分支。approve 完成并导出本轮测试；request_review 转人工复核；request_revision 有预算且有进展时向下一轮交付唯一 quality_feedback。业务 next_action 更新为 ADD_MISSING_CASES，不提前设置 stop_reason，执行 assessment 的 FINISH 建议原样保留。
 
@@ -50,6 +50,8 @@ report.md 和 summary.json 完成后才记录 workflow_finished；导出失败�
 ## CLI 与复现
 
 必需输入为 --source、--spec；可选 --output、--max-rounds、--timeout、--demo、可重复 --fixture 和真实模式 --env-file。离线模式拒绝 --env-file，真实模式拒绝 --fixture；离线内置 calculation、validation、discount 候选，其他输入须指定 JSON。
+
+S6 增加 --with-quality-review，与 --with-summary 可组合。离线质量审查必须显式重复提供 --review-fixture，按实际送审次数消费；真实 CLI/Web 使用同一 AppConfig 创建独立 DeepSeekReviewClient。共享 run_workflow 要求启用时提供 review_client，关闭时不接受多余 review_client。Web 的 quality_review_enabled 只接受 JSON 布尔值，默认 false，始终保持真实模式。具体入口及安装验证见 [S6 记录](quality-review-s6.md)。
 
 退出码 0 为 completed，1 为其他业务结论或节点错误，2 为输入/配置/产物持久化错误。`scripts/p4_baseline.py` 通过正式 CLI 运行确定案例再执行回归；--skip-tests 只复现案例，--tests-only 在已有 CLI 索引上更新回归证据。阶段结果见 [../evaluation/p4.md](../evaluation/p4.md)。
 

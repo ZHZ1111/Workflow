@@ -26,14 +26,16 @@ flowchart LR
 
 `/api/runs/<id>` 返回同一任务的 `state.json`、`events.jsonl`、`messages.jsonl` 和最终 `summary.json`。`web_static/workflow-view.js` 对这些数据做只读状态投影；事件用于确认节点实际启动/结束，消费证据来自状态中的 `consumed_message_ids` 或 `message_consumed` 事件。界面没有另设调度状态，不推算模型进度百分比。
 
-源码、规格和消息内容通过文本节点呈现，不作为页面命令执行。固定图对应当前 Web 的两个核心 Agent 与 ResultSummaryNode，没有拖拽编辑、任意 DAG 或并行调度能力。
+源码、规格和消息内容通过文本节点呈现，不作为页面命令执行。固定图目前投影默认的两个核心 Agent 与 ResultSummaryNode，没有拖拽编辑、任意 DAG 或并行调度能力。
+
+2026-10-17 的 S6 已增加默认关闭的“启用质量审查”复选框，页面将严格布尔字段 quality_review_enabled 传给同一共享服务，实际运行第三个审查节点。审查事件、类型化送审/质量反馈消息和原始状态可读取；完整审查节点图、质量反馈边及请求/用量汇总仍待 S7，不将现有双 Agent 图视为完整质量流程。入口与验证见 [S6 记录](quality-review-s6.md)。
 
 同一服务期间刷新页面，通过 sessionStorage 中的任务 ID 恢复任务并继续轮询；源码与规格输入框仍为空。服务重启后内存任务列表不会自动恢复，历史产物仍由 CLI `inspect` 读取。该限制没有因新增图而改变。
 
 ## 验证
 
 ```powershell
-node --test tests/web/workflow-view.test.cjs
+node --test tests/web/*.test.cjs
 .\.venv\Scripts\python.exe -m pytest tests/test_workflow_web.py tests/test_cli.py -q
 ```
 

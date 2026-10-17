@@ -77,7 +77,8 @@ function renderFlow(job) {
     title.textContent = `${WorkflowView.nodeNames[message.sender] || message.sender} → ${WorkflowView.nodeNames[message.receiver] || message.receiver}`;
     const status = document.createElement('span'); status.className = 'badge'; status.textContent = message.consumed ? '已消费' : '待消费';
     const detail = document.createElement('p'); detail.className = 'muted';
-    detail.textContent = `第 ${message.round} 轮 · ${message.type === 'execution_feedback' ? '执行反馈' : '候选交接'} · ${message.payload.candidate_id}\n${message.payload.reason || ''}`;
+    const messageType = {execution_feedback:'执行反馈',quality_feedback:'质量反馈',review_ready:'送审交接',candidate_ready:'候选交接'}[message.type] || message.type;
+    detail.textContent = `第 ${message.round} 轮 · ${messageType} · ${message.payload.candidate_id}\n${message.payload.reason || ''}`;
     row.append(title,status,detail); return row;
   }));
 }
@@ -105,7 +106,8 @@ $('run-form').addEventListener('submit', async event => {
   $('request-error').textContent = '';
   try {
     const payload = {source:$('source').value, spec:$('spec').value,
-      max_rounds:Number($('max-rounds').value), timeout:Number($('timeout').value)};
+      max_rounds:Number($('max-rounds').value), timeout:Number($('timeout').value),
+      quality_review_enabled:$('quality-review').checked};
     const job = await request('/api/runs', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
     activeJob = job.id;
     render({...job,events:[],messages:[],outputDir:'正在创建任务目录…'});
@@ -123,6 +125,7 @@ async function init() {
     if (!modelReady) $('request-error').textContent = '请在服务器 .env 中配置 DeepSeek 模型与密钥后刷新页面。';
     $('max-rounds').value = config.max_rounds;
     $('timeout').value = config.timeout;
+    $('quality-review').checked = config.quality_review_enabled ?? false;
     const previous = sessionStorage.getItem('workflowJob');
     if (previous) {
       try {

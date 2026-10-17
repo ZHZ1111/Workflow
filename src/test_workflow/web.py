@@ -15,6 +15,7 @@ from testgen_agent.models import ModelInfo
 
 from .config import WorkflowConfig
 from .service import run_workflow
+from .quality_client import DeepSeekReviewClient
 
 STATIC_ROOT = Path(__file__).with_name("web_static")
 MAX_REQUEST_BYTES = 512 * 1024
@@ -33,7 +34,8 @@ def validate_payload(value) -> dict:
     if value.get("mode", "real") != "real":
         raise ValueError("Web 工作台只使用 DeepSeek。")
     config = WorkflowConfig(mode="real", max_rounds=value.get("max_rounds", 3),
-                            execution_timeout_seconds=value.get("timeout", 60))
+                            execution_timeout_seconds=value.get("timeout", 60),
+                            quality_review_enabled=value.get("quality_review_enabled", False))
     return {"source": source, "spec": spec, "config": config}
 
 
@@ -109,9 +111,10 @@ def _run_job(store: JobStore, identity: str, payload: dict):
         model_config = load_config(env_file=store.env_file)
         config = config.updated(model=ModelInfo.from_config(model_config))
         client = DeepSeekClient(model_config)
+        review_client = DeepSeekReviewClient(model_config) if config.quality_review_enabled else None
         store.update(identity, status="running")
         state = run_workflow(source=source, specification=spec, output=job.output,
-                             config=config, client=client, with_summary=True)
+                             config=config, client=client, with_summary=True, review_client=review_client)
         store.update(identity, status="finished" if state.workflow_status == "finished" else "failed",
                      error=state.error_code)
     except Exception:
@@ -175,6 +178,7 @@ class WebHandler(BaseHTTPRequestHandler):
                             "timeout": config.execution_timeout_seconds}
             except ValueError:
                 settings = {"ready": False, "model": None, "max_rounds": 3, "timeout": 60}
+            settings["quality_review_enabled"] = False
             self._json({"config": settings})
             return
         parts = path.strip("/").split("/")

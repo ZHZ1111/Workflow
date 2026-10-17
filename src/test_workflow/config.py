@@ -1,4 +1,4 @@
-"""Public workflow settings. Credentials belong only to future model adapters."""
+"""Public workflow settings. Credentials stay in model-client configuration."""
 
 from typing import Annotated, Literal
 

@@ -78,4 +78,4 @@ P2 只完成生成能力的离线与本地 HTTP 模拟验证。实际执行/归�
 
 质量分支不调用 build_action_context，旧执行反馈的动作一致性校验、上下文与首轮行为保留。生成客户端仍每节点只调用一次；返回的完整候选仍由 stage_revision_candidate 验证并保存，自动执行和消息消费归外层 Workflow。删除或弱化已通过测试、修改其装饰器/映射/场景/支持代码的候选不发出 candidate_ready。
 
-S5 的固定客户端验收已接入真实 TestGenerationAgent、TestExecutionAgent 和 TestQualityReviewAgent，而非 S4 的受控生成节点；共享服务、CLI/Web 开关尚待 S6。实现及验证见 [S5 记录](quality-review-s5.md)。
+S5 的固定客户端验收已接入真实 TestGenerationAgent、TestExecutionAgent 和 TestQualityReviewAgent，而非 S4 的受控生成节点。S5 当时未开放应用入口，随后 S6 已接入共享服务、CLI/Web 开关；实现及验证见 [S5 记录](quality-review-s5.md)、[S6 记录](quality-review-s6.md)。
