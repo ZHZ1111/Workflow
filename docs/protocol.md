@@ -135,4 +135,10 @@ approve 强制选择当前获批候选并保留到尾部摘要及导出。候选
 
 WorkflowConfig 继续使用 S1 的默认 false 严格布尔字段。共享 run_workflow 新增可注入 review_client：启用时必须提供有效客户端并注册 test_quality_review，关闭时拒绝多余客户端；按质量/摘要开关选择四种定义，错误配置在创建任务目录前失败。
 
-CLI 新增 --with-quality-review 和可重复 --review-fixture，后者仅限显式离线质量模式。真实 CLI 与 Web 按同一 AppConfig 创建独立 DeepSeekReviewClient。Web /api/runs 新增 quality_review_enabled，缺省 false，非布尔值拒绝为 400，不创建任务；bootstrap 和表单均默认关闭，Web 不开放离线 fixture 模式。审查资源沿用既有 package-data，并验证 wheel 安装后能读取与运行。完整质量汇总和运行图仍留待 S7，见 [S6 实施记录](quality-review-s6.md)。
+CLI 新增 --with-quality-review 和可重复 --review-fixture，后者仅限显式离线质量模式。真实 CLI 与 Web 按同一 AppConfig 创建独立 DeepSeekReviewClient。Web /api/runs 新增 quality_review_enabled，缺省 false，非布尔值拒绝为 400，不创建任务；bootstrap 和表单均默认关闭，Web 不开放离线 fixture 模式。审查资源沿用既有 package-data，并验证 wheel 安装后能读取与运行。S6 当时的实现与边界见 [S6 实施记录](quality-review-s6.md)；完整质量汇总和运行图随后在 S7 完成。
+
+## 质量审查 S7：只读展示与导出（2026-10-17）
+
+summary.json 导出版本从 1.1 升为 1.2，增加逐轮质量状态/证据、已提交反馈消费位置、未解决发现来源和选中/最新/导出候选批准字段。external_requests 与 total_external_requests 同为生成加审查总量；根级 token_usage 同样为总量，model_usage 提供 generation/review/total 分项及 known_* 下界。缺失遥测保留 null，不改写业务 AgentState 的生成统计。WorkflowState、Result 和消息模型版本不变。
+
+报告与 Web 图读取实际节点/事件/已提交消息，明确 disabled/skipped 原因，下一轮不得沿用上一轮批准。Web 队列响应与任务快照增加默认 false 的 quality_review_enabled，来源为已校验请求配置；该字段表示配置而非调用证据。inspect_summary 保持只读，新增质量输出、批准对象、节点遥测和唯一反馈消费 Context 核验，旧任务继续缺省读取。详见 [S7 记录](quality-review-s7.md) 与 [报告字段](reporting.md)。

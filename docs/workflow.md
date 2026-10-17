@@ -35,7 +35,7 @@ workflow_status 描述调度是否结束，task_status 描述测试业务结论�
 
 summary.json 保存 selected_round、selection_reason、selected_all_passed 和 latest_all_passed。后轮失败或被门禁拒绝时，可以导出先前可用测试，但 task_status 不会因历史通过而变 completed。最终测试和 subject.py 按原字节复制到 final/，所有 rounds/ 中的测试、计划、LLM 响应和执行证据保留。没有可用候选则不创建 final/。
 
-外部请求计数与客户端调用分开。结构化模型错误报告已知尝试数时也计入 api_calls；无法取得次数时 summary.external_requests=null，并另存 known_external_requests，不能把未知量写成 0。离线请求数为 0。执行模式从 assessment 记录，注入执行器明确标 injected。
+外部请求计数与客户端调用分开。结构化模型错误报告已知尝试数时也计入 api_calls；无法取得次数时 summary.external_requests=null，并另存 known_external_requests，不能把未知量写成 0。S7 摘要 1.2 将该字段改为生成加审查总量，model_usage 保留分项；业务 api_calls 仍只累计生成请求。离线请求数为 0。执行模式从 assessment 记录，注入执行器明确标 injected。
 
 report.md 和 summary.json 完成后才记录 workflow_finished；导出失败会记录 export_error 并向调用方抛出，不能宣称报告已写入。状态原子替换失败时保留最后成功快照，不承诺续跑或跨文件事务。
 
@@ -60,3 +60,10 @@ P5 的 `scripts/p5_acceptance.py` 进一步保存统一系统矩阵和真实模�
 流程定义可以追加无消息依赖的尾部节点：实现同步接口、注册稳定标识并追加 NodeDefinition 即可。P6 已交付 ResultSummaryNode 和 --with-summary CLI，记录导出前业务结论并返回摘要产物，不修改主循环的业务路由。实现步骤见 [extensions.md](extensions.md)。
 
 P6 显式记录 node_output_saved、message_consumed 和 workflow_stopped。消息事件关联候选与 assessment 路径，消费事件轮次是接收轮次；无消息任务也保留空 messages.jsonl。报告包含逐轮计数、实测覆盖可用性、节点职责/调用、消息、路由和原始文件链接；inspect --summary 校验证据并只读重建摘要，不改写旧记录。完整字段和持久化边界见 [reporting.md](reporting.md)。
+
+
+## S7 报告与运行投影（2026-10-17）
+
+报告和页面区分基础执行结论与质量批准，按轮次展示规格/测试引用、发现、反馈下一轮消费及选中/最新/实际导出候选批准情况。事件驱动图增加审查节点和独立质量反馈边；未启用或基础不满足送审条件时显示实际原因，缺少当前批准不显示绿色完成。队列尚无状态文件时，Web 使用接受配置中的严格布尔开关显示等待状态。
+
+统计按实际节点遥测区分 generation/review/total；缺失值保留未知并给出已知小计，不把审查请求混入业务生成计数。inspect 只读核验审查记录、批准候选和反馈消费上下文；无调度或生成策略改变。字段、兼容语义与验证见 [S7 记录](quality-review-s7.md)。

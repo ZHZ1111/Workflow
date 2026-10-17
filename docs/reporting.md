@@ -1,6 +1,6 @@
 # 运行轨迹与报告
 
-版本：P6 / 2026-10-11。正式 `run` 无论正常结束还是节点错误，都尽量保存 `summary.json` 和 `report.md`；写入失败向调用方报错，不能保证失败磁盘上仍能保存新状态。
+版本：S7 / 2026-10-17（保留 P6 报告机制）。正式 `run` 无论正常结束还是节点错误，都尽量保存 `summary.json` 和 `report.md`；写入失败向调用方报错，不能保证失败磁盘上仍能保存新状态。
 
 ## 从结论追溯证据
 
@@ -8,7 +8,7 @@
 
 | 需要确认的事实 | 记录位置 |
 |---|---|
-| 两个 Agent 的职责和实际调用次数 | 报告“协作与节点调用”；摘要 `agents` / `node_invocations` |
+| 生成、执行、审查 Agent 的职责和实际调用次数 | 报告“协作与节点调用”；摘要 `agents` / `node_invocations` |
 | 某次节点收到哪些消息及历史 | `node_results/NN/<node>/context.json` |
 | 节点返回了什么，是否提交 | 同目录 `result.json`；`node_finished` / `node_failed` |
 | 某轮 pytest 实际执行了多少 | `round_details[].execution`；原始 execution.json / pytest.xml / pytest_result.json |
@@ -17,9 +17,9 @@
 | 编排采用哪个建议及为何停止 | `route_selected`、`workflow_stopped` 或 `workflow_error` |
 | 最终导出的候选 | `selected_round`、`final/test_subject.py` 摘要及原轮次测试文件 |
 
-`summary.json` 的导出契约版本为 1.1，保留 P4 已有键，增加逐轮实测、节点、消息、路由、耗时、目标阈值和已知用量。它是报告用 JSON，不是可送回 WorkflowState 校验的状态模型。原始业务模型继续使用 AgentDev 的冻结契约；生成和执行信息不从控制台文字猜测。
+`summary.json` 的导出契约版本为 1.2，保留 P4/P6 键及逐轮实测、节点、消息、路由、耗时、目标阈值；S7 将 `external_requests`、`token_usage` 从生成口径扩展为生成加审查的总量，分项见 `model_usage`。旧状态可重新生成摘要，但不会覆盖旧文件。它是报告用 JSON，不是可送回 WorkflowState 校验的状态模型。原始业务模型继续使用 AgentDev 的冻结契约；生成和执行信息不从控制台文字猜测。
 
-节点调用数根据已保存的 Context 计数，提交数根据对应结束事件计数；没有返回 Result 的节点单独列出。生成客户端调用、HTTP 请求、执行工具调用和 pytest 启动分别计数，客户端格式修复不等于新的 Workflow 轮次。无法取得的请求数、用量、测试计数保留 null。
+节点调用数根据已保存的 Context 计数，提交数根据对应结束事件计数；没有返回 Result 的节点单独列出。生成/审查客户端调用、请求尝试、外部请求、执行工具调用和 pytest 启动分别计数，客户端格式修复不等于新的 Workflow 轮次。无法取得的请求数、用量、测试计数保留 null。
 
 ## 消息和事件的含义
 
@@ -50,3 +50,13 @@
 `finished` 表示编排结束，`completed` 还要求最新候选真实全通过并达标。覆盖阈值沿用行 90%、有分支时分支 80%；无分支不是 0%。覆盖不可用保留 pytest 结果及错误原因；skipped/xfail/xpass 不视为全部通过。
 
 后轮错误可保留较早可用测试，但报告仍显示最新错误和 partial。`needs_review` 保留规格支持的失败断言；测试没有运行不能报告“通过”。任务目录隔离不是执行安全沙箱。最终摘要扩展节点记录的是导出前的业务结论，不能代替最终 state.json。
+
+## S7 质量结论与统计
+
+各轮 `round_details[].quality` 保存状态/原因、QualityAssessment、response 路径、遥测与证据核验结果；根级 `quality_assessments` 只含已提交审查。报告展示规格原文、测试原文、目标函数、建议和人工问题，基础执行完成与质量批准分别记录。关闭为 disabled，基础未完成为 skipped；未送审、审查异常不能显示批准。
+
+`selected_quality_approved`、`latest_quality_approved`、`exported_quality_approved` 分别对应选中、最新和实际导出候选，关闭审查时为 null。`unresolved_findings` 保留最近已提交审查的阻塞发现，`unresolved_findings_round` 标记来源，后轮未审查不会把旧发现清空。`messages` 记录来源及已提交的消费轮次/节点，不能把 Result 中未接受的消息提案当成实际交接。
+
+`model_usage` 的 generation/review/total 各有 client_calls、request_attempts、external_requests、token_usage、known_*、client_modes 和 telemetry_complete。总量字段 `total_external_requests` 与 `external_requests` 相同。缺少遥测/Result 或身份不匹配时保留 null，已知小计不等于完整总量；未调用分项为零，缺失 total_tokens 不从其他 token 分量猜测。失败或被拒绝输出中身份匹配的遥测也计入观察用量。业务 `AgentState.api_calls/token_usage` 保持生成口径。
+
+`inspect --summary` 除旧产物核验外，重新校验状态完成门禁、固定路径质量输出、规格/测试/执行引用、已提交节点决定与遥测，以及质量反馈与下一轮唯一生成 Context。任何不一致拒绝读取；普通报告构建将质量证据问题标为 error 并记录 `quality_integrity_errors`。旧任务缺省为未启用，不补造审查记录。具体实现及本阶段验证见 [S7 记录](quality-review-s7.md)。

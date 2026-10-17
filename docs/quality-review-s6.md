@@ -1,5 +1,7 @@
 # 质量审查 Agent：S6 服务、CLI 与 Web
 
+本文记录 S6 完成时的边界；质量报告、图和统计随后在 [S7](quality-review-s7.md) 完成。
+
 日期：2026-10-17。起始提交 `d91c8e15827fbdc67286117a4e0f708b46d9e157`，开始时工作区干净。S6 将既有三个生产节点接入共享应用服务与两个入口，复用 S1 的默认关闭、严格布尔配置，支持质量审查与摘要组合。
 
 ## 共享服务
@@ -70,4 +72,4 @@ node --test tests/web/*.test.cjs
 
 最终安装证据：[results.json](../outputs/quality-install-verification/94f4dba4c145432c951b74b43e0ed850/results.json)，相邻目录保存构建/安装/CLI 日志及完整任务。该次构建包含最终静态资源与 README 更新，四项检查再次通过。outputs 依原规则不提交，脚本可重新生成新证据目录。
 
-S6 八项任务已勾选，README、protocol、workflow、generation、运行可视化说明、历史阶段说明和本地主清单同步。S7–S9 继续保留未完成状态，本次未运行真实模型或自动提交/推送代码。
+S6 八项任务已勾选，README、protocol、workflow、generation、运行可视化说明、历史阶段说明和本地主清单同步。S6 完成时 S7–S9 仍待推进；S7 后续完成情况见对应记录。本阶段未运行真实模型或自动提交/推送代码。

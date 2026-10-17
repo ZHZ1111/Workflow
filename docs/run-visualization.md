@@ -1,6 +1,6 @@
 # 运行可视化
 
-日期：2026-10-13。Web 使用正式 Workflow 的同一任务快照，提供固定图、节点进度和 Agent 交接；页面负责展示，调度和业务结论仍由 WorkflowRunner 决定。
+日期：2026-10-17（S7；保留 2026-10-13 运行投影机制）。Web 使用正式 Workflow 的同一任务快照，提供固定图、节点进度和 Agent 交接；页面负责展示，调度和业务结论仍由 WorkflowRunner 决定。
 
 ## 使用
 
@@ -12,7 +12,11 @@ flowchart LR
     G --> E[执行与评估 Agent]
     E -->|补充或修复，有轮次预算| F[反馈交接]
     F --> G
-    E -->|停止测试循环| S[结果摘要：无模型扩展]
+    E -->|基础完成且启用| Q[质量审查 Agent]
+    Q -->|补充，有候选预算| QF[质量反馈交接]
+    QF --> G
+    Q -->|批准、复核或停止| S[结果摘要：无模型扩展]
+    E -->|其他停止或审查关闭| S
     S --> R[结束与导出]
 ```
 
@@ -26,9 +30,13 @@ flowchart LR
 
 `/api/runs/<id>` 返回同一任务的 `state.json`、`events.jsonl`、`messages.jsonl` 和最终 `summary.json`。`web_static/workflow-view.js` 对这些数据做只读状态投影；事件用于确认节点实际启动/结束，消费证据来自状态中的 `consumed_message_ids` 或 `message_consumed` 事件。界面没有另设调度状态，不推算模型进度百分比。
 
-源码、规格和消息内容通过文本节点呈现，不作为页面命令执行。固定图目前投影默认的两个核心 Agent 与 ResultSummaryNode，没有拖拽编辑、任意 DAG 或并行调度能力。
+源码、规格和消息内容通过文本节点呈现，不作为页面命令执行。固定图投影生成、执行、可选质量审查及 ResultSummaryNode，没有拖拽编辑、任意 DAG 或并行调度能力。
 
-2026-10-17 的 S6 已增加默认关闭的“启用质量审查”复选框，页面将严格布尔字段 quality_review_enabled 传给同一共享服务，实际运行第三个审查节点。审查事件、类型化送审/质量反馈消息和原始状态可读取；完整审查节点图、质量反馈边及请求/用量汇总仍待 S7，不将现有双 Agent 图视为完整质量流程。入口与验证见 [S6 记录](quality-review-s6.md)。
+S6 增加默认关闭的“启用质量审查”复选框，严格布尔字段传给同一共享服务。S7 增加第三节点、执行→审查→摘要与独立质量反馈边；基础未完成使用执行→摘要路径。关闭显示 disabled，基础未满足送审条件显示 skipped 原因，等待/人工复核/错误分别呈现。审查只依据当前轮次事件/记录，新轮次不会继承旧批准，缺少当前批准不能显示绿色结束。
+
+逐轮质量卡展示基础执行结论、审查决定、规格与测试引用、目标函数、补充建议、人工问题、证据路径和反馈消费位置。交接卡同时区分 execution_feedback 与 quality_feedback；待消费反馈不能画成已返回生成节点。顶部显示质量状态、未解决发现来源、选中/最新/实际导出候选批准，以及生成/审查/总请求与 token。未知量保留未知并展示已知小计；旧质量摘要没有分项总量时不把生成计数当成完整总量。
+
+排队阶段 API 返回已接受的 quality_review_enabled，状态文件创建前仍显示正确开关及等待，不推断节点已调用。桌面保持横向六节点，窄屏转为纵向，反馈路径换行。入口见 [S6 记录](quality-review-s6.md)，新投影、DOM 文本安全测试、桌面/390 像素浏览器检查和截图见 [S7 记录](quality-review-s7.md)。
 
 同一服务期间刷新页面，通过 sessionStorage 中的任务 ID 恢复任务并继续轮询；源码与规格输入框仍为空。服务重启后内存任务列表不会自动恢复，历史产物仍由 CLI `inspect` 读取。该限制没有因新增图而改变。
 
@@ -39,4 +47,4 @@ node --test tests/web/*.test.cjs
 .\.venv\Scripts\python.exe -m pytest tests/test_workflow_web.py tests/test_cli.py -q
 ```
 
-Node 仅用于开发测试，不是 Python 应用或浏览器运行依赖。GitHub Actions 同时运行前端状态测试和既有 Python 回归。实际结果、浏览器截图及新 wheel 静态资源检查见 [本次验收](../evaluation/run_visualization_20261013.md)。
+Node 仅用于开发测试，不是 Python 应用或浏览器运行依赖。GitHub Actions 同时运行前端状态测试和既有 Python 回归。实际结果、浏览器截图及新 wheel 静态资源检查见 [初始验收](../evaluation/run_visualization_20261013.md)；S7 新增质量视图后前端共 25 项通过，质量回归及安装结果见对应阶段记录。

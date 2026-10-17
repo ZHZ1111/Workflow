@@ -45,6 +45,7 @@ class WebJob:
     output: Path
     status: str = "queued"
     error: str | None = None
+    quality_review_enabled: bool = False
 
 
 class JobStore:
@@ -55,9 +56,9 @@ class JobStore:
         self._lock = threading.Lock()
         self.busy = threading.Lock()
 
-    def create(self) -> WebJob:
+    def create(self, *, quality_review_enabled: bool = False) -> WebJob:
         identity = uuid4().hex
-        job = WebJob(identity, self.root / "outputs" / "web" / identity)
+        job = WebJob(identity, self.root / "outputs" / "web" / identity, quality_review_enabled=quality_review_enabled)
         with self._lock:
             self._jobs[identity] = job
         return job
@@ -79,7 +80,7 @@ def _read(path: Path) -> str | None:
 
 
 def job_snapshot(job: WebJob) -> dict:
-    result = {"id": job.id, "status": job.status, "error": job.error,
+    result = {"id": job.id, "status": job.status, "error": job.error, "quality_review_enabled": job.quality_review_enabled,
               "outputDir": str(job.output), "events": [], "messages": []}
     for name in ("state", "summary"):
         try:
@@ -220,7 +221,7 @@ class WebHandler(BaseHTTPRequestHandler):
         if not store.busy.acquire(blocking=False):
             self._json({"error": "已有任务运行中，请等待完成。"}, HTTPStatus.CONFLICT)
             return
-        job = store.create()
+        job = store.create(quality_review_enabled=payload["config"].quality_review_enabled)
         try:
             threading.Thread(target=_run_job, args=(store, job.id, payload), daemon=True).start()
         except Exception:
@@ -228,7 +229,7 @@ class WebHandler(BaseHTTPRequestHandler):
             store.update(job.id, status="failed", error="无法启动任务。")
             self._json({"error": "无法启动任务。"}, HTTPStatus.INTERNAL_SERVER_ERROR)
             return
-        self._json({"id": job.id, "status": "queued"}, HTTPStatus.ACCEPTED)
+        self._json({"id": job.id, "status": "queued", "quality_review_enabled": job.quality_review_enabled}, HTTPStatus.ACCEPTED)
 
 
 class WebServer(ThreadingHTTPServer):

@@ -18,7 +18,7 @@ from ..quality_routing import quality_revision_stop
 from ..storage import verify_artifact
 
 
-def _validate_record(state, quality: QualityAssessment) -> ExecutionAssessment:
+def validate_quality_record(state, quality: QualityAssessment) -> ExecutionAssessment:
     """Bind a committed review to the same spec, candidate and real observation."""
     root, business, number = state.run_dir, state.agent_state, quality.round
     candidate = business.history[number - 1]
@@ -121,7 +121,7 @@ def validate_quality_revision(context: AgentContext) -> QualityAssessment:
             or business.request.spec_path.read_text(encoding="utf-8") != business.behavior_specification):
         raise ValueError("quality extension specification changed")
     for old in state.quality_assessments:
-        _validate_record(state, old)
+        validate_quality_record(state, old)
     return quality
 
 

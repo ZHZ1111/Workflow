@@ -4,7 +4,7 @@
 
 **CLI 和 Web 共用同一工作流服务。** Web 仅使用 DeepSeek，用户自行输入源码与行为规格；CLI 另外保留离线固定候选，仍真实执行 pytest/coverage。工程初验结果和修复记录见 [工程验收](evaluation/verification.md)。
 
-质量审查 Agent 的 S0–S6 已完成契约、客户端、审查节点、质量反馈生成及共享服务/CLI/Web 接入，默认关闭。CLI 使用 `--with-quality-review`，Web 勾选“启用质量审查”，可与摘要一起运行；详细质量报告、运行图和调用统计仍待 S7，见 [实施步骤](docs/quality-review-agent-plan.md)、[S6 记录](docs/quality-review-s6.md)。
+质量审查 Agent 的 S0–S7 已完成，默认关闭。CLI 使用 `--with-quality-review`，Web 勾选“启用质量审查”，可与摘要一起运行。报告与运行图展示第三个 Agent、规格依据、质量反馈消费、导出候选批准情况，以及生成/审查/总请求与 token；见 [实施步骤](docs/quality-review-agent-plan.md)、[S7 记录](docs/quality-review-s7.md)。S8 完整回归与 S9 真实模型验收待完成。
 
 ## 安装
 
@@ -85,7 +85,7 @@ Copy-Item .env.example .env
 
 默认读取当前目录的 `.env`，可用 `--project-root` 指定输出项目目录、`--env-file` 指定配置。输出保存在 `outputs/web/<job_id>/`，输入保存在 `outputs/web-inputs/<job_id>/`。仅监听本机，一次执行一个任务，拒绝跨站提交。刷新页面可继续查看当前任务；服务重启后用 CLI `inspect` 读取持久化产物。
 
-质量审查开关默认不勾选，提交后仅在基础完成时调用第三个 Agent；Web 继续仅使用 DeepSeek，不提供离线 fixture 入口。审查事件、原始消息和状态下载已包含真实记录；完整质量运行图、统计与报告在 S7 完善。
+质量审查开关默认不勾选，提交后仅在基础完成时调用第三个 Agent；Web 继续仅使用 DeepSeek，不提供离线 fixture 入口。图中区分审查关闭、待送审、跳过、批准与异常；逐轮卡片显示规格/测试证据、补充建议和消费轮次。总模型请求包含生成与审查，未知量保留未知。
 
 旧 `testgen-agent-web` 仍运行 vendor 的单 Agent；本项目使用 `test-workflow web` 或 `test-workflow-web`。
 
@@ -97,7 +97,7 @@ Copy-Item .env.example .env
 .\.venv\Scripts\python.exe -m test_workflow inspect <任务目录> --summary
 ```
 
-检查核对证据摘要及最终副本，仅读取已有任务。报告区分覆盖达标与业务正确、选中候选与最新候选。Windows 状态/pytest 检查点遇到临时文件占用时执行有限重试，不重复调用模型或执行测试。
+检查核对证据摘要及最终副本，仅读取已有任务。报告区分覆盖达标与质量批准、选中候选与最新候选；启用质量审查时，检查还核对审查输出、批准对象和已消费反馈。摘要导出版本为 1.2，`external_requests` 与 `token_usage` 为生成加审查的总量，分项见 `model_usage`。Windows 状态/pytest 检查点遇到临时文件占用时执行有限重试，不重复调用模型或执行测试。
 
 ## 验证与维护
 
@@ -112,7 +112,7 @@ node --test tests/web/*.test.cjs
 .\.venv\Scripts\python.exe scripts/verify_workflow.py --real --env-file .env
 # 新环境、wheel 安装、CLI 两轮反馈与 Web 注入模型响应的两轮验证
 .\.venv\Scripts\python.exe scripts/verify_install.py
-# S6：离线构建 wheel、隔离 --target 安装、审查资源与安装后质量 CLI（复用当前锁定依赖）
+# 质量审查：离线构建 wheel、隔离 --target 安装、审查资源与安装后质量 CLI（复用当前锁定依赖）
 .\.venv\Scripts\python.exe scripts/verify_quality_install.py
 ```
 

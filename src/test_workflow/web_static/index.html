@@ -23,18 +23,24 @@
 <button type="button" class="flow-node" data-node="test_generation" data-status="idle"><small>AGENT 01</small><strong>测试生成</strong><span class="node-state">等待</span><span class="node-detail">规划、生成或修订候选</span></button>
 <span class="flow-edge" data-edge="generation-execution" aria-label="候选交给执行 Agent">→</span>
 <button type="button" class="flow-node" data-node="test_execution" data-status="idle"><small>AGENT 02</small><strong>执行与评估</strong><span class="node-state">等待</span><span class="node-detail">pytest、覆盖率与路由建议</span></button>
-<span class="flow-edge" data-edge="execution-summary" aria-label="停止后生成摘要">→</span>
+<span class="flow-edge" data-edge="execution-review" aria-label="基础达标后送交质量审查">→</span>
+<button type="button" class="flow-node" data-node="test_quality_review" data-status="idle"><small>AGENT 03 · 可选</small><strong>质量审查</strong><span class="node-state">等待</span><span class="node-detail">依据规格审查场景与断言</span></button>
+<span class="flow-edge" data-edge="review-summary" aria-label="质量结论确定后生成摘要">→</span>
 <button type="button" class="flow-node" data-node="result_summary" data-status="idle"><small>无模型扩展</small><strong>结果摘要</strong><span class="node-state">等待</span><span class="node-detail">读取已确定的业务结论</span></button>
 <span class="flow-edge" data-edge="summary-end" aria-label="保存最终产物">→</span>
 <button type="button" class="flow-node" data-node="end" data-status="idle"><small>输出</small><strong>结束与导出</strong><span class="node-state">等待</span><span class="node-detail">报告、状态与可用测试</span></button>
-<div class="feedback-loop"><span class="flow-edge" data-edge="feedback-generation">↖ 返回生成</span><button type="button" class="flow-node feedback-node" data-node="feedback" data-status="idle"><small>有预算时反馈</small><strong>反馈交接</strong><span class="node-state">等待</span><span class="node-detail">补充场景或修复测试，最多三轮</span></button><span class="flow-edge" data-edge="execution-feedback">↙ 执行反馈</span></div>
+<div class="review-bypass"><span class="flow-edge" data-edge="execution-summary">执行 → 摘要：未启用审查或基础未完成</span></div>
+<div class="feedback-loop"><span class="flow-edge" data-edge="feedback-generation">↖ 返回生成</span><button type="button" class="flow-node feedback-node" data-node="feedback" data-status="idle"><small>有预算时反馈</small><strong>反馈交接</strong><span class="node-state">等待</span><span class="node-detail">补充场景或修复测试，最多三轮</span></button><span class="flow-edge" data-edge="execution-feedback">↙ 执行反馈</span><span class="flow-edge" data-edge="quality-feedback">↙ 质量反馈</span></div>
 </div>
 <div class="flow-evidence"><strong id="flow-evidence-title">节点证据</strong><p id="flow-evidence" class="muted">选择一个节点，查看对应轮次、事件及交接记录。</p></div>
 <p id="flow-route" class="muted">等待评估路由</p>
 <div class="section-heading"><h3>Agent 交接</h3><span id="handoff-count" class="muted">暂无消息</span></div><div id="handoffs" class="handoffs"><p class="muted">生成候选和执行反馈会显示在这里。</p></div>
 </section>
 <section class="panel" aria-live="polite"><div class="section-heading"><h2>任务结果</h2><span id="job-status" class="badge">等待开始</span></div><p id="output-dir" class="muted">运行后显示保存位置、逐轮结论和可下载产物。</p>
-<div class="metrics"><div><span>业务结论</span><strong id="task-status">—</strong></div><div><span>停止原因</span><strong id="stop-reason">—</strong></div><div><span>选中轮次</span><strong id="selected-round">—</strong></div><div><span>生成请求 / pytest</span><strong id="calls">—</strong></div></div>
+<div class="metrics"><div><span>业务结论</span><strong id="task-status">—</strong></div><div><span>停止原因</span><strong id="stop-reason">—</strong></div><div><span>选中轮次</span><strong id="selected-round">—</strong></div><div><span>总模型请求 / pytest</span><strong id="calls">—</strong></div></div>
+<p id="quality-status" class="muted">质量审查未启用</p>
+<div id="model-usage" class="model-usage"></div>
+<div id="quality-details" class="quality-details"></div>
 <div id="rounds" class="rounds"></div><nav id="downloads" class="downloads" aria-label="下载产物"></nav>
 <details open><summary>工作流事件</summary><pre id="events">暂无事件</pre></details>
 <details><summary>Agent 反馈消息</summary><pre id="messages">暂无消息</pre></details>

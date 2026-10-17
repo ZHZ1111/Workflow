@@ -142,8 +142,10 @@ def test_web_checkbox_flag_controls_actual_review_registration(server, enabled):
         _, bootstrap = call(base, "/api/bootstrap")
         assert bootstrap["config"]["quality_review_enabled"] is False
         _, created = call(base, "/api/runs", {**sample_inputs()["calculation"], "quality_review_enabled": enabled})
+        assert created["quality_review_enabled"] is enabled
         job = wait_job(base, created["id"])
     assert job["status"] == "finished" and job["state"]["config"]["quality_review_enabled"] is enabled
+    assert job["quality_review_enabled"] is enabled
     assert job["state"]["quality_status"] == ("passed" if enabled else "disabled")
     assert review.call_count == int(enabled)
     if enabled:

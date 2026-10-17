@@ -1,7 +1,7 @@
 # 增加质量审查 Agent：详细实施步骤
 
 > 编写日期：2026-10-16。
-> 编写时基于本地提交 `97fde32` 的源码结构。2026-10-16 从实际提交 `b2920aabce408a64841f1cd3eabe97d4c3ea8c76` 开始实施，截至 2026-10-17，S0–S6 已完成，见 [S0–S1 记录](quality-review-s0-s1.md)、[S2 记录](quality-review-s2.md)、[S3 记录](quality-review-s3.md)、[S4 记录](quality-review-s4.md)、[S5 记录](quality-review-s5.md)、[S6 记录](quality-review-s6.md)；S7–S9 仍为待实现计划。
+> 编写时基于本地提交 `97fde32` 的源码结构。2026-10-16 从实际提交 `b2920aabce408a64841f1cd3eabe97d4c3ea8c76` 开始实施，截至 2026-10-17，S0–S7 已完成，见 [S0–S1 记录](quality-review-s0-s1.md)、[S2 记录](quality-review-s2.md)、[S3 记录](quality-review-s3.md)、[S4 记录](quality-review-s4.md)、[S5 记录](quality-review-s5.md)、[S6 记录](quality-review-s6.md)、[S7 记录](quality-review-s7.md)；S8–S9 仍为待实现计划。
 > 本次范围：在现有测试生成 Agent、测试执行 Agent 之间的协作基础上，增加一个能提出质量反馈的审查 Agent，形成三 Agent 闭环。
 > 输入继续沿用“单文件 Python 源码 + 非空行为规格”；保留现有候选最多三轮的限制。本次不包含变异测试、属性测试、多文件支持、自动源码修复、通用 DAG 或断点恢复。
 
@@ -430,19 +430,21 @@ export_results()
 
 **验收：**关闭开关仍为两个生产 Agent；开启后出现第三节点，两个入口使用同一条质量流程。
 
-S6 的入口、失败处理、严格布尔字段和 wheel 验证见 [S6 实施记录](quality-review-s6.md)。完整质量报告及图仍留待 S7。
+S6 的入口、失败处理、严格布尔字段和 wheel 验证见 [S6 实施记录](quality-review-s6.md)；质量报告及图随后在 S7 完成。
 
 ### S7：报告、流程图与调用统计 — 1h
 
-- [ ] summary 增加各轮 QualityAssessment、质量状态、未解决发现和质量反馈消费位置。
-- [ ] 报告显示基础执行结论与质量结论，不能只显示最终 completed。
-- [ ] 显示生成/执行/审查的职责、调用次数及总请求/用量分项。
-- [ ] 标明实际导出的候选是否审查通过，较早选中候选与最新候选分别说明。
-- [ ] 在既有 workflow-view.js、页面和样式中增加审查节点及反馈边；状态来自事件而不是定时模拟。
-- [ ] 审查关闭或因基础失败未调用时，显示 disabled/skipped 的实际原因，不能显示通过。
-- [ ] 更新 inspect_summary 校验新增审查引用和批准对象；保持只读。
+- [x] summary 增加各轮 QualityAssessment、质量状态、未解决发现和质量反馈消费位置。
+- [x] 报告显示基础执行结论与质量结论，不能只显示最终 completed。
+- [x] 显示生成/执行/审查的职责、调用次数及总请求/用量分项。
+- [x] 标明实际导出的候选是否审查通过，较早选中候选与最新候选分别说明。
+- [x] 在既有 workflow-view.js、页面和样式中增加审查节点及反馈边；状态来自事件而不是定时模拟。
+- [x] 审查关闭或因基础失败未调用时，显示 disabled/skipped 的实际原因，不能显示通过。
+- [x] 更新 inspect_summary 校验新增审查引用和批准对象；保持只读。
 
 **验收：**能够从页面或报告回答“谁发现问题、依据是什么、反馈哪轮消费、哪轮执行通过、导出哪个候选”。
+
+七项任务完成，摘要 1.2 的口径、只读检查、页面与验证证据见 [S7 实施记录](quality-review-s7.md)。
 
 ### S8：关键验证与离线端到端验收 — 2h
 
