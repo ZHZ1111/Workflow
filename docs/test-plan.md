@@ -72,3 +72,14 @@ P6：`python scripts/p6_acceptance.py` 运行五个新离线 CLI 任务并验证
 全量基线为 711 passed（Workflow 288、vendor 423），见 `evaluation/review_20261013.md`；历史阶段数字不追改。W18 已有新虚拟环境与 wheel 的 CLI/Web 验证记录：`outputs/install-verification/21824a81a7404615bf9dc486ae507b2b/results.json`。Web 注入固定模型响应完成安装后的两轮反馈，真实 DeepSeek 结果使用另外的任务证据。
 
 运行可视化验证覆盖等待、生成/执行高亮、下一轮状态重置、反馈待消费/已消费、复核、部分完成、节点失败、报告导出和新任务清空。前端状态测试使用 Node 内置测试运行器，HTTP 回归验证新增资源及既有双 Agent 流程，浏览器确认实时高亮、刷新恢复、下载与窄屏布局；证据见 `evaluation/run_visualization_20261013.md`。
+
+
+## 质量审查 S8 验收（2026-10-17）
+
+S0–S8 已完成。按契约/客户端/单节点 195 项、质量与旧流程集成 172 项、最终完整 Workflow/vendor 1029 项的顺序验证，前端全部三个测试文件 25 项通过；各阶段存在交集，不累加。全量包含 Workflow 606 和 vendor 423，失败、错误、跳过均为零。历史 711 项和 S5 的 974 项保留为当时基线。
+
+新增三项测试实例直接比较 CLI/Web 固定响应的首轮批准与二轮补充结果，并验证三个生产节点持续补充至三轮预算停止。`scripts/verify_quality_acceptance.py` 生成十个独立 CLI 任务，共十五次真实 pytest，严格检查证据、报告链接、反馈消费、当前批准导出与输入未变；从最终 JUnit 匹配 Q01–Q20，二十项全部通过。请求错误使用 MockTransport，外部模型调用为零。
+
+三个质量功能加入前的旧任务按当前 inspect 读取，136 个文件内容及修改时间不变；一个原始 .coverage 拒绝访问的 P6 目录单独排除，不冒充通过。wheel/非 editable 安装、包内质量资源及安装后 CLI/inspect 通过，复用当前锁定依赖。CI 改为运行全部前端测试并归档 Python JUnit，本机 Windows 成功不代替远端 Windows/Linux 执行。
+
+第一次全量因聊天中断停止，没有完整 JUnit，不计作通过；保留中断日志后重跑得到最终 1029 passed。`--full` 将日志与退出码独立写入任务目录。结果见 [S8 实施记录](quality-review-s8.md)、[验收索引](../evaluation/quality-review-s8.json)、[完整 JUnit](../evaluation/quality-review-s8-tests.xml) 和 [二轮质量轨迹](../evaluation/quality-review-s8-trace.json)。S9 真实模型案例与演示待完成。

@@ -4,7 +4,7 @@
 
 **CLI 和 Web 共用同一工作流服务。** Web 仅使用 DeepSeek，用户自行输入源码与行为规格；CLI 另外保留离线固定候选，仍真实执行 pytest/coverage。工程初验结果和修复记录见 [工程验收](evaluation/verification.md)。
 
-质量审查 Agent 的 S0–S7 已完成，默认关闭。CLI 使用 `--with-quality-review`，Web 勾选“启用质量审查”，可与摘要一起运行。报告与运行图展示第三个 Agent、规格依据、质量反馈消费、导出候选批准情况，以及生成/审查/总请求与 token；见 [实施步骤](docs/quality-review-agent-plan.md)、[S7 记录](docs/quality-review-s7.md)。S8 完整回归与 S9 真实模型验收待完成。
+质量审查 Agent 的 S0–S8 已完成，默认关闭。CLI 使用 `--with-quality-review`，Web 勾选“启用质量审查”，可与摘要一起运行。报告与运行图展示第三个 Agent、规格依据、质量反馈消费、导出候选批准情况，以及生成/审查/总请求与 token；见 [实施步骤](docs/quality-review-agent-plan.md)、[S7 记录](docs/quality-review-s7.md)。S8 的 Q01–Q20、1029 项全量回归和 25 项前端测试已通过，见 [S8 记录](docs/quality-review-s8.md)；S9 文档、三个真实样例和 [45 秒离线演示](evaluation/quality-review-demo.html) 已准备，真实模型执行等待外传授权，见 [S9 记录](docs/quality-review-s9.md)。
 
 ## 安装
 
@@ -112,6 +112,12 @@ node --test tests/web/*.test.cjs
 .\.venv\Scripts\python.exe scripts/verify_workflow.py --real --env-file .env
 # 新环境、wheel 安装、CLI 两轮反馈与 Web 注入模型响应的两轮验证
 .\.venv\Scripts\python.exe scripts/verify_install.py
+# S9：固定响应、真实执行的二轮门槛演示（不读取 .env、不调用模型）
+.\.venv\Scripts\python.exe scripts/prepare_quality_demo.py
+# S9：准备三个真实样例的范围清单；默认不发送请求
+.\.venv\Scripts\python.exe scripts/verify_quality_real.py
+# 质量审查 S8：固定响应 CLI 验收与证据，执行仍为真实 pytest/coverage
+.\.venv\Scripts\python.exe scripts/verify_quality_acceptance.py
 # 质量审查：离线构建 wheel、隔离 --target 安装、审查资源与安装后质量 CLI（复用当前锁定依赖）
 .\.venv\Scripts\python.exe scripts/verify_quality_install.py
 ```
@@ -134,3 +140,6 @@ outputs/            本地证据及构建产物（Git 忽略）
 支持单个不超过 128 KiB、含 1–5 个顶层同步函数的 Python 文件和非空行为规格。不支持顶层类、异步、多文件工程、相对/通配符导入或第三方依赖。独立目录不构成安全沙箱；生成测试在本机运行，使用可信输入。
 
 详细说明：[总体设计](Design.md)、[范围](docs/scope.md)、[路由](docs/workflow.md)、[协议](docs/protocol.md)、[报告](docs/reporting.md)、[扩展](docs/extensions.md)、[复用审计](docs/reuse.md)、[历史验收](evaluation/acceptance.md)。
+
+
+S9 真实验收限定 calculation、quality_boundary、discount，目标为当前配置的 api.deepseek.com；需明确授权发送这些样例及对应测试、执行结果和反馈后再加 `--execute`。总计最多 18 次 HTTP 派发、每样例 6 次，每次输出上限 8192 tokens。当前自动审批拒绝启动，本阶段真实请求为零；不会把离线演示或历史真实任务算作本次验收。详细范围见 [清单](evaluation/quality-review-s9-scope.json)，当前状态见 [索引](evaluation/quality-review-s9.json)。

@@ -11,6 +11,7 @@ from testgen_agent.config import AppConfig
 from test_workflow.cli import main
 from test_workflow.config import WorkflowConfig
 from test_workflow.demo.client import FixtureClient
+from test_workflow.reporting import inspect_summary
 from test_workflow.service import DATA_ROOT, fixture_client, fixture_review_client, run_workflow, sample_inputs
 from test_workflow.state import StateStore
 from test_workflow.web import validate_payload
@@ -168,6 +169,39 @@ def test_web_quality_feedback_uses_same_service_loop(server, tmp_path):
         job = wait_job(base, created["id"])
     assert job["status"] == "finished" and job["summary"]["selected_round"] == 2
     assert len(generation.contexts) == len(reviewer.contexts) == 2
+
+
+@pytest.mark.parametrize("revision", [False, True])
+def test_cli_web_same_injected_responses_have_identical_routes_and_approved_export(server, tmp_path, revision):
+    _, base = server
+    first, second, feedback = two_round_fixtures(tmp_path)
+    fixtures = (first, second) if revision else (first,)
+    reviews = (feedback, DATA_ROOT / "quality_approve.json") if revision else (DATA_ROOT / "quality_approve.json",)
+    settings = AppConfig(model="fixture-model", api_key="fixture-parity-key")
+    output = tmp_path / "cli"
+    with patch("test_workflow.cli.load_config", return_value=settings), \
+         patch("test_workflow.cli.DeepSeekClient", return_value=FixtureClient(fixtures)), \
+         patch("test_workflow.cli.DeepSeekReviewClient", return_value=fixture_review_client(reviews)):
+        assert main(entry_args(output) + ["--with-quality-review", "--with-summary", "--max-rounds", "2"]) == 0
+    with patch("test_workflow.web.load_config", return_value=settings), \
+         patch("test_workflow.web.DeepSeekClient", return_value=FixtureClient(fixtures)), \
+         patch("test_workflow.web.DeepSeekReviewClient", return_value=fixture_review_client(reviews)):
+        _, created = call(base, "/api/runs", {**sample_inputs()["calculation"], "max_rounds": 2, "quality_review_enabled": True})
+        job = wait_job(base, created["id"])
+    assert job["status"] == "finished"
+    cli_state = StateStore(output).load()
+    cli_summary, web_summary = inspect_summary(cli_state), inspect_summary(StateStore(Path(job["outputDir"])).load())
+    for key in ("task_status", "stop_reason", "quality_status", "quality_stop_reason", "selected_round", "rounds",
+                "pytest_processes", "model_usage", "selected_quality_approved", "latest_quality_approved",
+                "exported_quality_approved", "final_test_sha256"):
+        assert cli_summary[key] == web_summary[key], key
+    cli_events = [json.loads(line) for line in (output / "events.jsonl").read_text(encoding="utf-8").splitlines()]
+    for kind, fields in (("node_started", ("round", "node")), ("route_selected", ("round", "node", "action", "stop_reason"))):
+        def trace(events):
+            return [tuple(event.get(field) for field in fields) for event in events if event["type"] == kind]
+        assert trace(cli_events) == trace(job["events"])
+    assert cli_summary["selected_round"] == 1 + int(revision)
+    assert cli_summary["exported_quality_approved"] and cli_summary["pytest_processes"] == 1 + int(revision)
 
 
 @pytest.mark.parametrize("value", [0, 1, "true", "false", None, [], {}])

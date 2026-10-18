@@ -1,0 +1,85 @@
+{
+  "plan": {
+    "schema_version": "1.1",
+    "target_functions": [
+      "discounted_total"
+    ],
+    "oracle_mode": "specification",
+    "entry_functions": [
+      "discounted_total"
+    ],
+    "relationships": [],
+    "strategy": [
+      {
+        "subject_kind": "function",
+        "function_name": "discounted_total",
+        "relationship_id": null,
+        "decision": "unit_test",
+        "reason": "Explicit behavior specification"
+      }
+    ],
+    "scenarios": [
+      {
+        "scenario_id": "below_threshold",
+        "target_function": "discounted_total",
+        "category": "boundary",
+        "inputs": {
+          "args": [
+            50
+          ],
+          "kwargs": {}
+        },
+        "expected_behavior": "returns 50",
+        "expected_basis": {
+          "kind": "specification",
+          "detail": "金额小于 100 时返回原金额。"
+        },
+        "test_kind": "unit",
+        "involved_functions": [
+          "discounted_total"
+        ],
+        "relationship_ids": [],
+        "steps": []
+      },
+      {
+        "scenario_id": "above_threshold",
+        "target_function": "discounted_total",
+        "category": "boundary",
+        "inputs": {
+          "args": [
+            150
+          ],
+          "kwargs": {}
+        },
+        "expected_behavior": "returns 135",
+        "expected_basis": {
+          "kind": "specification",
+          "detail": "金额大于等于 100 时按九折计算。"
+        },
+        "test_kind": "unit",
+        "involved_functions": [
+          "discounted_total"
+        ],
+        "relationship_ids": [],
+        "steps": []
+      }
+    ]
+  },
+  "code": "from subject import discounted_total\n\ndef test_below_threshold():\n    assert discounted_total(50) == 50\n\ndef test_above_threshold():\n    assert discounted_total(150) == 135\n",
+  "mappings": [
+    {
+      "test_function": "test_below_threshold",
+      "scenario_ids": [
+        "below_threshold"
+      ]
+    },
+    {
+      "test_function": "test_above_threshold",
+      "scenario_ids": [
+        "above_threshold"
+      ]
+    }
+  ],
+  "assumptions": [],
+  "questions": []
+}

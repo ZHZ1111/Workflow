@@ -1,0 +1,590 @@
+{
+  "recorded_at": "2026-10-17T14:11:54.022675+00:00",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.13.9 | packaged by Anaconda, Inc. | (main, Oct 21 2025, 19:09:58) [MSC v.1929 64 bit (AMD64)]",
+  "head": "4d595d684739541ea048bbc6adfafd6c84228c9f",
+  "full_scope_counts": {
+    "workflow": 606,
+    "vendor": 423
+  },
+  "evidence_directory": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff",
+  "phases": {
+    "contracts-client-agent": {
+      "path": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/contracts-client-agent.xml",
+      "sha256": "bc6020a6a9c91757f03dd15a403b9f22f673491a788caed94b17d6e8883d67b9",
+      "tests": 195,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 382.312,
+      "suite_duration_seconds": 382.572
+    },
+    "integration": {
+      "path": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/integration.xml",
+      "sha256": "de8b3c58d4725aca459bc83a85cc25df1c50e2b0c0dce9283f90063b9a3e95e1",
+      "tests": 172,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 796.255,
+      "suite_duration_seconds": 796.514
+    },
+    "full": {
+      "path": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/full.xml",
+      "sha256": "5deaf8fcd6b1827441d91641c81775ca1d9dd01219a0e3d1aef708c9220173cb",
+      "tests": 1029,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 528.577,
+      "suite_duration_seconds": 529.19
+    }
+  },
+  "frontend": {
+    "command": [
+      "node",
+      "--test",
+      "--test-reporter=tap",
+      "tests/web/quality-form.test.cjs",
+      "tests/web/quality-view.test.cjs",
+      "tests/web/workflow-view.test.cjs"
+    ],
+    "exit_code": 0,
+    "tests": 25,
+    "passed": 25,
+    "failed": 0,
+    "skipped": 0,
+    "log_sha256": "b7b354900b67b81889ee77286664438f616d030ed54af586052f979935253a2d"
+  },
+  "full_run": {
+    "command": [
+      "E:\\File-Document\\SE\\hw2\\Workflow\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "tests",
+      "vendor/agentdev/tests",
+      "-q",
+      "--junitxml",
+      "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\quality-s8\\7a082b295fa84d5a988e753bf6812bff\\full.xml"
+    ],
+    "started_at": "2026-10-17T14:02:15.676753+00:00",
+    "runner_pid": 49456,
+    "status": "finished",
+    "exit_code": 0,
+    "finished_at": "2026-10-17T14:11:07.344729+00:00",
+    "duration_seconds": 531.6680081000086,
+    "success": true
+  },
+  "interrupted_attempts": [
+    {
+      "status": "interrupted",
+      "confirmed_passed_progress": 576,
+      "complete_junit": false,
+      "log": "full-interrupted.log",
+      "counted_as_full_pass": false
+    }
+  ],
+  "archived_full_junit": {
+    "path": "evaluation/quality-review-s8-tests.xml",
+    "sha256": "5deaf8fcd6b1827441d91641c81775ca1d9dd01219a0e3d1aef708c9220173cb"
+  },
+  "quality_feedback_trace": {
+    "path": "evaluation/quality-review-s8-trace.json",
+    "sha256": "960e28a9bfc8a723d1e34ffb71a38f00cbf1c3adc14e7febaa0d67beee72cf22"
+  },
+  "legacy_inspection": [
+    {
+      "run_id": "run-66d40731a1ae49cd95f1557261109e43",
+      "directory": "outputs/verification/ed83c3684006484c9958cda6b313c0a6/offline-cli-calculation",
+      "saved_summary_version": "1.1",
+      "current_summary_version": "1.2",
+      "task_status": "completed",
+      "selected_round": 1,
+      "files_unchanged": 37,
+      "passed": true,
+      "saved_summary_sha256": "bcc1f1c08276d9e1f2cdb13da198ba1da698cf7cb30596a1255c525556344b97",
+      "saved_report_sha256": "cb9e2bfe03a1a374eccc3a11059167b8f21f59a56292bf72c383bc0efeaaa3d8"
+    },
+    {
+      "run_id": "run-a2dba9f539754d488c70f77075b48858",
+      "directory": "outputs/verification/ed83c3684006484c9958cda6b313c0a6/offline-cli-validation",
+      "saved_summary_version": "1.1",
+      "current_summary_version": "1.2",
+      "task_status": "completed",
+      "selected_round": 2,
+      "files_unchanged": 62,
+      "passed": true,
+      "saved_summary_sha256": "2984d2bfe4a2466a662ad1412915e629f9d81992079a6015be2e85eafe6f941b",
+      "saved_report_sha256": "ef867d944b06fb15598a601de92cf6d6f05628188084148c121c0fd06513ec09"
+    },
+    {
+      "run_id": "run-39b1852e27b9433c851313232d60f49c",
+      "directory": "outputs/verification/ed83c3684006484c9958cda6b313c0a6/offline-cli-discount",
+      "saved_summary_version": "1.1",
+      "current_summary_version": "1.2",
+      "task_status": "needs_review",
+      "selected_round": 1,
+      "files_unchanged": 37,
+      "passed": true,
+      "saved_summary_sha256": "34a8b55ab2e7115fb6e9b352bb903116f3acfafbe5a0716ffdecb553e206557c",
+      "saved_report_sha256": "ac87d7ff04be50bf0e7f150af7bc215400610a7170a5c108ea0907d013ed9d05"
+    }
+  ],
+  "checks": {
+    "dependencies": {
+      "exit_code": 0,
+      "log": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/dependencies.log",
+      "sha256": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf"
+    },
+    "diff": {
+      "exit_code": 0,
+      "log": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/diff.log",
+      "sha256": "e1ea55082cba3b11fe067f5056c82943bb26303eac979fbbc167434e80ecbb90"
+    }
+  },
+  "legacy_excluded": [
+    {
+      "directory": "outputs/p6/acceptance-5caa481201/completed",
+      "error_type": "PermissionError",
+      "reason": "Original .coverage artifact access denied; not counted as a passing compatibility case; evidence verification was not bypassed."
+    }
+  ],
+  "installed": {
+    "evidence": "outputs/quality-install-verification/410c846c2b2441d4b7f2775c949f0298/results.json",
+    "success": true,
+    "directory": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\quality-install-verification\\410c846c2b2441d4b7f2775c949f0298",
+    "checks": [
+      "build-wheels",
+      "wheel-review-resources",
+      "install-wheels",
+      "installed-quality-cli"
+    ],
+    "isolation": "Python -I with two non-editable wheels in --target; reuse current locked third-party dependencies"
+  },
+  "matrix": {
+    "Q01": {
+      "passed": true,
+      "missing_selectors": [],
+      "testcases": [
+        "tests.test_quality_workflow::test_quality_disabled_preserves_two_node_workflow"
+      ],
+      "evidence": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/full.xml"
+    },
+    "Q02": {
+      "passed": true,
+      "missing_selectors": [],
+      "testcases": [
+        "tests.test_quality_workflow::test_first_approval_runs_three_nodes_and_consumes_both_handoffs"
+      ],
+      "evidence": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/full.xml"
+    },
+    "Q03": {
+      "passed": true,
+      "missing_selectors": [],
+      "testcases": [
+        "tests.test_quality_generation::test_production_nodes_close_quality_loop_and_deliver_full_prompt[2]",
+        "tests.test_quality_generation::test_production_nodes_close_quality_loop_and_deliver_full_prompt[3]",
+        "tests.test_quality_entrypoints::test_offline_cli_accepts_review_responses_in_order"
+      ],
+      "evidence": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/full.xml"
+    },
+    "Q04": {
+      "passed": true,
+      "missing_selectors": [],
+      "testcases": [
+        "tests.test_quality_agent::test_coverage_gap_or_source_defect_never_calls_review[validation-validation_round_01.json]",
+        "tests.test_quality_agent::test_coverage_gap_or_source_defect_never_calls_review[discount-discount_defect.json]",
+        "tests.test_quality_workflow::test_base_noncompletion_never_invokes_review[validation-validation_round_01.json-partial]",
+        "tests.test_quality_workflow::test_base_noncompletion_never_invokes_review[discount-discount_defect.json-needs_review]"
+      ],
+      "evidence": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/full.xml"
+    },
+    "Q05": {
+      "passed": true,
+      "missing_selectors": [],
+      "testcases": [
+        "tests.test_quality_workflow::test_base_noncompletion_never_invokes_review[validation-validation_round_01.json-partial]",
+        "tests.test_quality_workflow::test_base_noncompletion_never_invokes_review[discount-discount_defect.json-needs_review]"
+      ],
+      "evidence": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/full.xml"
+    },
+    "Q06": {
+      "passed": true,
+      "missing_selectors": [],
+      "testcases": [
+        "tests.test_quality_generation::test_three_production_candidates_stop_at_quality_budget_without_round_four"
+      ],
+      "evidence": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/full.xml"
+    },
+    "Q07": {
+      "passed": true,
+      "missing_selectors": [],
+      "testcases": [
+        "tests.test_quality_client::test_business_inconsistency_and_model_host_metadata_are_never_accepted[approve_with_blocker]",
+        "tests.test_quality_client::test_business_inconsistency_and_model_host_metadata_are_never_accepted[revision_without_suggestion]",
+        "tests.test_quality_client::test_business_inconsistency_and_model_host_metadata_are_never_accepted[host_metadata]"
+      ],
+      "evidence": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/full.xml"
+    },
+    "Q08": {
+      "passed": true,
+      "missing_selectors": [],
+      "testcases": [
+        "tests.test_quality_agent::test_invalid_model_evidence_cannot_be_saved_as_success[target_functions-value0]",
+        "tests.test_quality_agent::test_invalid_model_evidence_cannot_be_saved_as_success[related_tests-value1]",
+        "tests.test_quality_agent::test_invalid_model_evidence_cannot_be_saved_as_success[spec_quote-\\u89c4\\u683c\\u4e2d\\u4e0d\\u5b58\\u5728\\u7684\\u5f15\\u7528]",
+        "tests.test_quality_agent::test_invalid_model_evidence_cannot_be_saved_as_success[test_code_quote-assert fabricated_result == True]",
+        "tests.test_quality_contracts::test_quotes_and_name_references_use_the_actual_review_input"
+      ],
+      "evidence": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/full.xml"
+    },
+    "Q09": {
+      "passed": true,
+      "missing_selectors": [],
+      "testcases": [
+        "tests.test_quality_workflow::test_invalid_quality_proposals_are_rejected_without_consuming_ready[wrong_run]",
+        "tests.test_quality_workflow::test_invalid_quality_proposals_are_rejected_without_consuming_ready[missing_response]",
+        "tests.test_quality_workflow::test_invalid_quality_proposals_are_rejected_without_consuming_ready[tampered_response]",
+        "tests.test_quality_workflow::test_invalid_quality_proposals_are_rejected_without_consuming_ready[rehashed_wrong_spec]",
+        "tests.test_quality_workflow::test_invalid_quality_proposals_are_rejected_without_consuming_ready[wrong_feedback_reason]",
+        "tests.test_quality_generation::test_invalid_quality_context_fails_before_client_call[consumed]",
+        "tests.test_quality_generation::test_invalid_quality_context_fails_before_client_call[not_registered]",
+        "tests.test_quality_generation::test_invalid_quality_context_fails_before_client_call[mixed]",
+        "tests.test_quality_generation::test_invalid_quality_context_fails_before_client_call[wrong_source_round]",
+        "tests.test_quality_generation::test_invalid_quality_context_fails_before_client_call[reason]",
+        "tests.test_quality_generation::test_invalid_quality_context_fails_before_client_call[findings]",
+        "tests.test_quality_generation::test_invalid_quality_context_fails_before_client_call[no_quality]",
+        "tests.test_quality_generation::test_invalid_quality_context_fails_before_client_call[wrong_action]",
+        "tests.test_quality_generation::test_invalid_quality_context_fails_before_client_call[base_incomplete]",
+        "tests.test_quality_generation::test_invalid_quality_context_fails_before_client_call[changed_spec]",
+        "tests.test_quality_generation::test_invalid_quality_context_fails_before_client_call[approved]",
+        "tests.test_quality_generation::test_invalid_quality_context_fails_before_client_call[review_error]",
+        "tests.test_quality_generation::test_invalid_quality_context_fails_before_client_call[stopped]",
+        "tests.test_quality_contracts::test_quality_messages_and_results_bind_to_the_same_assessment"
+      ],
+      "evidence": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/full.xml"
+    },
+    "Q10": {
+      "passed": true,
+      "missing_selectors": [],
+      "testcases": [
+        "tests.test_quality_workflow::test_duplicate_consumption_and_conflicting_feedback_cannot_commit_another_candidate"
+      ],
+      "evidence": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/full.xml"
+    },
+    "Q11": {
+      "passed": true,
+      "missing_selectors": [],
+      "testcases": [
+        "tests.test_quality_client::test_transient_failures_exhaust_shared_budget_with_safe_failure_telemetry[failure0-review_timeout]",
+        "tests.test_quality_client::test_transient_failures_exhaust_shared_budget_with_safe_failure_telemetry[failure1-review_network]",
+        "tests.test_quality_client::test_transient_failures_exhaust_shared_budget_with_safe_failure_telemetry[failure2-review_rate_limit]",
+        "tests.test_quality_client::test_transient_failures_exhaust_shared_budget_with_safe_failure_telemetry[failure3-review_service_unavailable]",
+        "tests.test_quality_client::test_transient_failures_exhaust_shared_budget_with_safe_failure_telemetry[failure4-review_service_unavailable]",
+        "tests.test_quality_client::test_permanent_http_errors_fail_once_without_echoing_body_or_headers[400-review_invalid_request]",
+        "tests.test_quality_client::test_permanent_http_errors_fail_once_without_echoing_body_or_headers[401-review_authentication]",
+        "tests.test_quality_client::test_permanent_http_errors_fail_once_without_echoing_body_or_headers[402-review_insufficient_balance]",
+        "tests.test_quality_client::test_permanent_http_errors_fail_once_without_echoing_body_or_headers[403-review_permission]",
+        "tests.test_quality_client::test_permanent_http_errors_fail_once_without_echoing_body_or_headers[404-review_not_found]",
+        "tests.test_quality_client::test_permanent_http_errors_fail_once_without_echoing_body_or_headers[422-invalid_review_response]",
+        "tests.test_quality_client::test_permanent_http_errors_fail_once_without_echoing_body_or_headers[307-invalid_review_response]",
+        "tests.test_quality_client::test_one_format_repair_returns_independent_decision_and_accumulates_usage[not JSON]",
+        "tests.test_quality_client::test_one_format_repair_returns_independent_decision_and_accumulates_usage[```json\\n{}\\n```]",
+        "tests.test_quality_client::test_one_format_repair_returns_independent_decision_and_accumulates_usage[{\"verdict\":\"approve\",\"summary\":\"ok\",\"findings\":[],\"extra\":\"untrusted\"}]",
+        "tests.test_quality_client::test_one_format_repair_returns_independent_decision_and_accumulates_usage[{\"verdict\":\"approve\",\"summary\":\"ok\",\"summary\":\"duplicate\"}]",
+        "tests.test_quality_client::test_one_format_repair_returns_independent_decision_and_accumulates_usage[[{\"verdict\":\"approve\"}]]",
+        "tests.test_quality_client::test_one_format_repair_returns_independent_decision_and_accumulates_usage[{\"verdict\":\"approve\",\"summary\":NaN}]",
+        "tests.test_quality_client::test_invalid_output_on_last_attempt_does_not_create_a_fourth_request"
+      ],
+      "evidence": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/full.xml"
+    },
+    "Q12": {
+      "passed": true,
+      "missing_selectors": [],
+      "testcases": [
+        "tests.test_quality_generation::test_quality_revision_keeps_original_passing_tests_and_support[delete]",
+        "tests.test_quality_generation::test_quality_revision_keeps_original_passing_tests_and_support[weaken]",
+        "tests.test_quality_generation::test_quality_revision_keeps_original_passing_tests_and_support[decorator]",
+        "tests.test_quality_generation::test_quality_revision_keeps_original_passing_tests_and_support[mapping]",
+        "tests.test_quality_generation::test_quality_revision_keeps_original_passing_tests_and_support[scenario]",
+        "tests.test_quality_generation::test_quality_revision_keeps_original_passing_tests_and_support[support]"
+      ],
+      "evidence": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/full.xml"
+    },
+    "Q13": {
+      "passed": true,
+      "missing_selectors": [],
+      "testcases": [
+        "tests.test_quality_workflow::test_quality_feedback_reaches_second_generation_and_approved_candidate_is_exported[tests]",
+        "tests.test_quality_workflow::test_quality_feedback_reaches_second_generation_and_approved_candidate_is_exported[tie]"
+      ],
+      "evidence": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/full.xml"
+    },
+    "Q14": {
+      "passed": true,
+      "missing_selectors": [],
+      "testcases": [
+        "tests.test_quality_workflow::test_review_stop_routes_preserve_findings_without_extra_feedback_or_candidates[decisions0-partial-quality_budget_reached-1]",
+        "tests.test_quality_workflow::test_review_stop_routes_preserve_findings_without_extra_feedback_or_candidates[decisions1-needs_review-ambiguous_specification-1]",
+        "tests.test_quality_workflow::test_review_stop_routes_preserve_findings_without_extra_feedback_or_candidates[decisions2-partial-quality_no_progress-2]",
+        "tests.test_quality_entrypoints::test_shared_service_composes_quality_and_summary[False-False]",
+        "tests.test_quality_entrypoints::test_shared_service_composes_quality_and_summary[False-True]",
+        "tests.test_quality_entrypoints::test_shared_service_composes_quality_and_summary[True-False]",
+        "tests.test_quality_entrypoints::test_shared_service_composes_quality_and_summary[True-True]"
+      ],
+      "evidence": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/full.xml"
+    },
+    "Q15": {
+      "passed": true,
+      "missing_selectors": [],
+      "testcases": [
+        "tests.test_quality_agent::test_concrete_spec_conflict_returns_human_review_without_generation_feedback"
+      ],
+      "evidence": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/full.xml"
+    },
+    "Q16": {
+      "passed": true,
+      "missing_selectors": [],
+      "testcases": [
+        "tests.test_quality_contracts::test_saved_legacy_contracts_still_load[p1/state.json-WorkflowState]",
+        "tests.test_quality_contracts::test_saved_legacy_contracts_still_load[p3/passed_result.json-AgentResult]",
+        "tests.test_quality_contracts::test_saved_legacy_contracts_still_load[p3/passed_context.json-AgentContext]",
+        "tests.test_quality_contracts::test_saved_legacy_contracts_still_load[p4/passed_state.json-WorkflowState]",
+        "tests.test_quality_contracts::test_saved_legacy_contracts_still_load[p4/revision_context.json-AgentContext]",
+        "tests.test_quality_contracts::test_saved_legacy_contracts_still_load[p4/feedback_message.json-Message]",
+        "tests.test_quality_contracts::test_saved_legacy_contracts_still_load[p6/summary_node_result.json-AgentResult]"
+      ],
+      "evidence": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/full.xml"
+    },
+    "Q17": {
+      "passed": true,
+      "missing_selectors": [],
+      "testcases": [
+        "tests.test_quality_entrypoints::test_cli_web_same_injected_responses_have_identical_routes_and_approved_export[False]",
+        "tests.test_quality_entrypoints::test_cli_web_same_injected_responses_have_identical_routes_and_approved_export[True]"
+      ],
+      "evidence": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/full.xml"
+    },
+    "Q18": {
+      "passed": true,
+      "missing_selectors": [],
+      "testcases": [
+        "tests.test_quality_reporting::test_inspection_detects_response_result_or_consumption_tampering[response_bytes]",
+        "tests.test_quality_reporting::test_inspection_detects_response_result_or_consumption_tampering[rehashed_telemetry]",
+        "tests.test_quality_reporting::test_inspection_detects_response_result_or_consumption_tampering[result_telemetry]",
+        "tests.test_quality_reporting::test_inspection_detects_response_result_or_consumption_tampering[consumer_context]",
+        "tests.test_reporting::test_inspect_summary_is_read_only_and_detects_changed_evidence[changed_final]",
+        "tests.test_reporting::test_inspect_summary_is_read_only_and_detects_changed_evidence[missing_final]",
+        "tests.test_reporting::test_inspect_summary_is_read_only_and_detects_changed_evidence[changed_artifact]",
+        "tests.test_reporting::test_inspect_summary_is_read_only_and_detects_changed_evidence[missing_artifact]"
+      ],
+      "evidence": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/full.xml"
+    },
+    "Q19": {
+      "passed": true,
+      "missing_selectors": [],
+      "testcases": [
+        "tests.test_quality_workflow::test_duplicate_candidate_after_quality_feedback_stops_before_another_review",
+        "tests.test_quality_workflow::test_review_stop_routes_preserve_findings_without_extra_feedback_or_candidates[decisions0-partial-quality_budget_reached-1]",
+        "tests.test_quality_workflow::test_review_stop_routes_preserve_findings_without_extra_feedback_or_candidates[decisions1-needs_review-ambiguous_specification-1]",
+        "tests.test_quality_workflow::test_review_stop_routes_preserve_findings_without_extra_feedback_or_candidates[decisions2-partial-quality_no_progress-2]"
+      ],
+      "evidence": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/full.xml"
+    },
+    "Q20": {
+      "passed": true,
+      "missing_selectors": [],
+      "testcases": [],
+      "evidence": "outputs/quality-install-verification/410c846c2b2441d4b7f2775c949f0298/results.json"
+    }
+  },
+  "scenarios": {
+    "evidence": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/scenarios.json",
+    "success": true,
+    "count": 10,
+    "pytest_processes": 15,
+    "model_requests_sent": 0,
+    "inputs_unchanged": true,
+    "cases": [
+      {
+        "name": "disabled",
+        "output": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/disabled",
+        "cli_exit": 0,
+        "task_status": "completed",
+        "quality_status": "disabled",
+        "quality_stop_reason": null,
+        "rounds": 1,
+        "selected_round": 1,
+        "pytest_processes": 1,
+        "review_calls": 0,
+        "exported_quality_approved": null,
+        "final_test_sha256": "d9bdae8ceedfd5db31fb98de50e1dee3bee21d95e3ec2c34ecdecf434c14660e",
+        "summary": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/disabled/summary.json",
+        "report": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/disabled/report.md"
+      },
+      {
+        "name": "approved",
+        "output": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/approved",
+        "cli_exit": 0,
+        "task_status": "completed",
+        "quality_status": "passed",
+        "quality_stop_reason": "approved",
+        "rounds": 1,
+        "selected_round": 1,
+        "pytest_processes": 1,
+        "review_calls": 1,
+        "exported_quality_approved": true,
+        "final_test_sha256": "d9bdae8ceedfd5db31fb98de50e1dee3bee21d95e3ec2c34ecdecf434c14660e",
+        "summary": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/approved/summary.json",
+        "report": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/approved/report.md"
+      },
+      {
+        "name": "quality_feedback",
+        "output": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/quality_feedback",
+        "cli_exit": 0,
+        "task_status": "completed",
+        "quality_status": "passed",
+        "quality_stop_reason": "approved",
+        "rounds": 2,
+        "selected_round": 2,
+        "pytest_processes": 2,
+        "review_calls": 2,
+        "exported_quality_approved": true,
+        "final_test_sha256": "98a03df59e44887e4cf75c25eb98352d6a81a0f24d066ca0f978f7d05c1cd5d9",
+        "summary": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/quality_feedback/summary.json",
+        "report": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/quality_feedback/report.md"
+      },
+      {
+        "name": "three_round_budget",
+        "output": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/three_round_budget",
+        "cli_exit": 1,
+        "task_status": "partial",
+        "quality_status": "changes_requested",
+        "quality_stop_reason": "quality_budget_reached",
+        "rounds": 3,
+        "selected_round": 3,
+        "pytest_processes": 3,
+        "review_calls": 3,
+        "exported_quality_approved": false,
+        "final_test_sha256": "9ec4a192afeacfb1cfb408fb37650c1486121964495f8d729a4c80651bf71125",
+        "summary": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/three_round_budget/summary.json",
+        "report": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/three_round_budget/report.md"
+      },
+      {
+        "name": "human_review",
+        "output": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/human_review",
+        "cli_exit": 1,
+        "task_status": "needs_review",
+        "quality_status": "needs_review",
+        "quality_stop_reason": "ambiguous_specification",
+        "rounds": 1,
+        "selected_round": 1,
+        "pytest_processes": 1,
+        "review_calls": 1,
+        "exported_quality_approved": false,
+        "final_test_sha256": "d9bdae8ceedfd5db31fb98de50e1dee3bee21d95e3ec2c34ecdecf434c14660e",
+        "summary": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/human_review/summary.json",
+        "report": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/human_review/report.md"
+      },
+      {
+        "name": "review_exhausted",
+        "output": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/review_exhausted",
+        "cli_exit": 1,
+        "task_status": "partial",
+        "quality_status": "error",
+        "quality_stop_reason": "review_error",
+        "rounds": 2,
+        "selected_round": 2,
+        "pytest_processes": 2,
+        "review_calls": 2,
+        "exported_quality_approved": false,
+        "final_test_sha256": "98a03df59e44887e4cf75c25eb98352d6a81a0f24d066ca0f978f7d05c1cd5d9",
+        "summary": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/review_exhausted/summary.json",
+        "report": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/review_exhausted/report.md"
+      },
+      {
+        "name": "execution_feedback_first",
+        "output": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/execution_feedback_first",
+        "cli_exit": 0,
+        "task_status": "completed",
+        "quality_status": "passed",
+        "quality_stop_reason": "approved",
+        "rounds": 2,
+        "selected_round": 2,
+        "pytest_processes": 2,
+        "review_calls": 1,
+        "exported_quality_approved": true,
+        "final_test_sha256": "8bba3f09666921d4256430381e395e661a7b46728701d8e2e8e6eb887a3cb199",
+        "summary": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/execution_feedback_first/summary.json",
+        "report": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/execution_feedback_first/report.md"
+      },
+      {
+        "name": "source_defect",
+        "output": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/source_defect",
+        "cli_exit": 1,
+        "task_status": "needs_review",
+        "quality_status": "not_run",
+        "quality_stop_reason": null,
+        "rounds": 1,
+        "selected_round": 1,
+        "pytest_processes": 1,
+        "review_calls": 0,
+        "exported_quality_approved": false,
+        "final_test_sha256": "81cbd6aa074f2b651d4d38d879de616610579bce1bd8d20c31a7a895976b342f",
+        "summary": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/source_defect/summary.json",
+        "report": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/source_defect/report.md"
+      },
+      {
+        "name": "duplicate",
+        "output": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/duplicate",
+        "cli_exit": 1,
+        "task_status": "partial",
+        "quality_status": "not_run",
+        "quality_stop_reason": "quality_no_progress",
+        "rounds": 2,
+        "selected_round": 1,
+        "pytest_processes": 1,
+        "review_calls": 1,
+        "exported_quality_approved": false,
+        "final_test_sha256": "d9bdae8ceedfd5db31fb98de50e1dee3bee21d95e3ec2c34ecdecf434c14660e",
+        "summary": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/duplicate/summary.json",
+        "report": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/duplicate/report.md"
+      },
+      {
+        "name": "passing_test_removed",
+        "output": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/passing_test_removed",
+        "cli_exit": 1,
+        "task_status": "partial",
+        "quality_status": "not_run",
+        "quality_stop_reason": null,
+        "rounds": 2,
+        "selected_round": 1,
+        "pytest_processes": 1,
+        "review_calls": 1,
+        "exported_quality_approved": false,
+        "final_test_sha256": "d9bdae8ceedfd5db31fb98de50e1dee3bee21d95e3ec2c34ecdecf434c14660e",
+        "summary": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/passing_test_removed/summary.json",
+        "report": "outputs/quality-s8/7a082b295fa84d5a988e753bf6812bff/passing_test_removed/report.md"
+      }
+    ]
+  },
+  "vendor": {
+    "unchanged": false,
+    "verified": true,
+    "files": 57,
+    "patches": [
+      "src/testgen_agent/tools/_pytest_results.py",
+      "src/testgen_agent/config.py",
+      "src/testgen_agent/models.py",
+      "src/testgen_agent/tools/test_runner.py",
+      "src/testgen_agent/tools/coverage_runner.py",
+      ".env.example"
+    ]
+  },
+  "historical_baselines": {
+    "pre_quality": 711,
+    "S5": 974,
+    "scope": "historical, not current results"
+  },
+  "success": true
+}

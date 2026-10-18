@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>45 秒三 Agent 质量审查演示</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f1f5fa;color:#20324a;font:15px/1.7 system-ui,"Microsoft YaHei",sans-serif}main{max-width:1100px;margin:35px auto;padding:0 24px}h1{font-size:29px;margin-bottom:10px}.muted{color:#5b6e86;font-size:13px}.badge{color:#246c53;font-weight:700}.nodes{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:24px 0}.node,.panel{background:white;border:1px solid #d7e1ee;border-radius:12px;padding:22px}.node.active{border:2px solid #286bb6;background:#edf5ff}.panel{margin:16px 0}button{cursor:pointer;border:0;border-radius:7px;background:#2868b1;color:white;padding:10px 18px;margin-right:12px;font:inherit}button.secondary{background:#e1eaf5;color:#23476b}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f5f8fc;padding:18px;border-radius:8px;font:13px/1.6 Consolas,monospace}.progress{height:7px;background:#dce6f3;border-radius:6px;margin:20px 0}.progress div{height:100%;width:0;background:#3678bf;border-radius:6px}.metrics{display:flex;gap:25px;flex-wrap:wrap;font-size:14px}.step{color:#2868b1;font-size:13px;font-weight:700}a{color:#2868b1}@media(max-width:650px){.nodes{grid-template-columns:1fr}main{padding:0 16px}h1{font-size:24px}.node{padding:14px}}
+</style>
+<main>
+<div class="badge">录制证据回放 · 45 秒</div><h1>覆盖已满，规格边界仍需补齐</h1>
+<p class="muted">固定生成和审查响应，生产 Agent 真实执行 pytest/coverage。回放不调用模型，不代表真实模型曾提出反馈。</p>
+<button id="play">从头播放 45 秒</button><button id="pause" class="secondary">暂停</button><span id="clock">0 / 45 秒</span>
+<div class="progress"><div id="bar"></div></div>
+<div class="nodes"><div class="node" id="generation"><strong>测试生成 Agent</strong><div>保留原测试并追加场景</div></div><div class="node" id="execution"><strong>执行与评估 Agent</strong><div>真实 pytest 与覆盖证据</div></div><div class="node" id="review"><strong>质量审查 Agent</strong><div>依据规格发现遗漏或批准</div></div></div>
+<section class="panel"><div class="step" id="step"></div><h2 id="title"></h2><p id="explain"></p><div class="metrics" id="metrics"></div><pre id="evidence"></pre><button class="secondary" id="next">查看下一段证据</button></section>
+<section class="panel"><strong>可追溯的原始记录</strong><p class="muted" id="provenance"></p><a id="report">打开本机原始报告</a><p class="muted">演示结束只展示已记录事实，不触发执行、调度或网络请求。</p></section>
+</main>
+<script id="recorded-data" type="application/json">__DEMO_DATA__</script>
+<script>
+const data=JSON.parse(document.getElementById('recorded-data').textContent),$=id=>document.getElementById(id);
+const first=data.rounds[0],second=data.rounds[1],finding=first.quality.assessment.decision.findings[0];
+const stages=[
+['generation','第 1 轮：先生成两个有效测试','50 与 150 分别覆盖未折扣、折扣两个分支。',data.first_tests],
+['execution','第 1 轮：真实执行已经达标','2 个测试全部通过，行和分支覆盖均为 100%。基础完成仍需送审。',JSON.stringify({execution:first.execution.kind,passed:first.execution.passed,line:first.coverage.line_percent,branch:first.coverage.branch_percent},null,2)],
+['review','审查发现：缺少恰好 100 的边界','审查仅引用规格提出补充，不能改写已通过断言。',`规格：${finding.spec_quote}\n发现：${finding.description}\n建议：${finding.suggested_case}`],
+['generation','第 2 轮：消费反馈并追加测试','第一轮质量反馈由第二轮生成节点消费，原测试保持不变。',data.test_diff+`\n消费证据：${data.feedback.message_id}\n来源第 ${data.feedback.source_round} 轮 → 消费第 ${data.feedback.consumer_round} 轮`],
+['execution','第 2 轮：重新真实执行','3 个测试全部通过；新候选必须重新执行，不能沿用上一轮观察。',JSON.stringify({execution:second.execution.kind,passed:second.execution.passed,line:second.coverage.line_percent,branch:second.coverage.branch_percent},null,2)],
+['review','审查批准当前候选，导出第 2 轮','质量批准与本轮规格、候选和执行证据绑定。',`决定：${second.quality.assessment.decision.verdict}\n选中轮次：${data.selected_round}\n最终测试 SHA-256：${data.final_test_sha256}`]
+];
+let elapsed=0,timer=null,start=0,index=0;
+function render(i){index=i;const [role,title,explain,evidence]=stages[i];for(const id of ['generation','execution','review'])$(id).classList.toggle('active',id===role);$('step').textContent=`录制片段 ${i+1} / 6`;$('title').textContent=title;$('explain').textContent=explain;$('evidence').textContent=evidence;$('metrics').textContent=`实际 pytest ${data.pytest_processes} 次 · 模型请求 ${data.external_requests} 次 · 最终选中第 ${data.selected_round} 轮`}
+function stop(){clearInterval(timer);timer=null}
+function tick(){elapsed=Math.min(45,(performance.now()-start)/1000);$('clock').textContent=`${Math.floor(elapsed)} / 45 秒`;$('bar').style.width=`${elapsed/45*100}%`;render(Math.min(5,Math.floor(elapsed/7.5)));if(elapsed>=45)stop()}
+$('play').onclick=()=>{stop();elapsed=0;start=performance.now();tick();timer=setInterval(tick,200)};
+$('pause').onclick=()=>{if(timer)stop();else{start=performance.now()-elapsed*1000;timer=setInterval(tick,200)}};
+$('next').onclick=()=>{stop();render((index+1)%6)};
+$('provenance').textContent=`任务 ${data.run_id} · 录制于 ${data.recorded_at} · 实际任务耗时 ${data.duration_seconds.toFixed(2)} 秒 · ${data.run_dir}`;
+$('report').href=data.report_href||'../'+data.run_dir+'/report.md';render(0);
+</script></html>

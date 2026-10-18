@@ -142,3 +142,10 @@ CLI 新增 --with-quality-review 和可重复 --review-fixture，后者仅限显
 summary.json 导出版本从 1.1 升为 1.2，增加逐轮质量状态/证据、已提交反馈消费位置、未解决发现来源和选中/最新/导出候选批准字段。external_requests 与 total_external_requests 同为生成加审查总量；根级 token_usage 同样为总量，model_usage 提供 generation/review/total 分项及 known_* 下界。缺失遥测保留 null，不改写业务 AgentState 的生成统计。WorkflowState、Result 和消息模型版本不变。
 
 报告与 Web 图读取实际节点/事件/已提交消息，明确 disabled/skipped 原因，下一轮不得沿用上一轮批准。Web 队列响应与任务快照增加默认 false 的 quality_review_enabled，来源为已校验请求配置；该字段表示配置而非调用证据。inspect_summary 保持只读，新增质量输出、批准对象、节点遥测和唯一反馈消费 Context 核验，旧任务继续缺省读取。详见 [S7 记录](quality-review-s7.md) 与 [报告字段](reporting.md)。
+
+
+## S9 验收资料与来源区分（2026-10-18）
+
+本阶段不增加生产协议字段。quality_review_enabled 默认 false、QualityAssessment/QualityFeedback 归属、三轮候选共享预算、当前批准门禁和 summary 1.2 口径不变。新 verification 索引明确区分 fixed_clients_real_pytest 与 real，记录请求派发审计、真实是否执行及授权状态；未调用模型时真实反馈数量为 null，不能将离线一次反馈填成真实结果。
+
+新增 quality_boundary 输入与两个完整 GeneratedTests 1.1 夹具，首轮两测试已达 100%/100%，质量补充保留原测试并新增 100→90，后轮批准与最终 SHA-256 对应。录制回放只读取该证据，不提交 WorkflowState、不调用模型。真实验收脚本仅在显式 --execute 和外传授权满足时使用三个指定样例，生产默认请求预算不变。见 [S9](quality-review-s9.md)、[范围](../evaluation/quality-review-s9-scope.json) 和 [当前索引](../evaluation/quality-review-s9.json)。

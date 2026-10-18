@@ -79,3 +79,10 @@ P2 只完成生成能力的离线与本地 HTTP 模拟验证。实际执行/归�
 质量分支不调用 build_action_context，旧执行反馈的动作一致性校验、上下文与首轮行为保留。生成客户端仍每节点只调用一次；返回的完整候选仍由 stage_revision_candidate 验证并保存，自动执行和消息消费归外层 Workflow。删除或弱化已通过测试、修改其装饰器/映射/场景/支持代码的候选不发出 candidate_ready。
 
 S5 的固定客户端验收已接入真实 TestGenerationAgent、TestExecutionAgent 和 TestQualityReviewAgent，而非 S4 的受控生成节点。S5 当时未开放应用入口，随后 S6 已接入共享服务、CLI/Web 开关；实现及验证见 [S5 记录](quality-review-s5.md)、[S6 记录](quality-review-s6.md)。
+
+
+## S9 门槛演示与真实验收（2026-10-18）
+
+quality_boundary 固定候选包含完整计划和映射：先验证 50→50、150→135，再保留原函数并追加 100→90。三个生产节点已真实执行此离线补充；生成输入接收第一轮已提交 quality_feedback，原历史保护与基础 FINISH 前提均保留。固定响应验证生成机制，不能证明真实模型会遗漏或提出同一边界发现。
+
+真实边界规格仅含行为约定，不包含“首轮故意遗漏”的演示要求。S9 真实模式先固定样例、目的地与预算，调用后按原结论记录；首轮 approve 不强制重跑，客户端错误不切换到固定批准。当前因自动审批拒绝尚未发生真实调用。生产生成默认最多 5 次 HTTP 尝试不变；验收脚本单独使用最多 2 次、含一次格式修复的受限策略。见 [S9](quality-review-s9.md)。

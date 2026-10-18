@@ -1,4 +1,4 @@
-"""S6 offline wheel/--target install check using the current locked dependencies."""
+"""Offline quality wheel/--target check using the current locked dependencies."""
 
 import json
 import os
@@ -38,6 +38,8 @@ def main():
             for name in ("quality_approve.json", "quality_request_revision.json", "quality_request_review.json"):
                 json.loads(archive.read(f"test_workflow/demo/data/{name}"))
             assert "test_workflow/adapters/quality_revision.py" in archive.namelist()
+            assert "test_workflow/quality_reporting.py" in archive.namelist()
+            assert "test_workflow/report_metrics.py" in archive.namelist()
         results["checks"].append("wheel-review-resources")
         execute("install-wheels", [sys.executable, "-m", "pip", "install", "--no-index", "--no-cache-dir",
                 "--no-deps", "--target", str(installed), *map(str, wheels.glob("*.whl"))])
@@ -63,6 +65,8 @@ for name in ('quality_approve.json', 'quality_request_revision.json', 'quality_r
     fixture_review_client((DATA_ROOT / name,))
 assert 'quality-review' in (STATIC_ROOT / 'index.html').read_text(encoding='utf-8')
 assert 'quality_review_enabled' in (STATIC_ROOT / 'app.js').read_text(encoding='utf-8')
+assert 'test_quality_review' in (STATIC_ROOT / 'workflow-view.js').read_text(encoding='utf-8')
+assert 'model-usage' in (STATIC_ROOT / 'index.html').read_text(encoding='utf-8')
 output = directory / 'cli-quality-run'
 assert main(['run', '--demo', '--source', str(DATA_ROOT / 'calculation.py'), '--spec', str(DATA_ROOT / 'calculation.md'),
              '--output', str(output), '--with-quality-review', '--review-fixture', str(DATA_ROOT / 'quality_approve.json'), '--with-summary']) == 0
@@ -72,6 +76,12 @@ assert len(state.quality_assessments) == 1
 assert (output / 'node_results/01/result_summary/result.json').is_file()
 assert (output / 'final/test_subject.py').is_file()
 assert main(['inspect', str(output), '--summary']) == 0
+from test_workflow.reporting import inspect_summary
+summary = inspect_summary(state)
+assert summary['schema_version'] == '1.2'
+assert summary['exported_quality_approved'] and summary['latest_quality_approved']
+assert summary['review_calls'] == 1 and summary['total_external_requests'] == 0
+assert summary['model_usage']['total']['client_calls'] == 2
 print(json.dumps({'data_root': str(DATA_ROOT), 'static_root': str(STATIC_ROOT), 'run_dir': str(output)}, ensure_ascii=False))
 """
         execute("installed-quality-cli", [sys.executable, "-I", "-c", harness, str(installed), str(directory)])

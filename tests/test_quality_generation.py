@@ -158,6 +158,28 @@ def test_production_nodes_close_quality_loop_and_deliver_full_prompt(tmp_path, r
     assert set(final.consumed_message_ids) == {item.message_id for item in final.messages}
 
 
+def test_three_production_candidates_stop_at_quality_budget_without_round_four(tmp_path):
+    last = revision_decision(True)
+    last = last.updated(findings=(last.findings[0].updated(
+        finding_id="large-product", suggested_case="calculate_total(1000000, 1000000) == 1000000000000"),))
+    initial, runner, client = prepare(tmp_path, decisions=(revision_decision(), revision_decision(True), last))
+    final = runner.run(initial)
+    assert final.workflow_status == "finished" and final.task_status == "partial", final.error_code
+    assert final.stop_reason == "round_limit_reached" and final.quality_stop_reason == "quality_budget_reached"
+    assert len(client.contexts) == len(final.quality_assessments) == len(final.agent_state.history) == 3
+    assert all(candidate.execution.all_passed and candidate.coverage.meets_target for candidate in final.agent_state.history)
+    feedback = [message for message in final.messages if message.type == "quality_feedback"]
+    assert [message.round for message in feedback] == [1, 2]
+    assert all(message.message_id in final.consumed_message_ids for message in feedback)
+    assert final.quality_assessments[-1].decision == last
+    assert not (final.run_dir / "node_results/04").exists()
+    events = [json.loads(line) for line in (final.run_dir / "events.jsonl").read_text(encoding="utf-8").splitlines()]
+    assert sum(event["type"] == "node_finished" and event["node"] == "result_summary" for event in events) == 1
+    summary = json.loads((final.run_dir / "summary.json").read_text(encoding="utf-8"))
+    assert summary["pytest_processes"] == summary["review_calls"] == 3
+    assert summary["unresolved_findings_round"] == 3 and not summary["exported_quality_approved"]
+
+
 def test_quality_generation_is_single_action_without_execution_or_state_mutation(tmp_path):
     context = prepared_revision(tmp_path)
     client = RecordingClient((candidates()[1],))

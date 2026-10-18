@@ -1,6 +1,8 @@
 # 多 Agent 测试 Workflow 工程设计
 
-版本：工程收尾与运行可视化 / 2026-10-13。**已实现两个 Agent、结构化协议、状态持久化、顺序调度、最多三轮反馈、停止路由、历史选择、可追溯报告与无模型扩展示例。** P5 三个必需真实模型案例独立保留；P6 本次验证日志、报告、只读查看和正式扩展。测试生成与执行能力来自 AgentDev，本项目新增节点边界、结构化交接、状态所有权和统一路由。P7.1 已有干净 wheel 安装及安装后 CLI/Web 验证记录；P7.2 已有全量回归和依赖检查，本次同步文档并实现运行图高亮。演示视频、最终提交版本和备用压缩包仍待实际交付。P0–P6 数字保留为历史证据，当前评审见 `evaluation/review_20261013.md`，本次更新见 `evaluation/run_visualization_20261013.md`。
+版本：质量审查 S9 准备 / 2026-10-18。已实现生成、执行与可选质量审查三个生产 Agent，默认关闭审查；共享服务、CLI/Web、三轮预算、质量反馈生成、证据报告与运行图均已接入。S8 全量 Workflow/vendor 1029 项及前端 25 项通过。S9 文档、三个真实案例和 45 秒离线演示已准备，真实调用因外传自动审批拒绝而等待明确授权，未计为完成。
+
+P0–P7 的真实案例、数字和日期保留为历史证据，见 evaluation/review_20261013.md 等记录；质量增量见 [详细计划](docs/quality-review-agent-plan.md)、[S8](docs/quality-review-s8.md)、[S9](docs/quality-review-s9.md)。课程演示视频、最终提交版本和备用压缩包仍按原清单实际交付。
 
 ## 架构与职责
 
@@ -11,6 +13,8 @@ flowchart LR
     SVC --> W[WorkflowRunner：唯一调度和状态提交者]
     W --> G[TestGenerationAgent]
     W --> E[TestExecutionAgent]
+    W --> Q[TestQualityReviewAgent：可选]
+    Q --> QC[独立 ReviewClient：规格、测试与执行证据]
     G --> GA[生成适配器：Prompt、LLM、候选校验与保存]
     E --> EA[执行适配器：pytest、coverage、归因与建议]
     GA --> V[AgentDev 运行源码快照]
@@ -23,7 +27,7 @@ flowchart LR
     W --> R[最终候选选择与报告]
 ```
 
-生成 Agent 接收源码事实、规格、历史和反馈，完成一次生成动作，不启动 pytest 或循环。执行 Agent 判断候选是否可执行、获取实测数据、保守归因并建议动作，不生成测试或调用生成节点。编排器读取流程定义与注册表，校验节点输出、提交状态、检查预算、决定后续节点；它不计作第三个 Agent。
+生成 Agent 接收源码事实、规格、历史和反馈，完成一次生成动作，不启动 pytest 或循环。执行 Agent 判断候选是否可执行、获取实测数据、保守归因并建议动作，不生成测试或调用生成节点。质量审查 Agent 根据原规格和当前测试/真实执行记录提出 approve、request_revision 或 request_review，不执行测试或修改共享状态。编排器读取流程定义与注册表，校验节点输出、提交状态、检查预算、决定后续节点；它不计作 Agent。
 
 执行 Agent 采用规则策略和真实工具观察。规则选择修复/补充/复核动作，保留可解释依据；每个 Agent 是否都调用 LLM 不是当前课程约束。
 
@@ -35,7 +39,16 @@ flowchart TD
     A --> G[生成 Agent：单轮候选]
     G --> E[执行 Agent：门禁、执行、覆盖与归因]
     E --> D{Workflow 校验动作与预算}
-    D -->|全通过且达标| R[提交业务结论并选择最终候选]
+    D -->|全通过且达标| EN{启用质量审查}
+    EN -->|否| R[提交业务结论并选择最终候选]
+    EN -->|是| Q[质量审查 Agent]
+    Q -->|approve 当前候选| R
+    Q -->|request_revision| QB{候选预算与发现进展}
+    QB -->|可继续| QF[已提交 quality_feedback]
+    QF --> G
+    QB -->|预算或无进展停止| R
+    Q -->|request_review| H
+    Q -->|审查错误| X
     D -->|可修复或覆盖不足| B{剩余轮次且有进展}
     B -->|是| F[反馈关联来源候选和执行]
     F --> G
@@ -72,6 +85,8 @@ outputs/<run_id>/
   node_results/NN/<node>/              每次节点 Context/Result
   handoffs/NN/candidate.json           外层候选交接
   evaluations/NN/assessment.json       当前轮执行评估
+  quality_reviews/NN/assessment.json    宿主审查记录与输入证据
+  quality_reviews/NN/response.json      审查响应与独立用量
   final/test_subject.py, subject.py    可用时导出所选测试及源码副本
   agent_workspace/                    由生成适配器创建
     subject.py
@@ -140,3 +155,16 @@ sequenceDiagram
 ```
 
 P1 产物放在外层 `demo_artifacts/01/`，内层 `agent_workspace/` 不创建。`task_status=null` 表示尚无测试业务结论。日志与状态不是跨文件事务；突然进程终止时日志可能领先于最后状态快照，基础版本只支持重新读取，不承诺续跑。状态写入失败时保留上一个可读取快照并向调用者暴露失败。
+
+
+## S1–S9 质量增量与验收边界
+
+quality_review_enabled 为严格布尔值且默认 false。启用后仅在基础真实全通过、行覆盖 ≥90% 且有分支时分支覆盖 ≥80% 时送审。生成/执行/审查通过 candidate_ready、review_ready、quality_feedback 协作，Workflow 保持唯一状态提交者；审查与执行反馈共用最多三轮候选。
+
+审查输出的规格引用、目标函数、测试引用、固定路径文件及候选/规格 SHA-256 由宿主验证。request_revision 仅为合法追加场景建立生成例外，原 FINISH 判断和已通过测试 AST/场景/映射/支持代码保护保留。approve 绑定当前候选及其真实执行，selected/latest/exported 批准分别展示。预算或发现无进展停止为 partial，具体规格问题转 needs_review，审查异常保持 error，不能默认批准。
+
+生产 DeepSeek 生成默认每次客户端调用最多 5 次 HTTP 尝试，审查默认最多 3 次且只允许一次格式修复；外层不自动重试。节点调用、HTTP 请求、模型 token 与 pytest 启动分开计数，未知总量保留 null 和已知小计。导出 summary 1.2 的 external_requests/token_usage 包含生成加审查，AgentState 统计保持生成口径，旧状态默认禁用审查，inspect 只读。
+
+S9 验收脚本另限制全局 18 次派发、每案例 6 次、生成/审查每次最多 2 次尝试，用于三个指定样例，不修改生产默认策略。离线门槛演示展示 100% 覆盖后补齐 100→90 的规格场景；真实模型是否提出同一发现尚未实测，不将固定响应当作真实反馈。
+
+当前不支持多文件项目、属性/变异测试、自动源码修复、任意 DAG 或并行 Agent、断点续跑和服务重启后的 Web 历史列表恢复；pytest 工作目录隔离不是安全沙箱。真实外传范围、自动审批阻塞、离线演示和验收证据见 S9 记录。

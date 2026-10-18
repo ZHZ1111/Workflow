@@ -1,0 +1,41 @@
+{
+  "prepared_at": "2026-10-18T08:38:36.040184+00:00",
+  "model": "deepseek-flash",
+  "base_url": "https://api.deepseek.com",
+  "request_timeout_seconds": 60,
+  "max_output_tokens_per_request": 8192,
+  "http_dispatch_limit": 18,
+  "http_per_case_limit": 6,
+  "maximum_request_body_bytes": 131072,
+  "generation_attempts_per_call": 2,
+  "review_attempts_per_call": 2,
+  "transient_retries": 0,
+  "format_repairs_per_call": 1,
+  "external_content": "Selected source/specification, generated plans/tests, execution/coverage excerpts, feedback and task metadata. Key only in authentication; never recorded.",
+  "samples": [
+    {
+      "name": "calculation",
+      "max_rounds": 2,
+      "source": "examples/calculation.py",
+      "source_sha256": "4043de06a34f5aa75919fa484db107bf05d5a78f95ac7cadcdd94cac60e429bf",
+      "spec": "examples/calculation.md",
+      "spec_sha256": "04af68dbe4df5b6270282ed6ccc02e52b344d2d6a033698e3d6cc0df0dbc69ff"
+    },
+    {
+      "name": "quality_boundary",
+      "max_rounds": 3,
+      "source": "examples/quality_boundary.py",
+      "source_sha256": "4d118e9ccf214c55dbf57528188417c8a9170510bf932b18360558e5b26f48fe",
+      "spec": "examples/quality_boundary.md",
+      "spec_sha256": "cff36501b6a0dad7331a0327f82dfd21a9aa54db39231bb4ac71d7397d7ec04d"
+    },
+    {
+      "name": "discount",
+      "max_rounds": 2,
+      "source": "examples/discount.py",
+      "source_sha256": "aabd7f536284dad04b0478446d78f7c377dc09d5548d09ae24b4cab7cede0b2e",
+      "spec": "examples/discount.md",
+      "spec_sha256": "6b741f3a28a1ebd3ad9b61ae01103086fe1f21bf0d87e40165b9c1580f59b63d"
+    }
+  ]
+}

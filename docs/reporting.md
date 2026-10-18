@@ -60,3 +60,10 @@
 `model_usage` 的 generation/review/total 各有 client_calls、request_attempts、external_requests、token_usage、known_*、client_modes 和 telemetry_complete。总量字段 `total_external_requests` 与 `external_requests` 相同。缺少遥测/Result 或身份不匹配时保留 null，已知小计不等于完整总量；未调用分项为零，缺失 total_tokens 不从其他 token 分量猜测。失败或被拒绝输出中身份匹配的遥测也计入观察用量。业务 `AgentState.api_calls/token_usage` 保持生成口径。
 
 `inspect --summary` 除旧产物核验外，重新校验状态完成门禁、固定路径质量输出、规格/测试/执行引用、已提交节点决定与遥测，以及质量反馈与下一轮唯一生成 Context。任何不一致拒绝读取；普通报告构建将质量证据问题标为 error 并记录 `quality_integrity_errors`。旧任务缺省为未启用，不补造审查记录。具体实现及本阶段验证见 [S7 记录](quality-review-s7.md)。
+
+
+## S9 材料与结果来源（2026-10-18）
+
+产品摘要仍为 1.2，默认关闭时显示 disabled，基础未完成显示 skipped，未知请求/token 与未调用分开。实际选中、最新与导出候选的批准对象保持分别核对。生成加审查总量在 model_usage/根级 external_requests 与 token_usage 展示，业务 AgentState 保持生成口径。
+
+`evaluation/quality-review-s9.json` 是独立验收索引，当前 real_model_executed=false、real_model_dispatches=0、real_quality_feedback_count=null；原因是自动审批拒绝外传启动。它不是 WorkflowState，也不是已完成的真实任务。离线演示索引另保存两轮执行与一次已消费质量反馈，HTML 的 45 秒只是录制讲解节奏，画面明确标注固定响应。真实任务若首轮批准，将如实记录零条真实质量反馈，不把离线补充移入真实统计。证据见 [S9 记录](quality-review-s9.md)。

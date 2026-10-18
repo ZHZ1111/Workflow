@@ -1,0 +1,53 @@
+{
+  "recorded_at": "2026-10-18T08:45:01.530827+00:00",
+  "status": "awaiting_explicit_external_data_authorization",
+  "s9_complete": false,
+  "real_model_executed": false,
+  "real_model_dispatches": 0,
+  "real_quality_feedback_count": null,
+  "authorization_block": {
+    "mechanism": "automatic approval review",
+    "action": "Execute three samples against https://api.deepseek.com",
+    "reason": "Starting S9 did not explicitly authorize the destination and external transmission of samples, generated tests, execution results and feedback.",
+    "bypassed": false
+  },
+  "scope": {
+    "path": "evaluation/quality-review-s9-scope.json",
+    "sha256": "3753ba1d8af35d9e96e0b90f4d50dbec82c9eb9f2d3ef5f96535a41d2615fa0e"
+  },
+  "script_tests": {
+    "junit": "outputs/quality-s9/s9-script-tests.xml",
+    "tests": 78,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "offline_demo": {
+    "trace": "evaluation/quality-review-s9-demo.json",
+    "trace_sha256": "f7c902f8d15b1a5f09070ddd615bfd2d218d8e6d56390d0e968fb38a6fdaeb32",
+    "html": "evaluation/quality-review-demo.html",
+    "html_sha256": "fdff1a7f079c01d15bacf5e69cd57965e241b1dbc3f8a5575de832d08c8297a4",
+    "run_dir": "outputs/quality-demo/s9-20261018/run",
+    "pytest_processes": 2,
+    "passed_by_round": [
+      2,
+      3
+    ],
+    "line_coverage_by_round": [
+      100.0,
+      100.0
+    ],
+    "branch_coverage_by_round": [
+      100.0,
+      100.0
+    ],
+    "quality_feedback_count": 1,
+    "consumer_round": 2,
+    "selected_round": 2,
+    "final_test_sha256": "4dfedd09b45b79f1196bdca1034d4a9c68340ef96592cf62a3aca5349ee144db",
+    "real_model_requests": 0,
+    "replay_seconds": 45,
+    "browser_verified_end": "45 / 45 seconds; approve; selected round 2",
+    "screenshot": "outputs/quality-demo/s9-20261018/replay-proof.png"
+  }
+}
