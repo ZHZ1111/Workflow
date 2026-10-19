@@ -16,7 +16,7 @@ def main():
     directory.mkdir(parents=True)
     wheels, installed = directory / "wheels", directory / "installed"
     results = {"success": False, "directory": str(directory), "checks": [],
-               "isolation": "Python -I with two non-editable wheels in --target; reuse current locked third-party dependencies"}
+               "isolation": "Python -I with one integrated non-editable wheel in --target; reuse current locked third-party dependencies"}
     environment = {key: value for key, value in os.environ.items() if key != "PYTHONPATH"}
     environment["PYTHONIOENCODING"] = "utf-8"
 
@@ -32,9 +32,16 @@ def main():
 
     try:
         execute("build-wheels", [sys.executable, "-m", "pip", "wheel", "--no-index", "--no-cache-dir",
-                "--no-deps", "--no-build-isolation", "--wheel-dir", str(wheels), str(ROOT / "vendor/agentdev"), str(ROOT)])
+                "--no-deps", "--no-build-isolation", "--wheel-dir", str(wheels), str(ROOT)])
         workflow_wheel = next(wheels.glob("test_workflow-*.whl"))
+        assert len(list(wheels.glob("*.whl"))) == 1
         with ZipFile(workflow_wheel) as archive:
+            for agent in ("test_generation", "test_execution", "test_quality_review"):
+                assert f"test_workflow/agents/{agent}/agent.py" in archive.namelist()
+                assert f"test_workflow/agents/{agent}.py" not in archive.namelist()
+            assert "test_workflow/agents/test_generation/core/tools/_pytest_results.py" in archive.namelist()
+            metadata = next(name for name in archive.namelist() if name.endswith(".dist-info/METADATA"))
+            assert "Requires-Dist: testgen-agent" not in archive.read(metadata).decode("utf-8")
             for name in ("quality_approve.json", "quality_request_revision.json", "quality_request_review.json"):
                 json.loads(archive.read(f"test_workflow/demo/data/{name}"))
             assert "test_workflow/adapters/quality_revision.py" in archive.namelist()
@@ -44,7 +51,7 @@ def main():
         execute("install-wheels", [sys.executable, "-m", "pip", "install", "--no-index", "--no-cache-dir",
                 "--no-deps", "--target", str(installed), *map(str, wheels.glob("*.whl"))])
         # -I excludes the current working directory and PYTHONPATH. Explicitly
-        # assert that both project imports resolve to the installed wheels.
+        # assert that workflow and generation core resolve to the same wheel.
         harness = """
 import json
 from pathlib import Path
@@ -54,9 +61,9 @@ sys.stdout.reconfigure(encoding='utf-8')
 sys.stderr.reconfigure(encoding='utf-8')
 installed, directory = map(Path, sys.argv[1:3])
 sys.path.insert(0, str(installed))
-import test_workflow, testgen_agent
+import test_workflow, test_workflow.agents.test_generation.core
 assert Path(test_workflow.__file__).is_relative_to(installed)
-assert Path(testgen_agent.__file__).is_relative_to(installed)
+assert Path(test_workflow.agents.test_generation.core.__file__).is_relative_to(installed)
 from test_workflow.cli import main
 from test_workflow.service import DATA_ROOT, fixture_review_client
 from test_workflow.state import StateStore

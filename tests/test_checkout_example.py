@@ -5,7 +5,7 @@ import importlib.util
 from pathlib import Path
 
 import pytest
-from testgen_agent.tools import analyze_source
+from test_workflow.agents.test_generation.core.tools import analyze_source
 
 SOURCE = Path(__file__).resolve().parents[1] / "examples/checkout.py"
 definition = importlib.util.spec_from_file_location("checkout_example", SOURCE)

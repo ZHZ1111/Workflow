@@ -4,16 +4,16 @@ from pathlib import Path
 
 import pytest
 
-from testgen_agent import models as m
-from testgen_agent.agent import AgentTools, apply_decision, build_action_context, choose_action, run_initial_step
-from testgen_agent.tools import analyze_source, run_tests_with_coverage
+from test_workflow.agents.test_generation.core import models as m
+from test_workflow.agents.test_generation.core.agent import AgentTools, apply_decision, build_action_context, choose_action, run_initial_step
+from test_workflow.agents.test_generation.core.tools import analyze_source, run_tests_with_coverage
 from test_agent import full_coverage, passed, state_for
 from test_generation import SyntheticClient, llm_result, relationship_generated, single_function_generated
 
 
 @pytest.fixture
 def source():
-    return analyze_source(Path(__file__).parents[1] / "examples" / "relationships.py")
+    return analyze_source(Path(__file__).resolve().parents[2] / "examples" / "agentdev" / "relationships.py")
 
 
 def failure_execution(kind="assertion_failed", *, exception="AssertionError", origin="test_subject.py", module=None, line=4):
@@ -27,8 +27,8 @@ def failure_execution(kind="assertion_failed", *, exception="AssertionError", or
 
 
 def discount_state(*, spec=None, expected=90, line=4, args=(100,)):
-    root = Path(__file__).parents[1]
-    source = analyze_source(root / "examples" / "discount.py")
+    root = Path(__file__).resolve().parents[2]
+    source = analyze_source(root / "examples" / "agentdev" / "discount.py")
     generated = single_function_generated("calculate_discount", code=(
         "from subject import calculate_discount\n\n"
         "def test_behavior():\n"
@@ -38,7 +38,7 @@ def discount_state(*, spec=None, expected=90, line=4, args=(100,)):
     generated = generated.updated(plan=generated.plan.updated(scenarios=(scenario,)))
     state = m.AgentState(
         schema_version="1.1", run_id="discount-offline", oracle_mode="specification", source_info=source,
-        behavior_specification=spec if spec is not None else (root / "examples" / "discount.md").read_text(encoding="utf-8"),
+        behavior_specification=spec if spec is not None else (root / "examples" / "agentdev" / "discount.md").read_text(encoding="utf-8"),
         request=m.TaskInput(source_path=source.source_path,
                             model=m.ModelInfo(model="offline-model", base_url="https://example.com")),
         history=(m.CandidateRound(number=1, generated=generated, test_path=Path("rounds/01/test_subject.py"),

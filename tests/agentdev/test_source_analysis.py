@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from testgen_agent.tools import (
+from test_workflow.agents.test_generation.core.tools import (
     MAX_SOURCE_BYTES,
     SourceAnalysisError,
     SourceReadError,
@@ -237,11 +237,11 @@ def test_rejects_more_than_five_target_functions(tmp_path):
 
 
 def test_project_examples_are_accepted():
-    root = Path(__file__).parents[1]
+    root = Path(__file__).resolve().parents[2]
 
-    calculation = analyze_source(root / "examples" / "calculation.py")
-    validation = analyze_source(root / "examples" / "validation.py")
-    relationships = analyze_source(root / "examples" / "relationships.py")
+    calculation = analyze_source(root / "examples" / "agentdev" / "calculation.py")
+    validation = analyze_source(root / "examples" / "agentdev" / "validation.py")
+    relationships = analyze_source(root / "examples" / "agentdev" / "relationships.py")
 
     assert [item.name for item in calculation.functions] == ["calculate_total"]
     assert [(item.kind, item.line) for item in validation.branches] == [

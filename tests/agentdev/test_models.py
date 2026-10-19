@@ -6,8 +6,8 @@ from pathlib import Path
 import pytest
 from pydantic import ValidationError
 
-from testgen_agent import models as m
-from testgen_agent.config import load_config
+from test_workflow.agents.test_generation.core import models as m
+from test_workflow.agents.test_generation.core.config import load_config
 
 
 @pytest.fixture

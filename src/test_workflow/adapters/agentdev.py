@@ -4,13 +4,13 @@ from dataclasses import dataclass
 import json
 from pathlib import Path
 
-from testgen_agent.agent import build_action_context, choose_action
-from testgen_agent.generation import (
+from test_workflow.agents.test_generation.core.agent import build_action_context, choose_action
+from test_workflow.agents.test_generation.core.generation import (
     GenerationClient, InitialCandidateArtifacts, generate_initial_candidate, stage_revision_candidate,
 )
-from testgen_agent.llm_client import GenerationContext, LLMError, LLMGenerationResult
-from testgen_agent.models import AgentAction, AgentState, CandidateRound, TokenUsage
-from testgen_agent.workspace import round_directory
+from test_workflow.agents.test_generation.core.llm_client import GenerationContext, LLMError, LLMGenerationResult
+from test_workflow.agents.test_generation.core.models import AgentAction, AgentState, CandidateRound, TokenUsage
+from test_workflow.agents.test_generation.core.workspace import round_directory
 
 from ..contracts import AgentContext, ArtifactRef
 from ..storage import atomic_write, file_digest, task_path, verify_artifact

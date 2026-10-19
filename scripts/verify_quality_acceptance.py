@@ -20,7 +20,7 @@ from urllib.parse import unquote
 from uuid import uuid4
 import xml.etree.ElementTree as ET
 
-from testgen_agent.models import GeneratedTests
+from test_workflow.agents.test_generation.core.models import GeneratedTests
 from test_workflow.quality_contracts import Finding, ReviewDecision
 from test_workflow.reporting import inspect_summary
 from test_workflow.service import DATA_ROOT
@@ -263,7 +263,7 @@ def check_full(evidence):
     """Persist progress and the exit code independently of a terminal session."""
     if (evidence / "full-run.json").exists() or (evidence / "full.xml").exists():
         raise ValueError("full regression already recorded; use a new evidence directory")
-    command = [sys.executable, "-m", "pytest", "tests", "vendor/agentdev/tests", "-q",
+    command = [sys.executable, "-m", "pytest", "tests", "-q",
                "--junitxml", str(evidence / "full.xml")]
     started = time.monotonic()
     record = {"command": command, "started_at": datetime.now(timezone.utc).isoformat(),
@@ -335,8 +335,8 @@ def collect(evidence, installed, legacy_runs):
         checks[name] = {"exit_code": checked.returncode, "log": relative(log), "sha256": file_digest(log)}
     result = {"recorded_at": datetime.now(timezone.utc).isoformat(), "platform": platform.platform(), "python": sys.version,
         "head": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
-        "full_scope_counts": {"workflow": sum(case.get("classname", "").startswith("tests.") for case in cases),
-                              "vendor": sum(case.get("classname", "").startswith("vendor.") for case in cases)},
+        "full_scope_counts": {"workflow": sum(case.get("classname", "").startswith("tests.") and not case.get("classname", "").startswith("tests.agentdev.") for case in cases),
+                              "vendor": sum(case.get("classname", "").startswith(("tests.agentdev.", "vendor.")) for case in cases)},
         "evidence_directory": relative(evidence), "phases": phases, "frontend": frontend,
         "full_run": full_run,
         "interrupted_attempts": json.loads((evidence / "interrupted.json").read_text(encoding="utf-8")) if (evidence / "interrupted.json").exists() else [],

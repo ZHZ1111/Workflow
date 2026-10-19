@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 from pydantic import ValidationError
-from testgen_agent.models import AgentAction, TokenUsage
+from test_workflow.agents.test_generation.core.models import AgentAction, TokenUsage
 
 from test_workflow.config import WorkflowConfig
 from test_workflow.contracts import (

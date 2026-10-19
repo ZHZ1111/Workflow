@@ -2,14 +2,14 @@
 
 from collections.abc import Callable
 
-from testgen_agent.models import AgentAction, TaskStatus
-from testgen_agent.tools import ExecutionArtifactError, ExecutionWorkspaceError, run_tests_with_coverage
+from test_workflow.agents.test_generation.core.models import AgentAction, TaskStatus
+from test_workflow.agents.test_generation.core.tools import ExecutionArtifactError, ExecutionWorkspaceError, run_tests_with_coverage
 
-from ..adapters.execution import (
+from ...adapters.execution import (
     ExecutionGateError, evaluate, preflight_execution, save_assessment, validate_observation,
 )
-from ..contracts import AgentContext, AgentResult, Message, MessagePayload, StatePatch
-from ..storage import task_path
+from ...contracts import AgentContext, AgentResult, Message, MessagePayload, StatePatch
+from ...storage import task_path
 
 
 class TestExecutionAgent:

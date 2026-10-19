@@ -1,7 +1,7 @@
 from pathlib import Path
 from unittest.mock import patch
 
-from testgen_agent.config import AppConfig
+from test_workflow.agents.test_generation.core.config import AppConfig
 
 from test_workflow.cli import main
 from test_workflow.service import fixture_client

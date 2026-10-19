@@ -1,5 +1,7 @@
 # P3 单候选执行与评估
 
+> 2026-10-19 目录更新：三个 Agent 已并列整合到同一个包，当前结构与安装方式见 [Agent 目录说明](agent-layout.md)。本文中的旧 vendor/包路径保留为历史实现说明，当前运行命令以 README 为准。
+
 版本：P3 / 2026-10-10。`TestExecutionAgent.run(context) -> AgentResult` 只处理当前候选，返回真实执行观察和动作建议。节点不调用生成客户端，也不调用其他节点。独立验收入口为 `python scripts/p3_baseline.py`，完整产物索引见 `evaluation/p3_results.json`。
 
 ## 执行门禁

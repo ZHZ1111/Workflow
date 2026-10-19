@@ -3,7 +3,7 @@
 from typing import Annotated, Literal
 
 from pydantic import Field, StrictBool, StrictInt
-from testgen_agent.models import ContractModel, ModelInfo, RoundNumber
+from test_workflow.agents.test_generation.core.models import ContractModel, ModelInfo, RoundNumber
 
 
 class WorkflowConfig(ContractModel):

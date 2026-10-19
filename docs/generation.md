@@ -1,5 +1,7 @@
 # P2 单步生成与修订
 
+> 2026-10-19 目录更新：三个 Agent 已并列整合到同一个包，当前结构与安装方式见 [Agent 目录说明](agent-layout.md)。本文中的旧 vendor/包路径保留为历史实现说明，当前运行命令以 README 为准。
+
 日期：2026-10-09。入口为 `TestGenerationAgent.run(AgentContext) -> AgentResult`，生成客户端由构造参数注入；节点不创建其他 Agent，不执行 pytest，不调用旧 run_agent 或 run_initial_step。
 
 ## 入口和一次调用

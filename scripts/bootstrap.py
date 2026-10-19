@@ -1,4 +1,4 @@
-"""Install the two local packages and locked dependencies without the original repository."""
+"""Install the integrated workflow package and its locked dependencies."""
 
 import argparse
 from pathlib import Path
@@ -14,14 +14,13 @@ def main():
     parser.add_argument("--venv", type=Path, default=ROOT / ".venv")
     args = parser.parse_args()
     if sys.version_info[:2] != (3, 13):
-        parser.error("CPython 3.13 is required by both project packages")
+        parser.error("CPython 3.13 is required by this project")
     destination = args.venv.resolve()
     python = destination / ("Scripts/python.exe" if sys.platform == "win32" else "bin/python")
     if not python.exists():
         venv.EnvBuilder(with_pip=True).create(destination)
     commands = [
         [str(python), "-m", "pip", "install", "-r", str(ROOT / "requirements.lock")],
-        [str(python), "-m", "pip", "install", "--no-build-isolation", "--no-deps", "-e", str(ROOT / "vendor/agentdev")],
         [str(python), "-m", "pip", "install", "--no-build-isolation", "--no-deps", "-e", str(ROOT)],
         [str(python), "-m", "pip", "check"],
     ]

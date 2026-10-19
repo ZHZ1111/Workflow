@@ -1,5 +1,7 @@
 # 多 Agent 测试 Workflow 工程设计
 
+> 2026-10-19 目录更新：三个 Agent 已并列整合到同一个包，当前结构与安装方式见 [Agent 目录说明](docs/agent-layout.md)。本文中的旧 vendor/包路径保留为历史实现说明，当前运行命令以 README 为准。
+
 版本：质量审查 S9 准备 / 2026-10-18。已实现生成、执行与可选质量审查三个生产 Agent，默认关闭审查；共享服务、CLI/Web、三轮预算、质量反馈生成、证据报告与运行图均已接入。S8 全量 Workflow/vendor 1029 项及前端 25 项通过。S9 文档、三个真实案例和 45 秒离线演示已准备，真实调用因外传自动审批拒绝而等待明确授权，未计为完成。
 
 P0–P7 的真实案例、数字和日期保留为历史证据，见 evaluation/review_20261013.md 等记录；质量增量见 [详细计划](docs/quality-review-agent-plan.md)、[S8](docs/quality-review-s8.md)、[S9](docs/quality-review-s9.md)。课程演示视频、最终提交版本和备用压缩包仍按原清单实际交付。
@@ -103,7 +105,7 @@ Workflow 轨迹和 AgentDev 工具轨迹分开写入，各自唯一写入者。�
 
 | 决策 | 理由 | 验证阶段 |
 |---|---|---|
-| 保留包名 testgen_agent，使用 vendor 快照 | 子进程依赖 `_pytest_results` 插件可导入；移交不依赖原目录 | P0/P7 |
+| 三个 Agent 并列归入同一包，生成 Agent 内保留复用 core | 子进程显式加载集成后的 `_pytest_results` 插件；只安装当前项目 | 2026-10-19 目录整合 |
 | 新 Workflow 不调用 run_agent/run_initial_step | 两者都含执行；完整闭环会掩盖节点协作 | P2/P4 |
 | 复用 CandidateRound/ExecutionResult/CoverageResult | 避免重复定义不同含义的测试数据 | P1/P3 |
 | 单进程同步，最多三轮 | 适合工时预算，现有路径与模型轮次也硬限制 3 | P4/P5 |

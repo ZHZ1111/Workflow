@@ -1,0 +1,464 @@
+{
+  "schema_version": "1.0",
+  "migrated_on": "2026-10-19",
+  "runtime_package": "test_workflow.agents.test_generation.core",
+  "files": [
+    {
+      "path": ".env.example",
+      "current_path": "docs/agentdev/.env.example",
+      "before_sha256": "1d1ae4042fbd8ac9c65cd158c9efc0539ab19dd322778875530fc67da0913f95",
+      "sha256": "1d1ae4042fbd8ac9c65cd158c9efc0539ab19dd322778875530fc67da0913f95",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "5bcfe530f8e38fb90cd5dfa9100d983efe8d6e95b14490d89d3306f531b0d157"
+    },
+    {
+      "path": "Design.md",
+      "current_path": "docs/agentdev/Design.md",
+      "before_sha256": "d46d86a4e199e396e8cfd5ca690340dceb2d095a1575db9884e541b70ff8abf0",
+      "sha256": "d46d86a4e199e396e8cfd5ca690340dceb2d095a1575db9884e541b70ff8abf0",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "d46d86a4e199e396e8cfd5ca690340dceb2d095a1575db9884e541b70ff8abf0"
+    },
+    {
+      "path": "examples/calculation.md",
+      "current_path": "examples/agentdev/calculation.md",
+      "before_sha256": "04af68dbe4df5b6270282ed6ccc02e52b344d2d6a033698e3d6cc0df0dbc69ff",
+      "sha256": "04af68dbe4df5b6270282ed6ccc02e52b344d2d6a033698e3d6cc0df0dbc69ff",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "04af68dbe4df5b6270282ed6ccc02e52b344d2d6a033698e3d6cc0df0dbc69ff"
+    },
+    {
+      "path": "examples/calculation.py",
+      "current_path": "examples/agentdev/calculation.py",
+      "before_sha256": "4043de06a34f5aa75919fa484db107bf05d5a78f95ac7cadcdd94cac60e429bf",
+      "sha256": "4043de06a34f5aa75919fa484db107bf05d5a78f95ac7cadcdd94cac60e429bf",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "4043de06a34f5aa75919fa484db107bf05d5a78f95ac7cadcdd94cac60e429bf"
+    },
+    {
+      "path": "examples/discount.md",
+      "current_path": "examples/agentdev/discount.md",
+      "before_sha256": "6b741f3a28a1ebd3ad9b61ae01103086fe1f21bf0d87e40165b9c1580f59b63d",
+      "sha256": "6b741f3a28a1ebd3ad9b61ae01103086fe1f21bf0d87e40165b9c1580f59b63d",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "6b741f3a28a1ebd3ad9b61ae01103086fe1f21bf0d87e40165b9c1580f59b63d"
+    },
+    {
+      "path": "examples/discount.py",
+      "current_path": "examples/agentdev/discount.py",
+      "before_sha256": "aabd7f536284dad04b0478446d78f7c377dc09d5548d09ae24b4cab7cede0b2e",
+      "sha256": "aabd7f536284dad04b0478446d78f7c377dc09d5548d09ae24b4cab7cede0b2e",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "aabd7f536284dad04b0478446d78f7c377dc09d5548d09ae24b4cab7cede0b2e"
+    },
+    {
+      "path": "examples/independent.md",
+      "current_path": "examples/agentdev/independent.md",
+      "before_sha256": "742c8f04669ef70bb92ee59c791b09adbccb68cded94b0b4efb633ecd3d6be3f",
+      "sha256": "742c8f04669ef70bb92ee59c791b09adbccb68cded94b0b4efb633ecd3d6be3f",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "742c8f04669ef70bb92ee59c791b09adbccb68cded94b0b4efb633ecd3d6be3f"
+    },
+    {
+      "path": "examples/independent.py",
+      "current_path": "examples/agentdev/independent.py",
+      "before_sha256": "6b0cc496a888589d8b82cee816929f76ea1e3c0765ac54dace587f55d80f1d3f",
+      "sha256": "6b0cc496a888589d8b82cee816929f76ea1e3c0765ac54dace587f55d80f1d3f",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "6b0cc496a888589d8b82cee816929f76ea1e3c0765ac54dace587f55d80f1d3f"
+    },
+    {
+      "path": "examples/order_flow.md",
+      "current_path": "examples/agentdev/order_flow.md",
+      "before_sha256": "1f57756f0edf018343fd13d62743d502917343a7ca4bafb63f7eb1fcc64a87ba",
+      "sha256": "1f57756f0edf018343fd13d62743d502917343a7ca4bafb63f7eb1fcc64a87ba",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "bbc14cb20e8cb088fa81a598f1191a2aa13a1390ffa87c4192a529c7bbb56a0a"
+    },
+    {
+      "path": "examples/order_flow.py",
+      "current_path": "examples/agentdev/order_flow.py",
+      "before_sha256": "646e0f23060878c7f6d327ca03ab4580a0181add36bec2a4f3289fa9e24f448c",
+      "sha256": "646e0f23060878c7f6d327ca03ab4580a0181add36bec2a4f3289fa9e24f448c",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "646e0f23060878c7f6d327ca03ab4580a0181add36bec2a4f3289fa9e24f448c"
+    },
+    {
+      "path": "examples/relationships.md",
+      "current_path": "examples/agentdev/relationships.md",
+      "before_sha256": "26cd5b047fc10bc8afe98bbf7ac29cf86abf8cc1182f90dbe114dc83490c24f3",
+      "sha256": "26cd5b047fc10bc8afe98bbf7ac29cf86abf8cc1182f90dbe114dc83490c24f3",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "26cd5b047fc10bc8afe98bbf7ac29cf86abf8cc1182f90dbe114dc83490c24f3"
+    },
+    {
+      "path": "examples/relationships.py",
+      "current_path": "examples/agentdev/relationships.py",
+      "before_sha256": "5de320c9eaf8194e0a1b105781dcca0767b261bf13b5ca66b3be8b423dce9049",
+      "sha256": "5de320c9eaf8194e0a1b105781dcca0767b261bf13b5ca66b3be8b423dce9049",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "5de320c9eaf8194e0a1b105781dcca0767b261bf13b5ca66b3be8b423dce9049"
+    },
+    {
+      "path": "examples/test_order_flow.py",
+      "current_path": "examples/agentdev/test_order_flow.py",
+      "before_sha256": "6b4c100d0a950dc9edf1b64f55b10fb134256ca7d9ef666f011b3adb8501646b",
+      "sha256": "6b4c100d0a950dc9edf1b64f55b10fb134256ca7d9ef666f011b3adb8501646b",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "6b4c100d0a950dc9edf1b64f55b10fb134256ca7d9ef666f011b3adb8501646b"
+    },
+    {
+      "path": "examples/validation.md",
+      "current_path": "examples/agentdev/validation.md",
+      "before_sha256": "139e4633e796b167bea5410bb0ea604715d9219125f8234a29a0c4b99b5d29b1",
+      "sha256": "139e4633e796b167bea5410bb0ea604715d9219125f8234a29a0c4b99b5d29b1",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "139e4633e796b167bea5410bb0ea604715d9219125f8234a29a0c4b99b5d29b1"
+    },
+    {
+      "path": "examples/validation.py",
+      "current_path": "examples/agentdev/validation.py",
+      "before_sha256": "283e7c1ba21bfbb01d82d0473631f500f552f27f1c801069291b5e0f3777dd7c",
+      "sha256": "283e7c1ba21bfbb01d82d0473631f500f552f27f1c801069291b5e0f3777dd7c",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "283e7c1ba21bfbb01d82d0473631f500f552f27f1c801069291b5e0f3777dd7c"
+    },
+    {
+      "path": "pyproject.toml",
+      "current_path": "docs/agentdev/pyproject.toml",
+      "before_sha256": "2f4fb4e186f6391ce548be849cdad639f84365a98c693f91e4ec921e8e455d55",
+      "sha256": "2f4fb4e186f6391ce548be849cdad639f84365a98c693f91e4ec921e8e455d55",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "2f4fb4e186f6391ce548be849cdad639f84365a98c693f91e4ec921e8e455d55"
+    },
+    {
+      "path": "README.md",
+      "current_path": "docs/agentdev/README.md",
+      "before_sha256": "a9b0a7f88ef455da66b84101d038107f8abe6693368367d52f5f307cd7740d93",
+      "sha256": "a9b0a7f88ef455da66b84101d038107f8abe6693368367d52f5f307cd7740d93",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "6e4696b8e81d59e6d095329a39599feefff36c982aaf0166c6f8615f129584b1"
+    },
+    {
+      "path": "requirements.lock",
+      "current_path": "docs/agentdev/requirements.lock",
+      "before_sha256": "d4d742b5ff1bd416b42c3a076f356e3a2d8944e1c6d1061469df0d99af67b630",
+      "sha256": "d4d742b5ff1bd416b42c3a076f356e3a2d8944e1c6d1061469df0d99af67b630",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "36019c0732c8081417815c327aa5969487d8c2be37554a503ccf8fbfdf5c31a7"
+    },
+    {
+      "path": "src/testgen_agent/__init__.py",
+      "current_path": "src/test_workflow/agents/test_generation/core/__init__.py",
+      "before_sha256": "fa2dc456da013d84ab8b056231b645fd87d9137636d61306659e22ebf3d4fd59",
+      "sha256": "fa2dc456da013d84ab8b056231b645fd87d9137636d61306659e22ebf3d4fd59",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "fa2dc456da013d84ab8b056231b645fd87d9137636d61306659e22ebf3d4fd59"
+    },
+    {
+      "path": "src/testgen_agent/__main__.py",
+      "current_path": "src/test_workflow/agents/test_generation/core/__main__.py",
+      "before_sha256": "e4df8cffa0b535603f2408e0ba4eb7e526d881b565336ebef537c725d326c7ac",
+      "sha256": "c2b787895464ea3fdef14223045eed183f688951e114818eabcf6a8a6bf2f9f7",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "c2b787895464ea3fdef14223045eed183f688951e114818eabcf6a8a6bf2f9f7"
+    },
+    {
+      "path": "src/testgen_agent/agent.py",
+      "current_path": "src/test_workflow/agents/test_generation/core/agent.py",
+      "before_sha256": "58753a0c7cc08f83c8df986833b675a544d85c8380d877e89f528616c629b868",
+      "sha256": "58753a0c7cc08f83c8df986833b675a544d85c8380d877e89f528616c629b868",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "288c5a7f75a19db293e3af411e79a3e18640eadc813b0216de71dac07b91a117"
+    },
+    {
+      "path": "src/testgen_agent/cli.py",
+      "current_path": "src/test_workflow/agents/test_generation/core/cli.py",
+      "before_sha256": "d0d6aec5dbf6859d96cfbebd0d6463a577bcb96919cd95d4e23ace7aaf6b0ab6",
+      "sha256": "d0d6aec5dbf6859d96cfbebd0d6463a577bcb96919cd95d4e23ace7aaf6b0ab6",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "d0d6aec5dbf6859d96cfbebd0d6463a577bcb96919cd95d4e23ace7aaf6b0ab6"
+    },
+    {
+      "path": "src/testgen_agent/config.py",
+      "current_path": "src/test_workflow/agents/test_generation/core/config.py",
+      "before_sha256": "6d1d4fed99bc467477611a8c7a26d4e065a0bba6a8fff16ef6b9b001accef018",
+      "sha256": "6d1d4fed99bc467477611a8c7a26d4e065a0bba6a8fff16ef6b9b001accef018",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "6d1d4fed99bc467477611a8c7a26d4e065a0bba6a8fff16ef6b9b001accef018"
+    },
+    {
+      "path": "src/testgen_agent/failure_analysis.py",
+      "current_path": "src/test_workflow/agents/test_generation/core/failure_analysis.py",
+      "before_sha256": "f2a91c002f29a43d24f9eaf41417de500ebd4dda88db43f401fdc8f1725c2489",
+      "sha256": "f2a91c002f29a43d24f9eaf41417de500ebd4dda88db43f401fdc8f1725c2489",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "f2a91c002f29a43d24f9eaf41417de500ebd4dda88db43f401fdc8f1725c2489"
+    },
+    {
+      "path": "src/testgen_agent/generation.py",
+      "current_path": "src/test_workflow/agents/test_generation/core/generation.py",
+      "before_sha256": "884e6f0f4f6e122ba19765100d5421238748afadcb21511b7747fb2b0d2451af",
+      "sha256": "884e6f0f4f6e122ba19765100d5421238748afadcb21511b7747fb2b0d2451af",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "884e6f0f4f6e122ba19765100d5421238748afadcb21511b7747fb2b0d2451af"
+    },
+    {
+      "path": "src/testgen_agent/llm_client.py",
+      "current_path": "src/test_workflow/agents/test_generation/core/llm_client.py",
+      "before_sha256": "12861da2e2319795c0c5d42ae189ab35baf756d0921ce86e5586bed156d059b3",
+      "sha256": "12861da2e2319795c0c5d42ae189ab35baf756d0921ce86e5586bed156d059b3",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "12861da2e2319795c0c5d42ae189ab35baf756d0921ce86e5586bed156d059b3"
+    },
+    {
+      "path": "src/testgen_agent/models.py",
+      "current_path": "src/test_workflow/agents/test_generation/core/models.py",
+      "before_sha256": "f072aa4aaf06347b0e32e04c1e74e97e1c2d8d32bf46b3ce39ef78e90936cec7",
+      "sha256": "f072aa4aaf06347b0e32e04c1e74e97e1c2d8d32bf46b3ce39ef78e90936cec7",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "f072aa4aaf06347b0e32e04c1e74e97e1c2d8d32bf46b3ce39ef78e90936cec7"
+    },
+    {
+      "path": "src/testgen_agent/prompts.py",
+      "current_path": "src/test_workflow/agents/test_generation/core/prompts.py",
+      "before_sha256": "423f1cced4990e976e3d23406edf601cd0b6f788e3072d6234a070c69ef046e5",
+      "sha256": "423f1cced4990e976e3d23406edf601cd0b6f788e3072d6234a070c69ef046e5",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "423f1cced4990e976e3d23406edf601cd0b6f788e3072d6234a070c69ef046e5"
+    },
+    {
+      "path": "src/testgen_agent/reporting.py",
+      "current_path": "src/test_workflow/agents/test_generation/core/reporting.py",
+      "before_sha256": "c51e745c7eaa3ea1a259d7cfe14f5025177d7f1ecccd862211cfe477e22ff4ef",
+      "sha256": "c51e745c7eaa3ea1a259d7cfe14f5025177d7f1ecccd862211cfe477e22ff4ef",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "c51e745c7eaa3ea1a259d7cfe14f5025177d7f1ecccd862211cfe477e22ff4ef"
+    },
+    {
+      "path": "src/testgen_agent/tools/__init__.py",
+      "current_path": "src/test_workflow/agents/test_generation/core/tools/__init__.py",
+      "before_sha256": "eb2dcdf824a6b6ba10afcb518c4abafa99e54ef595a1c518bff677cf00a38eb7",
+      "sha256": "eb2dcdf824a6b6ba10afcb518c4abafa99e54ef595a1c518bff677cf00a38eb7",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "eb2dcdf824a6b6ba10afcb518c4abafa99e54ef595a1c518bff677cf00a38eb7"
+    },
+    {
+      "path": "src/testgen_agent/tools/_pytest_results.py",
+      "current_path": "src/test_workflow/agents/test_generation/core/tools/_pytest_results.py",
+      "before_sha256": "b5623e4bb051d1a95f98f02ad3a681ddcdd16e4abcbcbc5085b737563f2eb15c",
+      "sha256": "b5623e4bb051d1a95f98f02ad3a681ddcdd16e4abcbcbc5085b737563f2eb15c",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "b5623e4bb051d1a95f98f02ad3a681ddcdd16e4abcbcbc5085b737563f2eb15c"
+    },
+    {
+      "path": "src/testgen_agent/tools/code_analyzer.py",
+      "current_path": "src/test_workflow/agents/test_generation/core/tools/code_analyzer.py",
+      "before_sha256": "62fee9c9058e721f67046ffe5f448911fdf2d5f17b9b2f0efb1031acb38764a7",
+      "sha256": "ad60f63bb7467f03887acc31259fc818cdf19d28d53bf6e8c8f12d5184b773d2",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "ad60f63bb7467f03887acc31259fc818cdf19d28d53bf6e8c8f12d5184b773d2"
+    },
+    {
+      "path": "src/testgen_agent/tools/coverage_mapper.py",
+      "current_path": "src/test_workflow/agents/test_generation/core/tools/coverage_mapper.py",
+      "before_sha256": "6d0db7d5a1f9c453c744170a1df84c395a63ccd3faab817cc2fb0bc662a589c0",
+      "sha256": "6d0db7d5a1f9c453c744170a1df84c395a63ccd3faab817cc2fb0bc662a589c0",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "6d0db7d5a1f9c453c744170a1df84c395a63ccd3faab817cc2fb0bc662a589c0"
+    },
+    {
+      "path": "src/testgen_agent/tools/coverage_runner.py",
+      "current_path": "src/test_workflow/agents/test_generation/core/tools/coverage_runner.py",
+      "before_sha256": "cfd476384dd9f013ba17baac07a730f3c44f1006653832ddeaa5aeb0758a3bf3",
+      "sha256": "cfd476384dd9f013ba17baac07a730f3c44f1006653832ddeaa5aeb0758a3bf3",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "cfd476384dd9f013ba17baac07a730f3c44f1006653832ddeaa5aeb0758a3bf3"
+    },
+    {
+      "path": "src/testgen_agent/tools/source_reader.py",
+      "current_path": "src/test_workflow/agents/test_generation/core/tools/source_reader.py",
+      "before_sha256": "fc64966b5827032cc74958c45707e618082cc164b556d8486c8c9ae397c588b9",
+      "sha256": "fc64966b5827032cc74958c45707e618082cc164b556d8486c8c9ae397c588b9",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "fc64966b5827032cc74958c45707e618082cc164b556d8486c8c9ae397c588b9"
+    },
+    {
+      "path": "src/testgen_agent/tools/test_runner.py",
+      "current_path": "src/test_workflow/agents/test_generation/core/tools/test_runner.py",
+      "before_sha256": "054b3ebe9c7c75ec6adddc354ed26646cfa4cbbb8d98bd8f56d828a82f675d0d",
+      "sha256": "de70b54818105d6b366985e78b6421638d86f04aca8cfcbfed1d91d06d9c76c1",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "de70b54818105d6b366985e78b6421638d86f04aca8cfcbfed1d91d06d9c76c1"
+    },
+    {
+      "path": "src/testgen_agent/tracing.py",
+      "current_path": "src/test_workflow/agents/test_generation/core/tracing.py",
+      "before_sha256": "71f3129cb5d5193d668ab1d535c5e6ff9fedccb6f8dc8ae8c7e1ca5054f92a48",
+      "sha256": "71f3129cb5d5193d668ab1d535c5e6ff9fedccb6f8dc8ae8c7e1ca5054f92a48",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "71f3129cb5d5193d668ab1d535c5e6ff9fedccb6f8dc8ae8c7e1ca5054f92a48"
+    },
+    {
+      "path": "src/testgen_agent/web.py",
+      "current_path": "src/test_workflow/agents/test_generation/core/web.py",
+      "before_sha256": "d9426e1c8ce03694406150ca26ab43a98b7dca0a91185a7584b190fdc1b8adcf",
+      "sha256": "d9426e1c8ce03694406150ca26ab43a98b7dca0a91185a7584b190fdc1b8adcf",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "d9426e1c8ce03694406150ca26ab43a98b7dca0a91185a7584b190fdc1b8adcf"
+    },
+    {
+      "path": "src/testgen_agent/web_static/app.js",
+      "current_path": "src/test_workflow/agents/test_generation/core/web_static/app.js",
+      "before_sha256": "fe6f4c90ee50c48251b46afe29a8d9592db2d8435eb0b3f980c9b8f636af17b5",
+      "sha256": "fe6f4c90ee50c48251b46afe29a8d9592db2d8435eb0b3f980c9b8f636af17b5",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "fe6f4c90ee50c48251b46afe29a8d9592db2d8435eb0b3f980c9b8f636af17b5"
+    },
+    {
+      "path": "src/testgen_agent/web_static/index.html",
+      "current_path": "src/test_workflow/agents/test_generation/core/web_static/index.html",
+      "before_sha256": "034a2922eff79c74657211a2e8ac5d94bcd7a899ab9dae385b544ba740b0820c",
+      "sha256": "034a2922eff79c74657211a2e8ac5d94bcd7a899ab9dae385b544ba740b0820c",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "034a2922eff79c74657211a2e8ac5d94bcd7a899ab9dae385b544ba740b0820c"
+    },
+    {
+      "path": "src/testgen_agent/web_static/styles.css",
+      "current_path": "src/test_workflow/agents/test_generation/core/web_static/styles.css",
+      "before_sha256": "99a778adaeee84c6ba12ea1c19df5d90b6875051cd2b94c745f975747fecd322",
+      "sha256": "99a778adaeee84c6ba12ea1c19df5d90b6875051cd2b94c745f975747fecd322",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "99a778adaeee84c6ba12ea1c19df5d90b6875051cd2b94c745f975747fecd322"
+    },
+    {
+      "path": "src/testgen_agent/workspace.py",
+      "current_path": "src/test_workflow/agents/test_generation/core/workspace.py",
+      "before_sha256": "a4d677b405e78c554cbab8176fdd9ad7ffbdba7a0d8b575cae1e8ef472d6e891",
+      "sha256": "a4d677b405e78c554cbab8176fdd9ad7ffbdba7a0d8b575cae1e8ef472d6e891",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "a4d677b405e78c554cbab8176fdd9ad7ffbdba7a0d8b575cae1e8ef472d6e891"
+    },
+    {
+      "path": "tests/test_agent.py",
+      "current_path": "tests/agentdev/test_agent.py",
+      "before_sha256": "2d225699e7f5e2c47b5b28b0344fa062f00464d54f6e32f74b0d30ba12b63517",
+      "sha256": "cac8ff47474b0b8afa4fb8c10fe8203c61bd23ec35321e7c67eb576e5db048a7",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "cac8ff47474b0b8afa4fb8c10fe8203c61bd23ec35321e7c67eb576e5db048a7"
+    },
+    {
+      "path": "tests/test_agent_loop.py",
+      "current_path": "tests/agentdev/test_agent_loop.py",
+      "before_sha256": "0d1a7c057240e57c7dd06fd3631d27c87c62fa7299bf06378c4d37f53e4372ba",
+      "sha256": "8b41c3d600cf53826a30ebaa31c20416507486ee94592c81c78579dc98ca372b",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "8b41c3d600cf53826a30ebaa31c20416507486ee94592c81c78579dc98ca372b"
+    },
+    {
+      "path": "tests/test_call_analysis.py",
+      "current_path": "tests/agentdev/test_call_analysis.py",
+      "before_sha256": "58a3e33c4409c0659c76f81a796c4d700fac18f2060df00022277ce677b6d8c6",
+      "sha256": "e9acca60a59ca2b56802868eb4a12a921a57f9c83de13fb77a98ae75c2b3a157",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "e9acca60a59ca2b56802868eb4a12a921a57f9c83de13fb77a98ae75c2b3a157"
+    },
+    {
+      "path": "tests/test_config.py",
+      "current_path": "tests/agentdev/test_config.py",
+      "before_sha256": "7b0ce99e46af099e78e1ff78b264af2d1d61145c249ab86285b8c69cea4a5e09",
+      "sha256": "b27a5e454267eedab14c18e4d8b481d02eff3c15b16d06c7b89cb4533128461c",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "b27a5e454267eedab14c18e4d8b481d02eff3c15b16d06c7b89cb4533128461c"
+    },
+    {
+      "path": "tests/test_coverage_runner.py",
+      "current_path": "tests/agentdev/test_coverage_runner.py",
+      "before_sha256": "749dba4df90f10a217764024ba20b8a9c901b62e94545310fe5e51108b283529",
+      "sha256": "b6ae63c2ac9e851fdd63d6ee1cbaac4725fc6e462175a286191ed447496a0753",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "b6ae63c2ac9e851fdd63d6ee1cbaac4725fc6e462175a286191ed447496a0753"
+    },
+    {
+      "path": "tests/test_failure_analysis.py",
+      "current_path": "tests/agentdev/test_failure_analysis.py",
+      "before_sha256": "e94139b3905826950c32442822ce108f3dd986021f58c19b4e8956ad2c398bc9",
+      "sha256": "d4deb4ecc5ffe40285822440053e67bb92a0a31cb4fa827554b90f70f00631e9",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "d4deb4ecc5ffe40285822440053e67bb92a0a31cb4fa827554b90f70f00631e9"
+    },
+    {
+      "path": "tests/test_generation.py",
+      "current_path": "tests/agentdev/test_generation.py",
+      "before_sha256": "1181272e6d4e08cab4ae746ef44de7177689df777fd4e2f88e1f04905878919c",
+      "sha256": "f3d9d7b3c9d5f6c0d4a0f5a86a6af309d8ef0ad707ff75f50a5ee4dbe67b1df1",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "f3d9d7b3c9d5f6c0d4a0f5a86a6af309d8ef0ad707ff75f50a5ee4dbe67b1df1"
+    },
+    {
+      "path": "tests/test_llm_client.py",
+      "current_path": "tests/agentdev/test_llm_client.py",
+      "before_sha256": "09f37d93b9bfe5921fbb206319b56b47c47ed00690ba9faab2dd1f56dae509c2",
+      "sha256": "5fbff9af928cba6b28bda079b6bbb9e4e325e90a98cb6b24d924924a93867587",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "5fbff9af928cba6b28bda079b6bbb9e4e325e90a98cb6b24d924924a93867587"
+    },
+    {
+      "path": "tests/test_models.py",
+      "current_path": "tests/agentdev/test_models.py",
+      "before_sha256": "68abeb16b20bd9fb6f18851a95a9f9f5772c099babfb067dd85d13cb98700749",
+      "sha256": "f4e5bd2fc011783a48a94f9c2d571ac0bf637695e6ba4f4cc23468aa7187b115",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "f4e5bd2fc011783a48a94f9c2d571ac0bf637695e6ba4f4cc23468aa7187b115"
+    },
+    {
+      "path": "tests/test_prompts.py",
+      "current_path": "tests/agentdev/test_prompts.py",
+      "before_sha256": "d4deb80982bd86432b307fc237440eccd40aff778bfac1ece44b8c2f79ac5da4",
+      "sha256": "22e68bd2d70012fc81df96d2583aa84cff3757abe85071901221d6fe492b2ade",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "22e68bd2d70012fc81df96d2583aa84cff3757abe85071901221d6fe492b2ade"
+    },
+    {
+      "path": "tests/test_relationship_models.py",
+      "current_path": "tests/agentdev/test_relationship_models.py",
+      "before_sha256": "3113512767a4c9fc10e4fe2bc9e7cddb43d8f950674e9bd8d4d97478d9c75d5f",
+      "sha256": "63de0b1ae48ecfdf33bf56c3cd57e8165b17b79a45129b6fc3aca29eaaf53008",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "63de0b1ae48ecfdf33bf56c3cd57e8165b17b79a45129b6fc3aca29eaaf53008"
+    },
+    {
+      "path": "tests/test_source_analysis.py",
+      "current_path": "tests/agentdev/test_source_analysis.py",
+      "before_sha256": "0dbe6691bb71d0145bf4d8731907405a898b9acaefaa60a7e45b0aa1b912479e",
+      "sha256": "04d978e9e9848eb26d2ad37026efc5b910e49a246aa7e53d97740bb24c3f9f6f",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "04d978e9e9848eb26d2ad37026efc5b910e49a246aa7e53d97740bb24c3f9f6f"
+    },
+    {
+      "path": "tests/test_test_runner.py",
+      "current_path": "tests/agentdev/test_test_runner.py",
+      "before_sha256": "f01e6451d4f979124c515039a5a4b13c044244da5b214af3b235ab548c5ab499",
+      "sha256": "92a112be4c83eb9d175ebf27c48beee443cec09e3085c21359d7b791ab589151",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "92a112be4c83eb9d175ebf27c48beee443cec09e3085c21359d7b791ab589151"
+    },
+    {
+      "path": "tests/test_tracing.py",
+      "current_path": "tests/agentdev/test_tracing.py",
+      "before_sha256": "f6a377868c6c0d3dc2ae01ac32de888fabb5be48412d46fe6efd4909565001c3",
+      "sha256": "5bd0cf45625c0a6873b1cd798b8144ecbe43f6986cdac8ba238a66a5af6b457a",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "5bd0cf45625c0a6873b1cd798b8144ecbe43f6986cdac8ba238a66a5af6b457a"
+    },
+    {
+      "path": "tests/test_web.py",
+      "current_path": "tests/agentdev/test_web.py",
+      "before_sha256": "d065434effaac236c543010cdc0970bf9f4bf7eca24d75280a443bef77a27e78",
+      "sha256": "e0c73223ee5f05cf8acb0466d0a116f1a3fb2a6d14e3fd4365273b2b1f06be95",
+      "change": "Relocation with package imports, subprocess plugin path and test example paths adapted as applicable.",
+      "normalized_sha256": "e0c73223ee5f05cf8acb0466d0a116f1a3fb2a6d14e3fd4365273b2b1f06be95"
+    }
+  ],
+  "hash_normalization": "utf8-lf"
+}

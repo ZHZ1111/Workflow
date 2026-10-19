@@ -3,7 +3,7 @@
 from typing import Annotated
 
 from pydantic import Field, model_validator
-from testgen_agent.models import ContractModel
+from test_workflow.agents.test_generation.core.models import ContractModel
 
 from .contracts import StableId
 

@@ -3,12 +3,12 @@
 import json
 from pathlib import Path
 
-from testgen_agent.agent import ActionDecision, choose_action
-from testgen_agent.failure_analysis import classify_failures
-from testgen_agent.generation import CandidateValidationError, preserved_tests, validate_generated_tests
-from testgen_agent.models import AgentAction, CandidateRound, CoverageResult, ExecutionResult, Issue, StopReason, TaskStatus
-from testgen_agent.tools.coverage_runner import CoverageRunResult
-from testgen_agent.workspace import round_directory
+from test_workflow.agents.test_generation.core.agent import ActionDecision, choose_action
+from test_workflow.agents.test_generation.core.failure_analysis import classify_failures
+from test_workflow.agents.test_generation.core.generation import CandidateValidationError, preserved_tests, validate_generated_tests
+from test_workflow.agents.test_generation.core.models import AgentAction, CandidateRound, CoverageResult, ExecutionResult, Issue, StopReason, TaskStatus
+from test_workflow.agents.test_generation.core.tools.coverage_runner import CoverageRunResult
+from test_workflow.agents.test_generation.core.workspace import round_directory
 
 from ..contracts import AgentContext, ArtifactRef, ExecutionAssessment, ExecutionFeedback
 from ..storage import atomic_write, file_digest, task_path, verify_artifact

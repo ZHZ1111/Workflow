@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from testgen_agent.web import STATIC_ROOT, WebJob, _job_snapshot, build_bootstrap, validate_run_payload
+from test_workflow.agents.test_generation.core.web import STATIC_ROOT, WebJob, _job_snapshot, build_bootstrap, validate_run_payload
 
 
 def test_web_assets_are_packaged() -> None:

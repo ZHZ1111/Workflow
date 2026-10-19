@@ -15,8 +15,8 @@ from urllib.parse import urlsplit
 from uuid import uuid4
 
 import httpx
-from testgen_agent.config import load_config
-from testgen_agent.llm_client import DeepSeekClient, RetryPolicy
+from test_workflow.agents.test_generation.core.config import load_config
+from test_workflow.agents.test_generation.core.llm_client import DeepSeekClient, RetryPolicy
 from test_workflow.config import WorkflowConfig
 from test_workflow.quality_client import DeepSeekReviewClient, ReviewRetryPolicy
 from test_workflow.reporting import inspect_summary

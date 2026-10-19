@@ -15,12 +15,12 @@ python scripts/bootstrap.py
 .\.venv\Scripts\python.exe -m pip check
 ```
 
-脚本创建 `.venv`，安装锁定依赖和两个本地包。无需原 hw1 工程，也无需从包索引寻找 `testgen-agent`。等价手工安装：
+脚本创建 `.venv`，安装锁定依赖和当前项目这一个本地包。三个 Agent 并列放在 `src/test_workflow/agents/`；原 AgentDev 实现已整合到测试生成 Agent 内，无需独立安装。等价手工安装：
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.lock
-.\.venv\Scripts\python.exe -m pip install --no-build-isolation --no-deps -e ./vendor/agentdev -e .
+.\.venv\Scripts\python.exe -m pip install --no-build-isolation --no-deps -e .
 ```
 
 Linux/macOS 使用 `.venv/bin/python`。包包含离线候选、样例及 Web 静态资源，wheel 安装后不依赖仓库目录。
@@ -32,7 +32,7 @@ Linux/macOS 使用 `.venv/bin/python`。包包含离线候选、样例及 Web �
 ```powershell
 Copy-Item .env.example .env
 # 编辑 LLM_MODEL 与 DEEPSEEK_API_KEY
-.\.venv\Scripts\python.exe -m testgen_agent --check-config
+.\.venv\Scripts\python.exe -m test_workflow.agents.test_generation.core --check-config
 ```
 
 配置优先级：显式 CLI 参数 > 进程环境 > 指定 `.env` > 默认值。未指定轮次或超时时采用 `AGENT_MAX_ROUNDS` 和 `TEST_EXECUTION_TIMEOUT_SECONDS`；Web 初始表单也读取这些默认值。`--env-file` 可指定配置，密钥只在服务器端读取，不返回页面或写入工作流状态。
@@ -87,7 +87,7 @@ Copy-Item .env.example .env
 
 质量审查开关默认不勾选，提交后仅在基础完成时调用第三个 Agent；Web 继续仅使用 DeepSeek，不提供离线 fixture 入口。图中区分审查关闭、待送审、跳过、批准与异常；逐轮卡片显示规格/测试证据、补充建议和消费轮次。总模型请求包含生成与审查，未知量保留未知。
 
-旧 `testgen-agent-web` 仍运行 vendor 的单 Agent；本项目使用 `test-workflow web` 或 `test-workflow-web`。
+本项目统一使用 `test-workflow web` 或 `test-workflow-web`，不再安装独立的旧 AgentDev 命令。
 
 ## 产物与检查
 
@@ -104,8 +104,8 @@ Copy-Item .env.example .env
 ```powershell
 # 前端运行状态投影回归（开发检查需要 Node.js）
 node --test tests/web/*.test.cjs
-# 全量 Workflow + vendor 回归
-.\.venv\Scripts\python.exe -m pytest tests vendor/agentdev/tests -q
+# 全量 Workflow + 已迁入 tests/agentdev 的原项目回归
+.\.venv\Scripts\python.exe -m pytest tests -q
 # CLI 正常、反馈、缺陷复核：三个离线任务
 .\.venv\Scripts\python.exe scripts/verify_workflow.py
 # 三个 CLI 离线 + 六个 CLI/Web DeepSeek 任务，发送样例及反馈并产生费用
@@ -124,13 +124,18 @@ node --test tests/web/*.test.cjs
 
 每次验收保存新的 `outputs/verification/` 或 `outputs/install-verification/` 目录。可用 `--real --skip-offline --interfaces web --samples calculation` 只复验指定案例。GitHub Actions 配置 Windows/Linux 离线回归，远端是否成功以实际运行记录为准。
 
-不提交 `.env`、虚拟环境、缓存、构建目录或原始运行输出。删除历史重复 pytest 文本汇总，保留 JUnit、结构化索引、异常初验日志和协议样例。旧阶段脚本可重建证据。vendor 原始哈希保留在 `evaluation/reuse_manifest.json`，后续补丁独立记录在 `evaluation/vendor_patches.json`。
+不提交 `.env`、虚拟环境、缓存、构建目录或原始运行输出。保留 JUnit、结构化索引、异常初验日志和协议样例。原始哈希与补丁仍保留在 `evaluation/reuse_manifest.json` 和 `evaluation/vendor_patches.json`，迁移路径及迁移后哈希记录在 `evaluation/agentdev_layout.json`；迁移说明见 [Agent 目录结构](docs/agent-layout.md)。历史验收记录保留原路径，不作为当前安装命令。
 
 ```text
 src/test_workflow/   协议、生成/执行/质量审查 Agent、编排、共享服务、CLI、Web、报告
+  agents/test_generation/    生成 Agent；core/ 内含复用的 AgentDev 实现
+  agents/test_execution/     执行 Agent
+  agents/test_quality_review/ 质量审查 Agent
 tests/              Workflow 回归与 HTTP 集成验证
-vendor/agentdev/     本地依赖、原测试与来源文档
+  agentdev/         原 AgentDev 回归测试
+docs/agentdev/      保留的原项目说明与元数据，非独立安装包
 examples/           源码/规格、离线候选、协议样例
+  agentdev/         原 AgentDev 样例
 scripts/            安装、当前验收、历史复现
 docs/               设计、范围、协议、扩展、开发说明
 evaluation/         精简验收、JUnit、来源和补丁哈希

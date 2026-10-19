@@ -6,9 +6,9 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from testgen_agent.llm_client import LLMCallRecord, LLMGenerationResult
-from testgen_agent.models import AgentAction, GeneratedTests, TaskStatus
-from testgen_agent.tools import run_tests_with_coverage
+from test_workflow.agents.test_generation.core.llm_client import LLMCallRecord, LLMGenerationResult
+from test_workflow.agents.test_generation.core.models import AgentAction, GeneratedTests, TaskStatus
+from test_workflow.agents.test_generation.core.tools import run_tests_with_coverage
 
 from test_workflow.adapters.execution import evaluate
 from test_workflow.agents.test_execution import TestExecutionAgent
@@ -67,7 +67,7 @@ def test_once_exact_round_real_target_evidence_and_immutable_state(tmp_path):
     ctx, runner, generated = prepare(tmp_path)
     before = ctx.canonical_json()
     digest = file_digest(ctx.state.agent_state.request.source_path)
-    with patch("test_workflow.agents.test_execution.run_tests_with_coverage", wraps=run_tests_with_coverage) as tool:
+    with patch("test_workflow.agents.test_execution.agent.run_tests_with_coverage", wraps=run_tests_with_coverage) as tool:
         result = TestExecutionAgent().run(ctx)
     assert result.status == "ok", result.error_code
     tool.assert_called_once_with(ctx.state.agent_state.request.output_dir, timeout=30, round_number=1)
@@ -118,7 +118,7 @@ def test_real_feedback_drives_one_manual_revision_with_protected_tests(tmp_path)
     assert "WORKFLOW_HANDOFF_DATA" in client.contexts[-1].user_prompt
     state = runner.apply_result(gc2.state, gr2, (er.messages[0].message_id,))
     ec2 = context(state, "test_execution", 2, gr2.messages)
-    with patch("test_workflow.agents.test_execution.run_tests_with_coverage", wraps=run_tests_with_coverage) as tool:
+    with patch("test_workflow.agents.test_execution.agent.run_tests_with_coverage", wraps=run_tests_with_coverage) as tool:
         er2 = TestExecutionAgent().run(ec2)
     assert er2.status == "ok", er2.error_code
     tool.assert_called_once_with(state.agent_state.request.output_dir, timeout=60, round_number=2)
@@ -221,7 +221,7 @@ def test_no_tests_real_backend_observation_cannot_complete(tmp_path):
 
 def test_coverage_export_failure_retains_real_execution(tmp_path):
     ctx, runner, _ = prepare(tmp_path)
-    with patch("testgen_agent.tools.coverage_runner.subprocess.run", side_effect=OSError("controlled export fault")):
+    with patch("test_workflow.agents.test_generation.core.tools.coverage_runner.subprocess.run", side_effect=OSError("controlled export fault")):
         result = TestExecutionAgent().run(ctx)
     assert result.status == "ok", result.error_code
     assert result.assessment.feedback.execution.all_passed
@@ -253,7 +253,7 @@ def test_timeout_terminates_pytest_and_keeps_source_and_diagnostics(tmp_path):
         processes.append((args[0], process))
         return process
     digest = file_digest(source)
-    with patch("testgen_agent.tools.test_runner.subprocess.Popen", side_effect=record):
+    with patch("test_workflow.agents.test_generation.core.tools.test_runner.subprocess.Popen", side_effect=record):
         result = TestExecutionAgent().run(ec)
     assert result.status == "ok", result.error_code
     assert result.assessment.feedback.execution.kind == "timeout"

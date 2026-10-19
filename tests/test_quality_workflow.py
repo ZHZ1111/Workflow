@@ -5,10 +5,10 @@ from pathlib import Path
 from unittest.mock import patch
 
 import pytest
-from testgen_agent.agent import select_best_candidate
-from testgen_agent.generation import stage_revision_candidate
-from testgen_agent.llm_client import LLMCallRecord, LLMGenerationResult
-from testgen_agent.models import AgentAction, GeneratedTests
+from test_workflow.agents.test_generation.core.agent import select_best_candidate
+from test_workflow.agents.test_generation.core.generation import stage_revision_candidate
+from test_workflow.agents.test_generation.core.llm_client import LLMCallRecord, LLMGenerationResult
+from test_workflow.agents.test_generation.core.models import AgentAction, GeneratedTests
 
 from test_workflow.adapters.agentdev import adapt_candidate
 from test_workflow.agents.test_execution import TestExecutionAgent

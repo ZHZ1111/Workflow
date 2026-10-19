@@ -3,15 +3,15 @@
 from typing import Literal
 
 from pydantic import ValidationError
-from testgen_agent.config import ConfigError
-from testgen_agent.generation import GenerationClient
-from testgen_agent.llm_client import LLMError, LLMErrorCode
-from testgen_agent.models import AgentAction
+from test_workflow.agents.test_generation.core.config import ConfigError
+from test_workflow.agents.test_generation.core.generation import GenerationClient
+from test_workflow.agents.test_generation.core.llm_client import LLMError, LLMErrorCode
+from test_workflow.agents.test_generation.core.models import AgentAction
 
-from ..adapters.agentdev import (
+from ...adapters.agentdev import (
     GenerationAdapterError, RecordedClient, adapt_candidate, cumulative_usage, generate_one, preflight,
 )
-from ..contracts import AgentContext, AgentResult, GenerationTelemetry, Message, MessagePayload, StatePatch
+from ...contracts import AgentContext, AgentResult, GenerationTelemetry, Message, MessagePayload, StatePatch
 
 
 class TestGenerationAgent:

@@ -5,15 +5,15 @@ from pathlib import Path
 
 import pytest
 
-from testgen_agent import models as m
-from testgen_agent.generation import (
+from test_workflow.agents.test_generation.core import models as m
+from test_workflow.agents.test_generation.core.generation import (
     CandidateValidationError,
     generate_initial_candidate,
     stage_initial_candidate,
     validate_generated_tests,
 )
-from testgen_agent.llm_client import LLMCallRecord, LLMGenerationResult
-from testgen_agent.tools import analyze_source, run_tests
+from test_workflow.agents.test_generation.core.llm_client import LLMCallRecord, LLMGenerationResult
+from test_workflow.agents.test_generation.core.tools import analyze_source, run_tests
 
 
 class SyntheticClient:
@@ -155,7 +155,7 @@ def single_function_generated(
 
 @pytest.fixture
 def relationship_source():
-    return analyze_source(Path(__file__).parents[1] / "examples" / "relationships.py")
+    return analyze_source(Path(__file__).resolve().parents[2] / "examples" / "agentdev" / "relationships.py")
 
 
 @pytest.fixture
@@ -212,7 +212,7 @@ def test_staged_synthetic_simple_candidate_executes_with_real_pytest(
 
 
 def test_independent_functions_keep_separate_unit_strategy(tmp_path):
-    source = analyze_source(Path(__file__).parents[1] / "examples" / "independent.py")
+    source = analyze_source(Path(__file__).resolve().parents[2] / "examples" / "agentdev" / "independent.py")
     plan = m.TestPlan(
         schema_version="1.1",
         target_functions=("rectangle_area", "is_even"),
@@ -286,7 +286,7 @@ def test_independent_functions_keep_separate_unit_strategy(tmp_path):
     ],
 )
 def test_original_examples_remain_valid_c2_inputs(filename, function_name, code, category):
-    source = analyze_source(Path(__file__).parents[1] / "examples" / filename)
+    source = analyze_source(Path(__file__).resolve().parents[2] / "examples" / "agentdev" / filename)
     generated = single_function_generated(function_name, code=code, category=category)
 
     validate_generated_tests(generated, source)

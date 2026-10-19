@@ -26,7 +26,7 @@ def run_checks(root):
     checks = {}
     for name, targets in (
         ("tests", ["tests"]),
-        ("vendor_tests", ["vendor/agentdev/tests/test_agent.py", "vendor/agentdev/tests/test_generation.py"]),
+        ("vendor_tests", ["tests/agentdev/test_agent.py", "tests/agentdev/test_generation.py"]),
     ):
         xml_path = ROOT / f"evaluation/p4_{name}.xml"
         command = [sys.executable, "-m", "pytest", *targets, "-q", "--basetemp", str(root / name), "--junitxml", str(xml_path)]

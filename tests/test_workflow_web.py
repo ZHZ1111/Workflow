@@ -9,7 +9,7 @@ from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
 import pytest
-from testgen_agent.config import AppConfig
+from test_workflow.agents.test_generation.core.config import AppConfig
 
 from test_workflow.service import fixture_client, sample_inputs as samples
 from test_workflow.web import WebServer, validate_payload

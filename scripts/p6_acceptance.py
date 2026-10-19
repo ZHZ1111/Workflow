@@ -100,8 +100,8 @@ def main():
         evidence["tests"].update(exit_code=result.returncode, junit=relative(xml))
         print(result.stdout.strip(), flush=True)
     manifest = json.loads((ROOT / "evaluation/reuse_manifest.json").read_text(encoding="utf-8"))
-    evidence["vendor_files_unchanged"] = all(file_digest(ROOT / "vendor/agentdev" / item["path"]) == item["sha256"] for item in manifest["files"])
     from vendor_audit import audit_vendor
+    evidence["vendor_files_unchanged"] = audit_vendor(ROOT)["unchanged"]
     evidence["vendor_files_verified"] = audit_vendor(ROOT)["verified"]
     evidence["updated_at"] = datetime.now(timezone(timedelta(hours=8))).isoformat()
     evidence["p6_complete"] = (len(evidence["cases"]) == len(CASES) and evidence["vendor_files_verified"]

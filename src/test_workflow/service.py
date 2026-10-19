@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from testgen_agent.models import GeneratedTests
+from test_workflow.agents.test_generation.core.models import GeneratedTests
 
 from .agents.test_execution import TestExecutionAgent
 from .agents.test_generation import TestGenerationAgent

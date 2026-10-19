@@ -4,12 +4,12 @@ from dataclasses import dataclass
 import hashlib
 from pathlib import Path
 
-from testgen_agent.agent import choose_action
-from testgen_agent.generation import validate_generated_tests
-from testgen_agent.models import (
+from test_workflow.agents.test_generation.core.agent import choose_action
+from test_workflow.agents.test_generation.core.generation import validate_generated_tests
+from test_workflow.agents.test_generation.core.models import (
     AgentAction, CandidateRound, CoverageResult, ExecutionResult, StopReason, TaskStatus, TestPlan,
 )
-from testgen_agent.workspace import round_directory
+from test_workflow.agents.test_generation.core.workspace import round_directory
 
 from ..contracts import AgentContext, ArtifactRef, ExecutionAssessment, QualityAssessment
 from ..quality_client import ReviewResponse

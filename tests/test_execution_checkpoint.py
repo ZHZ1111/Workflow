@@ -6,7 +6,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 import pytest
-from testgen_agent.tools._pytest_results import _Recorder
+from test_workflow.agents.test_generation.core.tools._pytest_results import _Recorder
 
 
 @pytest.mark.skipif(os.name != "nt", reason="Windows sharing violations")

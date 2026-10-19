@@ -2,8 +2,8 @@
 
 from pathlib import Path
 
-from testgen_agent.llm_client import GenerationContext, LLMCallRecord, LLMGenerationResult
-from testgen_agent.models import GeneratedTests
+from test_workflow.agents.test_generation.core.llm_client import GenerationContext, LLMCallRecord, LLMGenerationResult
+from test_workflow.agents.test_generation.core.models import GeneratedTests
 
 
 class FixtureClient:

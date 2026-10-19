@@ -6,13 +6,13 @@ from pathlib import Path
 import httpx
 import pytest
 
-from testgen_agent.config import load_config
-from testgen_agent.llm_client import DeepSeekClient, LLMError, LLMErrorCode
-from testgen_agent.models import (
+from test_workflow.agents.test_generation.core.config import load_config
+from test_workflow.agents.test_generation.core.llm_client import DeepSeekClient, LLMError, LLMErrorCode
+from test_workflow.agents.test_generation.core.models import (
     BranchArc, CandidateRound, CoverageResult, ExecutionKind, ExecutionResult,
     FunctionInfo, GeneratedTests, OracleMode, SourceBranch, SourceInfo,
 )
-from testgen_agent.prompts import (
+from test_workflow.agents.test_generation.core.prompts import (
     MAX_TOOL_LOG_CHARS, OUTPUT_EXAMPLE, TASK_DATA_END, TASK_DATA_START,
     build_feedback_context, build_generation_context,
 )

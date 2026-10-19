@@ -9,10 +9,10 @@ import json
 from pathlib import Path
 from unittest.mock import patch
 
-from testgen_agent.agent import choose_action
-from testgen_agent.generation import preserved_tests
-from testgen_agent.models import AgentAction
-from testgen_agent.tools import run_tests_with_coverage
+from test_workflow.agents.test_generation.core.agent import choose_action
+from test_workflow.agents.test_generation.core.generation import preserved_tests
+from test_workflow.agents.test_generation.core.models import AgentAction
+from test_workflow.agents.test_generation.core.tools import run_tests_with_coverage
 
 from test_workflow.agents.test_generation import TestGenerationAgent
 from test_workflow.contracts import AgentContext, AgentResult, Message, MessagePayload

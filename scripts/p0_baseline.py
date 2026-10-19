@@ -13,11 +13,11 @@ import sys
 from time import perf_counter
 from uuid import uuid4
 
-from testgen_agent.agent import run_agent
-from testgen_agent.config import ConfigError, load_config
-from testgen_agent.llm_client import DeepSeekClient, LLMCallRecord, LLMGenerationResult
-from testgen_agent.models import GeneratedTests, ModelInfo, OracleMode, TaskInput
-from testgen_agent.tools import analyze_source
+from test_workflow.agents.test_generation.core.agent import run_agent
+from test_workflow.agents.test_generation.core.config import ConfigError, load_config
+from test_workflow.agents.test_generation.core.llm_client import DeepSeekClient, LLMCallRecord, LLMGenerationResult
+from test_workflow.agents.test_generation.core.models import GeneratedTests, ModelInfo, OracleMode, TaskInput
+from test_workflow.agents.test_generation.core.tools import analyze_source
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -74,8 +74,8 @@ def main():
         "checks": {}, "samples": {}, "real_model": {"status": "not_requested"}}
     for name, arguments, timeout in (
         ("pip_check", ["-m", "pip", "check"], 60),
-        ("compileall", ["-m", "compileall", "-q", "vendor/agentdev/src", "vendor/agentdev/tests", "scripts"], 60),
-        ("agentdev_tests", ["-m", "pytest", "vendor/agentdev/tests", "-q", "-W", "error", "--basetemp", str(directory / "pytest-tmp"), "-o", "cache_dir=" + str(directory / "pytest-cache")], 600)):
+        ("compileall", ["-m", "compileall", "-q", "src/test_workflow/agents/test_generation/core", "tests/agentdev", "scripts"], 60),
+        ("agentdev_tests", ["-m", "pytest", "tests/agentdev", "-q", "-W", "error", "--basetemp", str(directory / "pytest-tmp"), "-o", "cache_dir=" + str(directory / "pytest-cache")], 600)):
         started = perf_counter()
         observed = subprocess.run([sys.executable, *arguments], cwd=ROOT, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=timeout)
         log = directory / (name + ".txt")

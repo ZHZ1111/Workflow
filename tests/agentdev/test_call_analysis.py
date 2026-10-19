@@ -4,8 +4,8 @@ from pathlib import Path
 
 import pytest
 
-from testgen_agent import models as m
-from testgen_agent.tools import (
+from test_workflow.agents.test_generation.core import models as m
+from test_workflow.agents.test_generation.core.tools import (
     analyze_source,
     build_call_graph,
     candidate_entry_functions,
@@ -30,9 +30,9 @@ def unresolved_expressions(source):
 
 
 def test_relationship_example_produces_confirmed_edge_and_candidate_entry():
-    root = Path(__file__).parents[1]
+    root = Path(__file__).resolve().parents[2]
 
-    source = analyze_source(root / "examples" / "relationships.py")
+    source = analyze_source(root / "examples" / "agentdev" / "relationships.py")
 
     site = source.call_sites[0]
     assert site.call_id == "call:checkout:11:11:11:48"
@@ -338,8 +338,8 @@ def test_graph_helpers_require_source_info():
 
 
 def test_agent_relationship_can_reference_real_analyzer_evidence():
-    root = Path(__file__).parents[1]
-    source = analyze_source(root / "examples" / "relationships.py")
+    root = Path(__file__).resolve().parents[2]
+    source = analyze_source(root / "examples" / "agentdev" / "relationships.py")
     call_id = source.direct_calls[0].call_site_id
     plan = m.TestPlan(
         schema_version="1.1",

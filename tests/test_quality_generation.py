@@ -6,10 +6,10 @@ from pathlib import Path
 from unittest.mock import patch
 
 import pytest
-from testgen_agent.agent import choose_action
-from testgen_agent.llm_client import LLMCallRecord, LLMGenerationResult, LLMError, LLMErrorCode
-from testgen_agent.models import AgentAction, GeneratedTests, StopReason
-from testgen_agent.prompts import TASK_DATA_START, TASK_DATA_END
+from test_workflow.agents.test_generation.core.agent import choose_action
+from test_workflow.agents.test_generation.core.llm_client import LLMCallRecord, LLMGenerationResult, LLMError, LLMErrorCode
+from test_workflow.agents.test_generation.core.models import AgentAction, GeneratedTests, StopReason
+from test_workflow.agents.test_generation.core.prompts import TASK_DATA_START, TASK_DATA_END
 
 from test_workflow.adapters.quality_revision import build_quality_revision_context
 from test_workflow.agents.test_generation import TestGenerationAgent

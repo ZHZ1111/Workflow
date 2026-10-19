@@ -5,10 +5,10 @@ from pathlib import Path
 from unittest.mock import Mock, patch
 
 import pytest
-from testgen_agent.models import TaskStatus, StopReason
-from testgen_agent.config import AppConfig
-from testgen_agent.llm_client import LLMError, LLMErrorCode
-from testgen_agent.tools import run_tests_with_coverage
+from test_workflow.agents.test_generation.core.models import TaskStatus, StopReason
+from test_workflow.agents.test_generation.core.config import AppConfig
+from test_workflow.agents.test_generation.core.llm_client import LLMError, LLMErrorCode
+from test_workflow.agents.test_generation.core.tools import run_tests_with_coverage
 
 from test_workflow.agents.test_generation import TestGenerationAgent
 from test_workflow.agents.test_execution import TestExecutionAgent
@@ -44,7 +44,7 @@ def read_summary(state):
 
 
 def test_real_feedback_is_consumed_and_changes_next_prompt(tmp_path):
-    with patch("test_workflow.agents.test_execution.run_tests_with_coverage", wraps=run_tests_with_coverage) as tool:
+    with patch("test_workflow.agents.test_execution.agent.run_tests_with_coverage", wraps=run_tests_with_coverage) as tool:
         state, client, runner = prepare(tmp_path, "validation", ("validation_round_01.json", "validation_round_02.json"))
         digest = file_digest(state.agent_state.request.source_path)
         final = runner.run(state)
@@ -176,7 +176,7 @@ def test_model_error_records_attempts_without_an_outer_retry(tmp_path):
 
 def test_coverage_export_failure_keeps_tests_without_completion(tmp_path):
     state, client, runner = prepare(tmp_path, "calculation", ("calculation_complete.json",))
-    with patch("testgen_agent.tools.coverage_runner.subprocess.run", side_effect=OSError("export fault")):
+    with patch("test_workflow.agents.test_generation.core.tools.coverage_runner.subprocess.run", side_effect=OSError("export fault")):
         final = runner.run(state)
     assert final.workflow_status == "finished" and final.task_status == "partial"
     assert final.stop_reason == "unrecoverable_error" and len(client.contexts) == 1

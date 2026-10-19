@@ -5,11 +5,11 @@ from unittest.mock import patch
 import httpx
 import pytest
 
-from testgen_agent.agent import choose_action
-from testgen_agent.config import AppConfig, ConfigError
-from testgen_agent.llm_client import DeepSeekClient, LLMCallRecord, LLMError, LLMErrorCode, LLMGenerationResult, RetryPolicy
-from testgen_agent.models import AgentAction, GeneratedTests, TokenUsage
-from testgen_agent.tools import run_tests_with_coverage
+from test_workflow.agents.test_generation.core.agent import choose_action
+from test_workflow.agents.test_generation.core.config import AppConfig, ConfigError
+from test_workflow.agents.test_generation.core.llm_client import DeepSeekClient, LLMCallRecord, LLMError, LLMErrorCode, LLMGenerationResult, RetryPolicy
+from test_workflow.agents.test_generation.core.models import AgentAction, GeneratedTests, TokenUsage
+from test_workflow.agents.test_generation.core.tools import run_tests_with_coverage
 
 from test_workflow.agents.test_generation import TestGenerationAgent
 from test_workflow.adapters.agentdev import cumulative_usage
@@ -41,8 +41,8 @@ def engine(agent):
 def generate_without_execution(agent, context):
     with patch("subprocess.run", side_effect=AssertionError("generation launched a process")), \
          patch("subprocess.Popen", side_effect=AssertionError("generation launched a process")), \
-         patch("testgen_agent.agent.run_agent", side_effect=AssertionError("old complete loop called")), \
-         patch("testgen_agent.agent.run_initial_step", side_effect=AssertionError("old mixed step called")):
+         patch("test_workflow.agents.test_generation.core.agent.run_agent", side_effect=AssertionError("old complete loop called")), \
+         patch("test_workflow.agents.test_generation.core.agent.run_initial_step", side_effect=AssertionError("old mixed step called")):
         return agent.run(context)
 
 

@@ -4,17 +4,17 @@ from pathlib import Path
 
 import pytest
 
-from testgen_agent import models as m
-from testgen_agent.agent import (
+from test_workflow.agents.test_generation.core import models as m
+from test_workflow.agents.test_generation.core.agent import (
     AgentTools, apply_decision, build_action_context, choose_action, run_initial_step,
 )
-from testgen_agent.tools import analyze_source
+from test_workflow.agents.test_generation.core.tools import analyze_source
 from test_generation import SyntheticClient, llm_result, relationship_generated, single_function_generated
 
 
 @pytest.fixture
 def source():
-    return analyze_source(Path(__file__).parents[1] / "examples" / "relationships.py")
+    return analyze_source(Path(__file__).resolve().parents[2] / "examples" / "agentdev" / "relationships.py")
 
 
 def passed(count=2):
@@ -226,12 +226,12 @@ def test_spec_path_is_read_and_tool_interfaces_are_replaceable(source, tmp_path)
         events.append("analyze")
         assert path == source.source_path
         return source
-    from testgen_agent.generation import generate_initial_candidate
+    from test_workflow.agents.test_generation.core.generation import generate_initial_candidate
     def generate(**kwargs):
         events.append("generate")
         assert kwargs["behavior_specification"] == "明确的离线规格"
         return generate_initial_candidate(**kwargs)
-    from testgen_agent.tools import run_tests_with_coverage
+    from test_workflow.agents.test_generation.core.tools import run_tests_with_coverage
     def execute(workspace, timeout):
         events.append("execute")
         return run_tests_with_coverage(workspace, timeout)

@@ -8,8 +8,8 @@ from unittest.mock import Mock, patch
 import httpx
 import pytest
 from pydantic import SecretStr
-from testgen_agent.config import AppConfig
-from testgen_agent.models import AgentAction, CandidateRound, TaskStatus
+from test_workflow.agents.test_generation.core.config import AppConfig
+from test_workflow.agents.test_generation.core.models import AgentAction, CandidateRound, TaskStatus
 
 from test_workflow.agents.test_execution import TestExecutionAgent
 from test_workflow.agents.test_generation import TestGenerationAgent
@@ -133,7 +133,7 @@ def test_one_review_preserves_inputs_state_and_records_exact_approval(ctx):
     files += [ctx.state.agent_state.request.source_path, ctx.state.agent_state.request.spec_path, ctx.run_dir / "state.json"]
     snapshots = {path: (file_digest(path), path.stat().st_mtime_ns) for path in files}
     with patch("subprocess.Popen", side_effect=AssertionError("review executed pytest")), patch(
-        "test_workflow.agents.test_execution.run_tests_with_coverage", side_effect=AssertionError("execution called")
+        "test_workflow.agents.test_execution.agent.run_tests_with_coverage", side_effect=AssertionError("execution called")
     ):
         result = registry.get("test_quality_review").run(ctx)
     assert result.status == "ok", result.error_code

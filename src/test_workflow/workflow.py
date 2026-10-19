@@ -4,9 +4,9 @@ from pathlib import Path
 from time import perf_counter
 from uuid import uuid4
 
-from testgen_agent.agent import choose_action, select_best_candidate
-from testgen_agent.models import AgentAction, AgentState, CandidateRound, ModelInfo, OracleMode, StopReason, TaskInput, TaskStatus
-from testgen_agent.tools import analyze_source
+from test_workflow.agents.test_generation.core.agent import choose_action, select_best_candidate
+from test_workflow.agents.test_generation.core.models import AgentAction, AgentState, CandidateRound, ModelInfo, OracleMode, StopReason, TaskInput, TaskStatus
+from test_workflow.agents.test_generation.core.tools import analyze_source
 
 from .config import WorkflowConfig
 from .contracts import AgentContext, AgentResult, StatePatch, ExecutionAssessment, QualityAssessment

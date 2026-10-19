@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Annotated, Literal
 
 from pydantic import Field, StrictInt, field_validator
-from testgen_agent.models import ContractModel, RoundNumber
+from test_workflow.agents.test_generation.core.models import ContractModel, RoundNumber
 
 from .contracts import Message, StableId, relative_path
 from .state import utc_now

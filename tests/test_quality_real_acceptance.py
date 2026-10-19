@@ -6,7 +6,7 @@ from pathlib import Path
 
 import httpx
 import pytest
-from testgen_agent.config import AppConfig
+from test_workflow.agents.test_generation.core.config import AppConfig
 
 ROOT = Path(__file__).resolve().parents[1]
 definition = importlib.util.spec_from_file_location("s9_acceptance", ROOT / "scripts/verify_quality_real.py")

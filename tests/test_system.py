@@ -5,8 +5,8 @@ from pathlib import Path
 from unittest.mock import Mock, patch
 
 import pytest
-from testgen_agent.models import GeneratedTests
-from testgen_agent.llm_client import LLMGenerationResult, LLMCallRecord
+from test_workflow.agents.test_generation.core.models import GeneratedTests
+from test_workflow.agents.test_generation.core.llm_client import LLMGenerationResult, LLMCallRecord
 
 from test_workflow.agents.test_generation import TestGenerationAgent
 from test_workflow.agents.test_execution import TestExecutionAgent

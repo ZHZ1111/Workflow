@@ -10,7 +10,7 @@ import sys
 from uuid import uuid4
 import xml.etree.ElementTree as ET
 
-from testgen_agent.llm_client import LLMGenerationResult
+from test_workflow.agents.test_generation.core.llm_client import LLMGenerationResult
 from test_workflow.contracts import AgentContext, AgentResult, ExecutionAssessment
 from test_workflow.events import Event
 from test_workflow.state import StateStore
@@ -151,9 +151,9 @@ def run_tests(root):
     checks = {}
     for name, targets in (
         ("workflow", ["tests"]),
-        ("vendor", ["vendor/agentdev/tests/test_agent.py", "vendor/agentdev/tests/test_generation.py",
-                    "vendor/agentdev/tests/test_test_runner.py", "vendor/agentdev/tests/test_coverage_runner.py",
-                    "vendor/agentdev/tests/test_failure_analysis.py", "vendor/agentdev/tests/test_llm_client.py"]),
+        ("vendor", ["tests/agentdev/test_agent.py", "tests/agentdev/test_generation.py",
+                    "tests/agentdev/test_test_runner.py", "tests/agentdev/test_coverage_runner.py",
+                    "tests/agentdev/test_failure_analysis.py", "tests/agentdev/test_llm_client.py"]),
     ):
         xml = ROOT / f"evaluation/p5_{name}_tests.xml"
         result = subprocess.run([sys.executable, "-m", "pytest", *targets, "-q", "--basetemp", str(root / name),
@@ -325,10 +325,9 @@ def main():
     if args.tests:
         evidence["checks"] = run_tests(root)
     manifest = json.loads((ROOT / "evaluation/reuse_manifest.json").read_text(encoding="utf-8"))
-    evidence["vendor_files_unchanged"] = all(file_digest(ROOT / "vendor/agentdev" / item["path"]) == item["sha256"]
-                                               for item in manifest["files"])
-    evidence["vendor_manifest_files"] = len(manifest["files"])
     from vendor_audit import audit_vendor
+    evidence["vendor_files_unchanged"] = audit_vendor(ROOT)["unchanged"]
+    evidence["vendor_manifest_files"] = len(manifest["files"])
     evidence["vendor_files_verified"] = audit_vendor(ROOT)["verified"]
     expected = {"calculation": ("completed", "coverage_target_met"), "validation": ("completed", "coverage_target_met"),
                 "discount": ("needs_review", "suspected_source_defect")}

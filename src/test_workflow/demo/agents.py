@@ -4,8 +4,8 @@ from importlib.resources import files
 from pathlib import Path
 from typing import Literal
 
-from testgen_agent.generation import validate_generated_tests
-from testgen_agent.models import CandidateRound, ContractModel, GeneratedTests
+from test_workflow.agents.test_generation.core.generation import validate_generated_tests
+from test_workflow.agents.test_generation.core.models import CandidateRound, ContractModel, GeneratedTests
 
 from ..contracts import AgentContext, AgentResult, ArtifactRef, Message, MessagePayload, StatePatch
 from ..storage import atomic_write, file_digest, task_path, verify_artifact

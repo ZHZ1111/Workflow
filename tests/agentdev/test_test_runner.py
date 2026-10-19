@@ -8,9 +8,9 @@ from time import perf_counter
 import pytest
 from pydantic import ValidationError
 
-from testgen_agent.models import ExecutionKind, ExecutionResult
-from testgen_agent.tools import ExecutionArtifactError, ExecutionWorkspaceError, run_tests
-from testgen_agent.tools import test_runner as runner
+from test_workflow.agents.test_generation.core.models import ExecutionKind, ExecutionResult
+from test_workflow.agents.test_generation.core.tools import ExecutionArtifactError, ExecutionWorkspaceError, run_tests
+from test_workflow.agents.test_generation.core.tools import test_runner as runner
 
 
 def prepare(tmp_path, code, *, subject="def double(x):\n    return x * 2\n"):

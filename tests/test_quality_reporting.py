@@ -4,7 +4,7 @@ import json
 from unittest.mock import patch
 
 import pytest
-from testgen_agent.models import TokenUsage
+from test_workflow.agents.test_generation.core.models import TokenUsage
 
 from test_workflow.contracts import AgentContext, AgentResult, GenerationTelemetry
 from test_workflow.agents.test_generation import TestGenerationAgent

@@ -10,7 +10,7 @@ from pathlib import Path
 import sys
 from typing import Literal, NoReturn
 
-from testgen_agent.models import (
+from test_workflow.agents.test_generation.core.models import (
     CallSite,
     DirectCall,
     FunctionInfo,

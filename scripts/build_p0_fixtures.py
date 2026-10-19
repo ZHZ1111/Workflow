@@ -1,7 +1,7 @@
 """Build deterministic model-response data for later Workflow integration checks."""
 from pathlib import Path
 
-from testgen_agent import models as m
+from test_workflow.agents.test_generation.core import models as m
 
 
 def build(function: str, cases: list[tuple[str, object, object, str | None]], *, binary: bool = False):

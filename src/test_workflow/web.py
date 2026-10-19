@@ -9,9 +9,9 @@ import threading
 from urllib.parse import urlsplit
 from uuid import uuid4
 
-from testgen_agent.config import load_config
-from testgen_agent.llm_client import DeepSeekClient
-from testgen_agent.models import ModelInfo
+from test_workflow.agents.test_generation.core.config import load_config
+from test_workflow.agents.test_generation.core.llm_client import DeepSeekClient
+from test_workflow.agents.test_generation.core.models import ModelInfo
 
 from .config import WorkflowConfig
 from .service import run_workflow

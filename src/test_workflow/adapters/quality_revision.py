@@ -3,13 +3,13 @@
 import hashlib
 import json
 
-from testgen_agent.agent import choose_action
-from testgen_agent.generation import preserved_tests
-from testgen_agent.llm_client import GenerationContext
-from testgen_agent.models import (
+from test_workflow.agents.test_generation.core.agent import choose_action
+from test_workflow.agents.test_generation.core.generation import preserved_tests
+from test_workflow.agents.test_generation.core.llm_client import GenerationContext
+from test_workflow.agents.test_generation.core.models import (
     AgentAction, CandidateRound, CoverageResult, ExecutionResult, StopReason, TaskStatus, TestPlan,
 )
-from testgen_agent.prompts import build_feedback_context, TASK_DATA_START, TASK_DATA_END
+from test_workflow.agents.test_generation.core.prompts import build_feedback_context, TASK_DATA_START, TASK_DATA_END
 
 from ..contracts import AgentContext, ExecutionAssessment, QualityAssessment
 from ..quality_client import ReviewResponse

@@ -4,16 +4,16 @@ import json
 from time import perf_counter
 from typing import Literal
 
-from testgen_agent.models import AgentAction
+from test_workflow.agents.test_generation.core.models import AgentAction
 
-from ..adapters.quality import (
+from ...adapters.quality import (
     QualityGateError, preflight_quality, review_directory, save_quality_assessment, validate_quality_response,
 )
-from ..contracts import AgentContext, AgentResult, Message, MessagePayload, QualityFeedback
-from ..quality_client import ReviewClient, ReviewClientError, ReviewErrorCode, ReviewResponse
-from ..quality_contracts import ReviewTelemetry
-from ..quality_prompts import ReviewContext
-from ..storage import atomic_write
+from ...contracts import AgentContext, AgentResult, Message, MessagePayload, QualityFeedback
+from ...quality_client import ReviewClient, ReviewClientError, ReviewErrorCode, ReviewResponse
+from ...quality_contracts import ReviewTelemetry
+from ...quality_prompts import ReviewContext
+from ...storage import atomic_write
 
 
 class TestQualityReviewAgent:

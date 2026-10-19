@@ -12,9 +12,9 @@ from typing import Annotated, Protocol, runtime_checkable
 
 import httpx
 from pydantic import Field, StrictInt, ValidationError, model_validator
-from testgen_agent.config import AppConfig
-from testgen_agent.llm_client import create_http_client
-from testgen_agent.models import ContractModel, Text, TokenUsage
+from test_workflow.agents.test_generation.core.config import AppConfig
+from test_workflow.agents.test_generation.core.llm_client import create_http_client
+from test_workflow.agents.test_generation.core.models import ContractModel, Text, TokenUsage
 
 from .quality_contracts import ReviewDecision, ReviewTelemetry
 from .quality_prompts import ReviewContext, build_review_prompt, build_review_repair_prompt

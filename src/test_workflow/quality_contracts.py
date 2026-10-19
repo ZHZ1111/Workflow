@@ -4,7 +4,7 @@ import ast
 from typing import Annotated, Literal
 
 from pydantic import Field, StrictBool, StrictInt, StringConstraints, computed_field, model_validator
-from testgen_agent.models import ContractModel, Identifier, TestName, Text, TokenUsage
+from test_workflow.agents.test_generation.core.models import ContractModel, Identifier, TestName, Text, TokenUsage
 
 ReviewText = Annotated[Text, StringConstraints(max_length=2000)]
 ReviewQuote = Annotated[Text, StringConstraints(max_length=4000)]

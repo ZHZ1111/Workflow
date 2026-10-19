@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Annotated, Literal
 
 from pydantic import Field, StrictInt, model_validator
-from testgen_agent.models import AgentState, ContractModel, Count, RoundNumber, StopReason, TaskStatus
+from test_workflow.agents.test_generation.core.models import AgentState, ContractModel, Count, RoundNumber, StopReason, TaskStatus
 
 from .config import WorkflowConfig
 from .contracts import ArtifactRef, Message, QualityAssessment, StableId

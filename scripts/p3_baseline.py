@@ -11,7 +11,7 @@ from pathlib import Path
 import subprocess
 from unittest.mock import patch
 
-from testgen_agent.tools import run_tests_with_coverage
+from test_workflow.agents.test_generation.core.tools import run_tests_with_coverage
 from test_workflow.adapters.execution import evaluate
 from test_workflow.agents.test_execution import TestExecutionAgent
 from test_workflow.agents.test_generation import TestGenerationAgent
@@ -96,8 +96,8 @@ def main():
         for number in range(1, len(fixtures) + 1):
             with patch("subprocess.Popen", side_effect=AssertionError("generation cannot execute pytest")):
                 state, _, gr = invoke(state, generator, runner, "test_generation", number, feedback)
-            fault = patch("testgen_agent.tools.coverage_runner.subprocess.run", side_effect=OSError("controlled export fault")) if name == "coverage_export_failure" else nullcontext()
-            with fault, patch("testgen_agent.tools.test_runner.subprocess.Popen", side_effect=record):
+            fault = patch("test_workflow.agents.test_generation.core.tools.coverage_runner.subprocess.run", side_effect=OSError("controlled export fault")) if name == "coverage_export_failure" else nullcontext()
+            with fault, patch("test_workflow.agents.test_generation.core.tools.test_runner.subprocess.Popen", side_effect=record):
                 state, ctx, result = invoke(state, executor, runner, "test_execution", number, gr.messages)
             assessment = result.assessment
             rounds.append({"round": number, "tool_calls": assessment.tool_calls, "pytest_started": assessment.pytest_started,
@@ -137,7 +137,7 @@ def main():
     (workspace / "rounds/01").mkdir(parents=True)
     (workspace / "subject.py").write_bytes((ROOT / "examples/calculation.py").read_bytes())
     (workspace / "rounds/01/test_subject.py").write_text("# deliberately empty\n", encoding="utf-8")
-    with patch("testgen_agent.tools.test_runner.subprocess.Popen", side_effect=record):
+    with patch("test_workflow.agents.test_generation.core.tools.test_runner.subprocess.Popen", side_effect=record):
         observed = run_tests_with_coverage(workspace)
     candidate = passed_context.state.agent_state.history[-1].updated(execution=observed.execution, coverage=observed.coverage)
     manual = evaluate(passed_context, candidate, None, (), tool_calls=1, observation_mode="injected")

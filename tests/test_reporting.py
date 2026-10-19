@@ -123,7 +123,7 @@ def test_unconsumed_feedback_is_not_reported_as_used(tmp_path):
 
 
 def test_coverage_unavailable_report_keeps_true_test_outcomes(tmp_path):
-    with patch("testgen_agent.tools.coverage_runner.subprocess.run", side_effect=OSError("export fault")):
+    with patch("test_workflow.agents.test_generation.core.tools.coverage_runner.subprocess.run", side_effect=OSError("export fault")):
         _, state, summary = run(tmp_path, "calculation", ("calculation_complete.json",))
     assert state.task_status == "partial" and summary["selected_all_passed"] is True
     assert summary["selected_coverage"]["status"] == "unavailable"

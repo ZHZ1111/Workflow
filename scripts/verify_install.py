@@ -31,7 +31,7 @@ def main():
         return result.stdout
 
     execute("build", [sys.executable, "-m", "pip", "wheel", "--no-deps", "--no-build-isolation",
-                      "--wheel-dir", str(wheel_dir), str(ROOT / "vendor/agentdev"), str(ROOT)])
+                      "--wheel-dir", str(wheel_dir), str(ROOT)])
     venv.EnvBuilder(with_pip=True).create(directory / "venv")
     python = directory / "venv" / ("Scripts/python.exe" if sys.platform == "win32" else "bin/python")
     scripts = python.parent
@@ -57,7 +57,7 @@ def main():
         # response. No offline mode exists in the Web API and no HTTP leaves
         # this machine during clean-install verification.
         harness = ("from pathlib import Path; import test_workflow.web as web; "
-                   "from test_workflow.service import fixture_client; from testgen_agent.config import AppConfig; "
+                   "from test_workflow.service import fixture_client; from test_workflow.agents.test_generation.core.config import AppConfig; "
                    "web.load_config=lambda **kw: AppConfig(model='fixture-model', api_key='fixture-key'); "
                    "web.DeepSeekClient=lambda config: fixture_client('validation'); "
                    f"web.serve('127.0.0.1', {port}, Path.cwd())")

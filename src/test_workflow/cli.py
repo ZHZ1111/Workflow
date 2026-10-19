@@ -4,9 +4,9 @@ import argparse
 import json
 from pathlib import Path
 
-from testgen_agent.config import load_config
-from testgen_agent.llm_client import DeepSeekClient
-from testgen_agent.models import ModelInfo, TaskStatus
+from test_workflow.agents.test_generation.core.config import load_config
+from test_workflow.agents.test_generation.core.llm_client import DeepSeekClient
+from test_workflow.agents.test_generation.core.models import ModelInfo, TaskStatus
 
 from .config import WorkflowConfig
 from .demo.agents import FakeExecutionAgent, FakeGenerationAgent

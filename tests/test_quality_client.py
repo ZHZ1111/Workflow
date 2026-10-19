@@ -9,8 +9,8 @@ from unittest.mock import patch
 import httpx
 import pytest
 from pydantic import SecretStr, ValidationError
-from testgen_agent.config import AppConfig
-from testgen_agent.models import (
+from test_workflow.agents.test_generation.core.config import AppConfig
+from test_workflow.agents.test_generation.core.models import (
     AgentAction, CandidateRound, CoverageResult, ExecutionResult, GeneratedTests, StopReason, TaskStatus,
 )
 
@@ -96,7 +96,7 @@ def later_context(context):
 
 def test_review_uses_independent_schema_existing_transport_and_safe_telemetry(config, context):
     client, requests, delays = client_for(config, [completion()])
-    with patch("testgen_agent.llm_client.DeepSeekClient.generate_tests", side_effect=AssertionError("generation called")):
+    with patch("test_workflow.agents.test_generation.core.llm_client.DeepSeekClient.generate_tests", side_effect=AssertionError("generation called")):
         result = client.review(context)
     assert isinstance(client, ReviewClient) and isinstance(result, ReviewResponse)
     body = json.loads(requests[0].content)

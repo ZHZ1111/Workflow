@@ -8,7 +8,7 @@ from pathlib import Path, PureWindowsPath
 from typing import Annotated, Literal, TYPE_CHECKING
 
 from pydantic import Field, StrictBool, StrictInt, StringConstraints, computed_field, field_validator, model_validator
-from testgen_agent.models import (
+from test_workflow.agents.test_generation.core.models import (
     AgentAction, CandidateRound, ContractModel, Count, Issue, RoundNumber,
     Text, TokenUsage, CoverageResult, ExecutionResult, StopReason, TaskStatus,
 )

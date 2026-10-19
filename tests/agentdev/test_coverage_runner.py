@@ -5,11 +5,11 @@ import subprocess
 
 import pytest
 
-from testgen_agent.models import BranchArc, CoverageResult, ExecutionKind
-from testgen_agent.tools import (
+from test_workflow.agents.test_generation.core.models import BranchArc, CoverageResult, ExecutionKind
+from test_workflow.agents.test_generation.core.tools import (
     build_coverage_source_hints, parse_coverage_json, run_tests_with_coverage,
 )
-from testgen_agent.tools import coverage_runner as collector
+from test_workflow.agents.test_generation.core.tools import coverage_runner as collector
 
 
 BRANCH_SOURCE = "def choose(x):\n    if x > 0:\n        return 1\n    return -1\n"
@@ -281,9 +281,9 @@ def test_coverage_interface_rejects_invalid_timeouts(tmp_path, timeout, exceptio
 
 def test_feedback_prompt_receives_measured_source_snippets(tmp_path):
     # Reuse the real D2 observation with a separately identified synthetic plan.
-    from testgen_agent.models import CandidateRound, GeneratedTests
-    from testgen_agent.prompts import build_feedback_context, TASK_DATA_START, TASK_DATA_END
-    from testgen_agent.tools import analyze_source
+    from test_workflow.agents.test_generation.core.models import CandidateRound, GeneratedTests
+    from test_workflow.agents.test_generation.core.prompts import build_feedback_context, TASK_DATA_START, TASK_DATA_END
+    from test_workflow.agents.test_generation.core.tools import analyze_source
 
     root = prepare(tmp_path, "from subject import choose\ndef test_positive():\n    assert choose(1) == 1\n")
     result = run_tests_with_coverage(root)

@@ -5,13 +5,13 @@ import json
 import httpx
 import pytest
 
-from testgen_agent.agent import AgentTools, run_agent
-from testgen_agent.config import load_config
-from testgen_agent.generation import stage_initial_candidate
-from testgen_agent.llm_client import DeepSeekClient, LLMError, LLMErrorCode, RetryPolicy
-from testgen_agent.models import OracleMode
-from testgen_agent.prompts import build_generation_context
-from testgen_agent.tracing import TraceArtifactError, TraceEvent, TraceWriter
+from test_workflow.agents.test_generation.core.agent import AgentTools, run_agent
+from test_workflow.agents.test_generation.core.config import load_config
+from test_workflow.agents.test_generation.core.generation import stage_initial_candidate
+from test_workflow.agents.test_generation.core.llm_client import DeepSeekClient, LLMError, LLMErrorCode, RetryPolicy
+from test_workflow.agents.test_generation.core.models import OracleMode
+from test_workflow.agents.test_generation.core.prompts import build_generation_context
+from test_workflow.agents.test_generation.core.tracing import TraceArtifactError, TraceEvent, TraceWriter
 from test_agent_loop import task_request, candidate, POS, ZERO, NEG, run, SequenceClient
 from test_failure_analysis import discount_state
 from test_llm_client import completion
@@ -156,7 +156,7 @@ def test_prepared_workspace_cannot_bypass_candidate_overwrite_protection(task_re
     result, _ = run(task_request.updated(max_rounds=1), [candidate([POS])])
     before = (task_request.output_dir / "rounds/01/candidate.json").read_bytes()
     from test_generation import llm_result
-    from testgen_agent.tools import analyze_source
+    from test_workflow.agents.test_generation.core.tools import analyze_source
     with pytest.raises(FileExistsError):
         stage_initial_candidate(source=analyze_source(task_request.source_path), llm_result=llm_result(candidate([POS])),
                                 workspace=task_request.output_dir, prepared_run_id=result.state.run_id)
@@ -173,7 +173,7 @@ def test_specification_read_failure_is_traced_without_model_calls(task_request):
 
 
 def test_export_failure_records_failed_tool_and_never_finishes_run(task_request, monkeypatch):
-    import testgen_agent.agent as agent
+    import test_workflow.agents.test_generation.core.agent as agent
     def fail_export(*args):
         raise OSError("export disk unavailable")
     monkeypatch.setattr(agent, "_export_results", fail_export)

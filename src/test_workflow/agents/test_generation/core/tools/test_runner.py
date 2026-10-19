@@ -62,7 +62,7 @@ def _run_tests(
             sys.executable, "-P", "-m", "pytest", "-c", str(config_path),
             "--rootdir", str(root), "--noconftest", "--import-mode=importlib",
             "-p", "no:cacheprovider",
-            "-p", "testgen_agent.tools._pytest_results",
+            "-p", "test_workflow.agents.test_generation.core.tools._pytest_results",
             f"--junitxml={artifacts / 'pytest.xml'}", "--color=no", "--tb=short",
             # The validated relative filename avoids pytest interpreting [] in
             # parent directory names as a parametrized node selector.
@@ -201,7 +201,9 @@ def _test_environment(report_path: Path, workspace: Path) -> dict[str, str]:
         PYTEST_DISABLE_PLUGIN_AUTOLOAD="1", PYTHONUNBUFFERED="1",
         # Only the host package and fixed subject root are added. Using the OS
         # path separator also handles workspace names containing spaces/Chinese.
-        PYTHONPATH=os.pathsep.join((str(Path(__file__).resolve().parents[2]), str(workspace))),
+        # core/tools lives five levels below the src/site-packages import root.
+        # The subprocess loads the integrated plugin without a legacy package.
+        PYTHONPATH=os.pathsep.join((str(Path(__file__).resolve().parents[5]), str(workspace))),
         TESTGEN_EXECUTION_REPORT=str(report_path),
     )
     return environment

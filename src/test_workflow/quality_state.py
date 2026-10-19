@@ -3,7 +3,7 @@
 import hashlib
 from typing import TYPE_CHECKING
 
-from testgen_agent.models import TaskStatus, TestPlan
+from test_workflow.agents.test_generation.core.models import TaskStatus, TestPlan
 
 from .contracts import ExecutionAssessment, QualityAssessment
 from .quality_contracts import validate_review_evidence

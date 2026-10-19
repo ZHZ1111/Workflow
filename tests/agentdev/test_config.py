@@ -8,11 +8,11 @@ import sys
 import httpx
 import pytest
 
-import testgen_agent.cli as cli
-from testgen_agent.cli import main
-from testgen_agent.config import ConfigError, load_config
-from testgen_agent.llm_client import create_http_client
-from testgen_agent.models import StopReason, TaskStatus
+import test_workflow.agents.test_generation.core.cli as cli
+from test_workflow.agents.test_generation.core.cli import main
+from test_workflow.agents.test_generation.core.config import ConfigError, load_config
+from test_workflow.agents.test_generation.core.llm_client import create_http_client
+from test_workflow.agents.test_generation.core.models import StopReason, TaskStatus
 
 
 @pytest.fixture
@@ -120,7 +120,7 @@ def test_explicit_proxy_is_passed_to_http_client(configured_environment, monkeyp
         def __init__(self, **kwargs):
             captured.update(kwargs)
 
-    monkeypatch.setattr("testgen_agent.llm_client.httpx.Client", FakeClient)
+    monkeypatch.setattr("test_workflow.agents.test_generation.core.llm_client.httpx.Client", FakeClient)
     create_http_client(config)
 
     assert captured["proxy"] == "http://127.0.0.1:7890"
@@ -215,7 +215,7 @@ def test_module_entrypoint_redirects_chinese_output_as_utf8(tmp_path):
         }
     )}
     result = subprocess.run(
-        [sys.executable, "-m", "testgen_agent", "--check-config", "--env-file", str(env_file)],
+        [sys.executable, "-m", "test_workflow.agents.test_generation.core", "--check-config", "--env-file", str(env_file)],
         cwd=tmp_path, env=environment, capture_output=True, timeout=10,
     )
     assert result.returncode == 0

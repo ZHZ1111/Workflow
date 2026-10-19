@@ -4,7 +4,7 @@ import json
 from typing import Annotated
 
 from pydantic import Field, StrictInt, model_validator
-from testgen_agent.models import (
+from test_workflow.agents.test_generation.core.models import (
     CandidateRound, ContractModel, OracleMode, RoundNumber, SourceInfo, TaskStatus,
     Text, validate_plan_against_source,
 )

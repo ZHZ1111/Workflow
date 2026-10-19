@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from testgen_agent.models import GeneratedTests
+from test_workflow.agents.test_generation.core.models import GeneratedTests
 from test_workflow.storage import atomic_write
 
 ROOT = Path(__file__).resolve().parents[1]

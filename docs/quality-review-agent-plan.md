@@ -1,5 +1,7 @@
 # 增加质量审查 Agent：详细实施步骤
 
+> 2026-10-19 目录更新：三个 Agent 已并列整合到同一个包，当前结构与安装方式见 [Agent 目录说明](agent-layout.md)。本文中的旧 vendor/包路径保留为历史实现说明，当前运行命令以 README 为准。
+
 > 编写日期：2026-10-16。
 > 编写时基于本地提交 `97fde32` 的源码结构。2026-10-16 从实际提交 `b2920aabce408a64841f1cd3eabe97d4c3ea8c76` 开始实施，截至 2026-10-17，S0–S8 已完成，见 [S0–S1 记录](quality-review-s0-s1.md)、[S2 记录](quality-review-s2.md)、[S3 记录](quality-review-s3.md)、[S4 记录](quality-review-s4.md)、[S5 记录](quality-review-s5.md)、[S6 记录](quality-review-s6.md)、[S7 记录](quality-review-s7.md)、[S8 记录](quality-review-s8.md)；S9 文档、样例与 45 秒离线演示已准备，真实模型外传等待明确授权，见 [S9 记录](quality-review-s9.md)。
 > 本次范围：在现有测试生成 Agent、测试执行 Agent 之间的协作基础上，增加一个能提出质量反馈的审查 Agent，形成三 Agent 闭环。

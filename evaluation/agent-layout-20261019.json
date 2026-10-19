@@ -1,0 +1,55 @@
+{
+  "phase": "agent_directory_integration",
+  "recorded_at": "2026-10-19T14:02:00.398306+08:00",
+  "base_commit": "ce5c02328c4d33e7c4eafe74224879722ab8baf8",
+  "layout": "Three peer agent packages in src/test_workflow/agents; generation core integrated in the same distribution",
+  "python_regression": {
+    "command": ".venv/Scripts/python.exe -m pytest tests -q --junitxml=outputs/agent-layout-regression.xml",
+    "tests": 1037,
+    "agentdev_tests": 423,
+    "workflow_tests": 614,
+    "failures": 0,
+    "errors": 0,
+    "junit": "outputs/agent-layout-regression.xml",
+    "elapsed_seconds": 1477.03
+  },
+  "frontend": {
+    "command": "node --test tests/web/*.test.cjs",
+    "tests": 25,
+    "passed": 25,
+    "failed": 0
+  },
+  "single_wheel_install": {
+    "success": true,
+    "evidence": "outputs/quality-install-verification/8b8f73dcfe0b4cf8bc23b253fc4162b1/results.json"
+  },
+  "provenance": {
+    "unchanged": false,
+    "verified": true,
+    "files": 57,
+    "patches": [
+      "src/testgen_agent/tools/_pytest_results.py",
+      "src/testgen_agent/config.py",
+      "src/testgen_agent/models.py",
+      "src/testgen_agent/tools/test_runner.py",
+      "src/testgen_agent/tools/coverage_runner.py",
+      ".env.example"
+    ],
+    "layout": "integrated"
+  },
+  "newline_audit": {
+    "crlf_conversion_accepted": true,
+    "actual_source_change_rejected": true
+  },
+  "runtime_comparison": {
+    "files": 24,
+    "beyond_import_relocation": [
+      "tools/test_runner.py: integrated plugin import-root adjustment"
+    ]
+  },
+  "legacy_distribution_removed": true,
+  "legacy_module_importable": false,
+  "dependency_check": "passed",
+  "original_data_backup": "outputs/agent-layout-backup",
+  "external_model_requests": 0
+}

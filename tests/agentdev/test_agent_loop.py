@@ -5,11 +5,11 @@ from pathlib import Path
 
 import pytest
 
-from testgen_agent import models as m
-from testgen_agent.agent import AgentTools, run_agent, select_best_candidate
-from testgen_agent.generation import stage_revision_candidate
-from testgen_agent.llm_client import LLMError, LLMErrorCode
-from testgen_agent.tools import analyze_source, run_tests, run_tests_with_coverage
+from test_workflow.agents.test_generation.core import models as m
+from test_workflow.agents.test_generation.core.agent import AgentTools, run_agent, select_best_candidate
+from test_workflow.agents.test_generation.core.generation import stage_revision_candidate
+from test_workflow.agents.test_generation.core.llm_client import LLMError, LLMErrorCode
+from test_workflow.agents.test_generation.core.tools import analyze_source, run_tests, run_tests_with_coverage
 from test_generation import llm_result, relationship_generated, single_function_generated
 from test_failure_analysis import discount_state
 
@@ -96,7 +96,7 @@ def test_three_round_real_loop_finishes_and_preserves_all_snapshots(task_request
 
 
 def test_report_exposes_relationship_evidence_and_strategy(tmp_path):
-    source_path = Path(__file__).parents[1] / "examples" / "relationships.py"
+    source_path = Path(__file__).resolve().parents[2] / "examples" / "agentdev" / "relationships.py"
     source = analyze_source(source_path)
     request = m.TaskInput(
         source_path=source_path,
@@ -345,7 +345,7 @@ def test_input_error_has_explicit_failed_stop_and_no_model_request(task_request)
 
 
 def test_timeout_ends_loop_without_second_model_request(task_request):
-    from testgen_agent.tools.coverage_runner import CoverageRunResult
+    from test_workflow.agents.test_generation.core.tools.coverage_runner import CoverageRunResult
     def timeout(workspace, timeout):
         execution = m.ExecutionResult(kind="timeout", exit_code=-1, timed_out=True)
         coverage = m.CoverageResult(target_file=workspace / "subject.py", status="unavailable", error="timeout")
