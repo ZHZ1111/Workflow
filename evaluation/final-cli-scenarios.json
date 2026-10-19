@@ -1,0 +1,504 @@
+{
+  "recorded_at": "2026-10-19T07:34:48.511899+00:00",
+  "success": true,
+  "model_requests_sent": 0,
+  "clients": "fixed generation and review fixtures; production nodes and real pytest/coverage",
+  "inputs_unchanged": true,
+  "cases": [
+    {
+      "run_id": "run-156ebb68f9eb44e4a76a47dff79e3f77",
+      "workflow_status": "finished",
+      "task_status": "completed",
+      "stop_reason": "coverage_target_met",
+      "quality_status": "disabled",
+      "quality_stop_reason": null,
+      "rounds": 1,
+      "selected_round": 1,
+      "exported_quality_approved": null,
+      "review_calls": 0,
+      "pytest_processes": 1,
+      "external_requests": 0,
+      "node_order": [
+        {
+          "round": 1,
+          "node": "test_generation",
+          "committed": true
+        },
+        {
+          "round": 1,
+          "node": "test_execution",
+          "committed": true
+        },
+        {
+          "round": 1,
+          "node": "result_summary",
+          "committed": true
+        }
+      ],
+      "inspect_read_only": true,
+      "report_links_verified": 35,
+      "final_test_sha256": "d9bdae8ceedfd5db31fb98de50e1dee3bee21d95e3ec2c34ecdecf434c14660e",
+      "name": "disabled",
+      "passed": true,
+      "cli_exit": 0
+    },
+    {
+      "run_id": "run-d09b6ff9f90c4bf884caef96c4d32516",
+      "workflow_status": "finished",
+      "task_status": "completed",
+      "stop_reason": "coverage_target_met",
+      "quality_status": "passed",
+      "quality_stop_reason": "approved",
+      "rounds": 1,
+      "selected_round": 1,
+      "exported_quality_approved": true,
+      "review_calls": 1,
+      "pytest_processes": 1,
+      "external_requests": 0,
+      "node_order": [
+        {
+          "round": 1,
+          "node": "test_generation",
+          "committed": true
+        },
+        {
+          "round": 1,
+          "node": "test_execution",
+          "committed": true
+        },
+        {
+          "round": 1,
+          "node": "test_quality_review",
+          "committed": true
+        },
+        {
+          "round": 1,
+          "node": "result_summary",
+          "committed": true
+        }
+      ],
+      "inspect_read_only": true,
+      "report_links_verified": 43,
+      "final_test_sha256": "d9bdae8ceedfd5db31fb98de50e1dee3bee21d95e3ec2c34ecdecf434c14660e",
+      "name": "approved",
+      "passed": true,
+      "cli_exit": 0
+    },
+    {
+      "run_id": "run-e99caeeca008437495d34e3c87956895",
+      "workflow_status": "finished",
+      "task_status": "completed",
+      "stop_reason": "coverage_target_met",
+      "quality_status": "passed",
+      "quality_stop_reason": "approved",
+      "rounds": 2,
+      "selected_round": 2,
+      "exported_quality_approved": true,
+      "review_calls": 2,
+      "pytest_processes": 2,
+      "external_requests": 0,
+      "node_order": [
+        {
+          "round": 1,
+          "node": "test_generation",
+          "committed": true
+        },
+        {
+          "round": 1,
+          "node": "test_execution",
+          "committed": true
+        },
+        {
+          "round": 1,
+          "node": "test_quality_review",
+          "committed": true
+        },
+        {
+          "round": 2,
+          "node": "test_generation",
+          "committed": true
+        },
+        {
+          "round": 2,
+          "node": "test_execution",
+          "committed": true
+        },
+        {
+          "round": 2,
+          "node": "test_quality_review",
+          "committed": true
+        },
+        {
+          "round": 2,
+          "node": "result_summary",
+          "committed": true
+        }
+      ],
+      "inspect_read_only": true,
+      "report_links_verified": 78,
+      "final_test_sha256": "98a03df59e44887e4cf75c25eb98352d6a81a0f24d066ca0f978f7d05c1cd5d9",
+      "name": "quality_feedback",
+      "passed": true,
+      "cli_exit": 0
+    },
+    {
+      "run_id": "run-b2afeb52420841b399bd555d3dbf4861",
+      "workflow_status": "finished",
+      "task_status": "partial",
+      "stop_reason": "round_limit_reached",
+      "quality_status": "changes_requested",
+      "quality_stop_reason": "quality_budget_reached",
+      "rounds": 3,
+      "selected_round": 3,
+      "exported_quality_approved": false,
+      "review_calls": 3,
+      "pytest_processes": 3,
+      "external_requests": 0,
+      "node_order": [
+        {
+          "round": 1,
+          "node": "test_generation",
+          "committed": true
+        },
+        {
+          "round": 1,
+          "node": "test_execution",
+          "committed": true
+        },
+        {
+          "round": 1,
+          "node": "test_quality_review",
+          "committed": true
+        },
+        {
+          "round": 2,
+          "node": "test_generation",
+          "committed": true
+        },
+        {
+          "round": 2,
+          "node": "test_execution",
+          "committed": true
+        },
+        {
+          "round": 2,
+          "node": "test_quality_review",
+          "committed": true
+        },
+        {
+          "round": 3,
+          "node": "test_generation",
+          "committed": true
+        },
+        {
+          "round": 3,
+          "node": "test_execution",
+          "committed": true
+        },
+        {
+          "round": 3,
+          "node": "test_quality_review",
+          "committed": true
+        },
+        {
+          "round": 3,
+          "node": "result_summary",
+          "committed": true
+        }
+      ],
+      "inspect_read_only": true,
+      "report_links_verified": 113,
+      "final_test_sha256": "9ec4a192afeacfb1cfb408fb37650c1486121964495f8d729a4c80651bf71125",
+      "name": "three_round_budget",
+      "passed": true,
+      "cli_exit": 1
+    },
+    {
+      "run_id": "run-61a9238f5e9d4f799063737a9b89f029",
+      "workflow_status": "finished",
+      "task_status": "needs_review",
+      "stop_reason": "ambiguous_specification",
+      "quality_status": "needs_review",
+      "quality_stop_reason": "ambiguous_specification",
+      "rounds": 1,
+      "selected_round": 1,
+      "exported_quality_approved": false,
+      "review_calls": 1,
+      "pytest_processes": 1,
+      "external_requests": 0,
+      "node_order": [
+        {
+          "round": 1,
+          "node": "test_generation",
+          "committed": true
+        },
+        {
+          "round": 1,
+          "node": "test_execution",
+          "committed": true
+        },
+        {
+          "round": 1,
+          "node": "test_quality_review",
+          "committed": true
+        },
+        {
+          "round": 1,
+          "node": "result_summary",
+          "committed": true
+        }
+      ],
+      "inspect_read_only": true,
+      "report_links_verified": 43,
+      "final_test_sha256": "d9bdae8ceedfd5db31fb98de50e1dee3bee21d95e3ec2c34ecdecf434c14660e",
+      "name": "human_review",
+      "passed": true,
+      "cli_exit": 1
+    },
+    {
+      "run_id": "run-200fb17bd6124551816fca6e6911ec86",
+      "workflow_status": "error",
+      "task_status": "partial",
+      "stop_reason": "unrecoverable_error",
+      "quality_status": "error",
+      "quality_stop_reason": "review_error",
+      "rounds": 2,
+      "selected_round": 2,
+      "exported_quality_approved": false,
+      "review_calls": 2,
+      "pytest_processes": 2,
+      "external_requests": 0,
+      "node_order": [
+        {
+          "round": 1,
+          "node": "test_generation",
+          "committed": true
+        },
+        {
+          "round": 1,
+          "node": "test_execution",
+          "committed": true
+        },
+        {
+          "round": 1,
+          "node": "test_quality_review",
+          "committed": true
+        },
+        {
+          "round": 2,
+          "node": "test_generation",
+          "committed": true
+        },
+        {
+          "round": 2,
+          "node": "test_execution",
+          "committed": true
+        },
+        {
+          "round": 2,
+          "node": "test_quality_review",
+          "committed": false
+        }
+      ],
+      "inspect_read_only": true,
+      "report_links_verified": 70,
+      "final_test_sha256": "98a03df59e44887e4cf75c25eb98352d6a81a0f24d066ca0f978f7d05c1cd5d9",
+      "name": "review_exhausted",
+      "passed": true,
+      "cli_exit": 1
+    },
+    {
+      "run_id": "run-9cb8b91abde64a4ebbce8954f5810a83",
+      "workflow_status": "finished",
+      "task_status": "completed",
+      "stop_reason": "coverage_target_met",
+      "quality_status": "passed",
+      "quality_stop_reason": "approved",
+      "rounds": 2,
+      "selected_round": 2,
+      "exported_quality_approved": true,
+      "review_calls": 1,
+      "pytest_processes": 2,
+      "external_requests": 0,
+      "node_order": [
+        {
+          "round": 1,
+          "node": "test_generation",
+          "committed": true
+        },
+        {
+          "round": 1,
+          "node": "test_execution",
+          "committed": true
+        },
+        {
+          "round": 2,
+          "node": "test_generation",
+          "committed": true
+        },
+        {
+          "round": 2,
+          "node": "test_execution",
+          "committed": true
+        },
+        {
+          "round": 2,
+          "node": "test_quality_review",
+          "committed": true
+        },
+        {
+          "round": 2,
+          "node": "result_summary",
+          "committed": true
+        }
+      ],
+      "inspect_read_only": true,
+      "report_links_verified": 70,
+      "final_test_sha256": "8bba3f09666921d4256430381e395e661a7b46728701d8e2e8e6eb887a3cb199",
+      "name": "execution_feedback_first",
+      "passed": true,
+      "cli_exit": 0
+    },
+    {
+      "run_id": "run-546b0a028fa74653a36f275f969e6c2f",
+      "workflow_status": "finished",
+      "task_status": "needs_review",
+      "stop_reason": "suspected_source_defect",
+      "quality_status": "not_run",
+      "quality_stop_reason": null,
+      "rounds": 1,
+      "selected_round": 1,
+      "exported_quality_approved": false,
+      "review_calls": 0,
+      "pytest_processes": 1,
+      "external_requests": 0,
+      "node_order": [
+        {
+          "round": 1,
+          "node": "test_generation",
+          "committed": true
+        },
+        {
+          "round": 1,
+          "node": "test_execution",
+          "committed": true
+        },
+        {
+          "round": 1,
+          "node": "result_summary",
+          "committed": true
+        }
+      ],
+      "inspect_read_only": true,
+      "report_links_verified": 35,
+      "final_test_sha256": "81cbd6aa074f2b651d4d38d879de616610579bce1bd8d20c31a7a895976b342f",
+      "name": "source_defect",
+      "passed": true,
+      "cli_exit": 1
+    },
+    {
+      "run_id": "run-3635d0ed3c5f42e8bd52fd9b19f1aabb",
+      "workflow_status": "finished",
+      "task_status": "partial",
+      "stop_reason": "no_progress",
+      "quality_status": "not_run",
+      "quality_stop_reason": "quality_no_progress",
+      "rounds": 2,
+      "selected_round": 1,
+      "exported_quality_approved": false,
+      "review_calls": 1,
+      "pytest_processes": 1,
+      "external_requests": 0,
+      "node_order": [
+        {
+          "round": 1,
+          "node": "test_generation",
+          "committed": true
+        },
+        {
+          "round": 1,
+          "node": "test_execution",
+          "committed": true
+        },
+        {
+          "round": 1,
+          "node": "test_quality_review",
+          "committed": true
+        },
+        {
+          "round": 2,
+          "node": "test_generation",
+          "committed": true
+        },
+        {
+          "round": 2,
+          "node": "test_execution",
+          "committed": true
+        },
+        {
+          "round": 2,
+          "node": "result_summary",
+          "committed": true
+        }
+      ],
+      "inspect_read_only": true,
+      "report_links_verified": 53,
+      "final_test_sha256": "d9bdae8ceedfd5db31fb98de50e1dee3bee21d95e3ec2c34ecdecf434c14660e",
+      "name": "duplicate",
+      "passed": true,
+      "cli_exit": 1
+    },
+    {
+      "run_id": "run-ee889e6101d6418cad6b745981763a1a",
+      "workflow_status": "finished",
+      "task_status": "partial",
+      "stop_reason": "round_limit_reached",
+      "quality_status": "not_run",
+      "quality_stop_reason": null,
+      "rounds": 2,
+      "selected_round": 1,
+      "exported_quality_approved": false,
+      "review_calls": 1,
+      "pytest_processes": 1,
+      "external_requests": 0,
+      "node_order": [
+        {
+          "round": 1,
+          "node": "test_generation",
+          "committed": true
+        },
+        {
+          "round": 1,
+          "node": "test_execution",
+          "committed": true
+        },
+        {
+          "round": 1,
+          "node": "test_quality_review",
+          "committed": true
+        },
+        {
+          "round": 2,
+          "node": "test_generation",
+          "committed": true
+        },
+        {
+          "round": 2,
+          "node": "test_execution",
+          "committed": true
+        },
+        {
+          "round": 2,
+          "node": "result_summary",
+          "committed": true
+        }
+      ],
+      "inspect_read_only": true,
+      "report_links_verified": 53,
+      "final_test_sha256": "d9bdae8ceedfd5db31fb98de50e1dee3bee21d95e3ec2c34ecdecf434c14660e",
+      "name": "passing_test_removed",
+      "passed": true,
+      "cli_exit": 1
+    }
+  ]
+}

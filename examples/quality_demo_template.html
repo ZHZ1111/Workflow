@@ -33,5 +33,5 @@ $('play').onclick=()=>{stop();elapsed=0;start=performance.now();tick();timer=set
 $('pause').onclick=()=>{if(timer)stop();else{start=performance.now()-elapsed*1000;timer=setInterval(tick,200)}};
 $('next').onclick=()=>{stop();render((index+1)%6)};
 $('provenance').textContent=`任务 ${data.run_id} · 录制于 ${data.recorded_at} · 实际任务耗时 ${data.duration_seconds.toFixed(2)} 秒 · ${data.run_dir}`;
-$('report').href=data.report_href||'../'+data.run_dir+'/report.md';render(0);
+if(data.report_href){$('report').href=data.report_href}else{$('report').hidden=true}render(0);
 </script></html>

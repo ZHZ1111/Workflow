@@ -1,0 +1,140 @@
+{
+  "removed_tracked_files": [
+    "docs/development.md",
+    "docs/execution.md",
+    "docs/generation.md",
+    "docs/quality-review-agent-plan.md",
+    "docs/quality-review-demo.md",
+    "docs/quality-review-s0-s1.md",
+    "docs/quality-review-s2.md",
+    "docs/quality-review-s3.md",
+    "docs/quality-review-s4.md",
+    "docs/quality-review-s5.md",
+    "docs/quality-review-s6.md",
+    "docs/quality-review-s7.md",
+    "docs/quality-review-s8.md",
+    "docs/quality-review-s9.md",
+    "docs/reporting.md",
+    "docs/run-visualization.md",
+    "docs/samples.md",
+    "docs/scope.md",
+    "docs/test-plan.md",
+    "docs/upgrade-roadmap.md",
+    "docs/workflow.md",
+    "evaluation/acceptance.md",
+    "evaluation/baseline.md",
+    "evaluation/ci_path_fix_20261016.md",
+    "evaluation/p0_initial_tests.txt",
+    "evaluation/p0_recheck.xml",
+    "evaluation/p0_results.json",
+    "evaluation/p1.md",
+    "evaluation/p1_results.json",
+    "evaluation/p1_tests.xml",
+    "evaluation/p2.md",
+    "evaluation/p2_results.json",
+    "evaluation/p2_tests.xml",
+    "evaluation/p2_vendor_tests.xml",
+    "evaluation/p3.md",
+    "evaluation/p3_results.json",
+    "evaluation/p3_tests.xml",
+    "evaluation/p3_vendor_tests.xml",
+    "evaluation/p4.md",
+    "evaluation/p4_results.json",
+    "evaluation/p4_tests.xml",
+    "evaluation/p4_vendor_tests.xml",
+    "evaluation/p5_vendor_tests.xml",
+    "evaluation/p5_workflow_tests.xml",
+    "evaluation/p6.md",
+    "evaluation/p6_compatibility.json",
+    "evaluation/p6_results.json",
+    "evaluation/p6_tests.xml",
+    "evaluation/quality-review-s8-tests.xml",
+    "evaluation/quality-review-s9-demo.json",
+    "evaluation/quality-review-s9-scope.json",
+    "evaluation/quality-review-s9.json",
+    "evaluation/review_20261013.md",
+    "evaluation/run_visualization_20261013.md",
+    "evaluation/verification.md",
+    "scripts/build_p0_fixtures.py",
+    "scripts/build_p2_fixtures.py",
+    "scripts/build_p3_fixtures.py",
+    "scripts/build_p4_fixtures.py",
+    "scripts/p0_baseline.py",
+    "scripts/p1_baseline.py",
+    "scripts/p2_baseline.py",
+    "scripts/p3_baseline.py",
+    "scripts/p4_baseline.py",
+    "scripts/p5_acceptance.py",
+    "scripts/p6_acceptance.py",
+    "scripts/prepare_p0.py"
+  ],
+  "removed_tracked_count": 67,
+  "removed_local": [
+    "TASK_CHECKLIST.md",
+    "build",
+    "outputs/layout-audit-01_d_2yj"
+  ],
+  "preserved": [
+    "src",
+    "tests",
+    "examples",
+    "docs/agentdev",
+    "evaluation/reuse_manifest.json",
+    "evaluation/vendor_patches.json",
+    "evaluation/agentdev_layout.json",
+    ".env",
+    ".venv",
+    "existing task output history"
+  ],
+  "cleanup_permission_errors": [
+    {
+      "path": "outputs\\agent-layout-backup\\vendor\\agentdev\\outputs\\p0\\recheck-cache",
+      "error": "PermissionError"
+    },
+    {
+      "path": "outputs\\agent-layout-backup\\vendor\\agentdev\\outputs\\p0\\recheck-cache",
+      "error": "PermissionError"
+    },
+    {
+      "path": "outputs\\agent-layout-backup\\vendor\\agentdev\\outputs\\p0",
+      "error": "OSError"
+    },
+    {
+      "path": "outputs\\agent-layout-backup\\vendor\\agentdev\\outputs",
+      "error": "OSError"
+    },
+    {
+      "path": "outputs\\agent-layout-backup\\vendor\\agentdev",
+      "error": "OSError"
+    },
+    {
+      "path": "outputs\\agent-layout-backup\\vendor",
+      "error": "OSError"
+    },
+    {
+      "path": "outputs\\agent-layout-backup",
+      "error": "OSError"
+    }
+  ],
+  "archive_created": false,
+  "archive_reason": "User explicitly requested no archive",
+  "removed_generated_cache_directories": [
+    "src/test_workflow/__pycache__",
+    "src/test_workflow/adapters/__pycache__",
+    "src/test_workflow/agents/__pycache__",
+    "src/test_workflow/demo/__pycache__",
+    "src/test_workflow/nodes/__pycache__",
+    "src/test_workflow/demo/data/__pycache__",
+    "src/test_workflow/agents/test_execution/__pycache__",
+    "src/test_workflow/agents/test_generation/__pycache__",
+    "src/test_workflow/agents/test_quality_review/__pycache__",
+    "src/test_workflow/agents/test_generation/core/__pycache__",
+    "src/test_workflow/agents/test_generation/core/tools/__pycache__",
+    "tests/__pycache__",
+    "tests/agentdev/__pycache__",
+    "scripts/__pycache__",
+    ".pytest_cache",
+    "build"
+  ],
+  "final_cache_cleanup_errors": []
+}

@@ -1,0 +1,332 @@
+{
+  "recorded_at": "2026-10-19T07:58:34.945157+00:00",
+  "status": "required_course_features_verified",
+  "base_commit": "c2f81f7cad43f45b358970ce1e3cba3552f1e12d",
+  "python": "3.13.9 | packaged by Anaconda, Inc. | (main, Oct 21 2025, 19:09:58) [MSC v.1929 64 bit (AMD64)]",
+  "full_regression": {
+    "tests": 1037,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 1037,
+    "agentdev": 423,
+    "workflow": 614,
+    "duration_seconds": 1752.3905093999929
+  },
+  "frontend": {
+    "command": [
+      "node",
+      "--test",
+      "--test-reporter=tap",
+      "tests/web/quality-form.test.cjs",
+      "tests/web/quality-view.test.cjs",
+      "tests/web/workflow-view.test.cjs"
+    ],
+    "exit_code": 0,
+    "tests": 25,
+    "passed": 25,
+    "failed": 0,
+    "skipped": 0,
+    "log_sha256": "7a861e753252ea4d246b91bc9045065e654b228a0de7c8205e242ea76fe19556"
+  },
+  "offline_scenarios": {
+    "success": true,
+    "count": 10,
+    "pytest_processes": 15,
+    "evidence": "evaluation/final-cli-scenarios.json",
+    "inputs_unchanged": true,
+    "external_requests": 0
+  },
+  "default_cli": {
+    "success": true,
+    "cases": [
+      {
+        "sample": "calculation",
+        "task_status": "completed",
+        "rounds": 1,
+        "pytest_processes": 1,
+        "external_requests": 0
+      },
+      {
+        "sample": "validation",
+        "task_status": "completed",
+        "rounds": 2,
+        "pytest_processes": 2,
+        "external_requests": 0
+      },
+      {
+        "sample": "discount",
+        "task_status": "needs_review",
+        "rounds": 1,
+        "pytest_processes": 1,
+        "external_requests": 0
+      }
+    ]
+  },
+  "quality_matrix": {
+    "Q01": {
+      "passed": true,
+      "matched_testcases": 1,
+      "selectors": [
+        "test_quality_workflow.test_quality_disabled_preserves_two_node_workflow"
+      ]
+    },
+    "Q02": {
+      "passed": true,
+      "matched_testcases": 1,
+      "selectors": [
+        "test_quality_workflow.test_first_approval_runs_three_nodes_and_consumes_both_handoffs"
+      ]
+    },
+    "Q03": {
+      "passed": true,
+      "matched_testcases": 3,
+      "selectors": [
+        "test_quality_generation.test_production_nodes_close_quality_loop_and_deliver_full_prompt",
+        "test_quality_entrypoints.test_offline_cli_accepts_review_responses_in_order"
+      ]
+    },
+    "Q04": {
+      "passed": true,
+      "matched_testcases": 4,
+      "selectors": [
+        "test_quality_agent.test_coverage_gap_or_source_defect_never_calls_review",
+        "test_quality_workflow.test_base_noncompletion_never_invokes_review"
+      ]
+    },
+    "Q05": {
+      "passed": true,
+      "matched_testcases": 2,
+      "selectors": [
+        "test_quality_workflow.test_base_noncompletion_never_invokes_review"
+      ]
+    },
+    "Q06": {
+      "passed": true,
+      "matched_testcases": 1,
+      "selectors": [
+        "test_quality_generation.test_three_production_candidates_stop_at_quality_budget_without_round_four"
+      ]
+    },
+    "Q07": {
+      "passed": true,
+      "matched_testcases": 3,
+      "selectors": [
+        "test_quality_client.test_business_inconsistency_and_model_host_metadata_are_never_accepted"
+      ]
+    },
+    "Q08": {
+      "passed": true,
+      "matched_testcases": 5,
+      "selectors": [
+        "test_quality_agent.test_invalid_model_evidence_cannot_be_saved_as_success",
+        "test_quality_contracts.test_quotes_and_name_references_use_the_actual_review_input"
+      ]
+    },
+    "Q09": {
+      "passed": true,
+      "matched_testcases": 19,
+      "selectors": [
+        "test_quality_workflow.test_invalid_quality_proposals_are_rejected_without_consuming_ready",
+        "test_quality_generation.test_invalid_quality_context_fails_before_client_call",
+        "test_quality_contracts.test_quality_messages_and_results_bind_to_the_same_assessment"
+      ]
+    },
+    "Q10": {
+      "passed": true,
+      "matched_testcases": 1,
+      "selectors": [
+        "test_quality_workflow.test_duplicate_consumption_and_conflicting_feedback_cannot_commit_another_candidate"
+      ]
+    },
+    "Q11": {
+      "passed": true,
+      "matched_testcases": 19,
+      "selectors": [
+        "test_quality_client.test_transient_failures_exhaust_shared_budget_with_safe_failure_telemetry",
+        "test_quality_client.test_permanent_http_errors_fail_once_without_echoing_body_or_headers",
+        "test_quality_client.test_one_format_repair_returns_independent_decision_and_accumulates_usage",
+        "test_quality_client.test_invalid_output_on_last_attempt_does_not_create_a_fourth_request"
+      ]
+    },
+    "Q12": {
+      "passed": true,
+      "matched_testcases": 6,
+      "selectors": [
+        "test_quality_generation.test_quality_revision_keeps_original_passing_tests_and_support"
+      ]
+    },
+    "Q13": {
+      "passed": true,
+      "matched_testcases": 2,
+      "selectors": [
+        "test_quality_workflow.test_quality_feedback_reaches_second_generation_and_approved_candidate_is_exported"
+      ]
+    },
+    "Q14": {
+      "passed": true,
+      "matched_testcases": 7,
+      "selectors": [
+        "test_quality_workflow.test_review_stop_routes_preserve_findings_without_extra_feedback_or_candidates",
+        "test_quality_entrypoints.test_shared_service_composes_quality_and_summary"
+      ]
+    },
+    "Q15": {
+      "passed": true,
+      "matched_testcases": 1,
+      "selectors": [
+        "test_quality_agent.test_concrete_spec_conflict_returns_human_review_without_generation_feedback"
+      ]
+    },
+    "Q16": {
+      "passed": true,
+      "matched_testcases": 7,
+      "selectors": [
+        "test_quality_contracts.test_saved_legacy_contracts_still_load"
+      ]
+    },
+    "Q17": {
+      "passed": true,
+      "matched_testcases": 2,
+      "selectors": [
+        "test_quality_entrypoints.test_cli_web_same_injected_responses_have_identical_routes_and_approved_export"
+      ]
+    },
+    "Q18": {
+      "passed": true,
+      "matched_testcases": 8,
+      "selectors": [
+        "test_quality_reporting.test_inspection_detects_response_result_or_consumption_tampering",
+        "test_reporting.test_inspect_summary_is_read_only_and_detects_changed_evidence"
+      ]
+    },
+    "Q19": {
+      "passed": true,
+      "matched_testcases": 4,
+      "selectors": [
+        "test_quality_workflow.test_duplicate_candidate_after_quality_feedback_stops_before_another_review",
+        "test_quality_workflow.test_review_stop_routes_preserve_findings_without_extra_feedback_or_candidates"
+      ]
+    },
+    "Q20": {
+      "passed": true,
+      "matched_testcases": 0,
+      "selectors": []
+    }
+  },
+  "wheel_install": {
+    "success": true,
+    "directory": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\quality-install-verification\\1dd3a9fe5b5a4809b7d5837f5cf7adfb",
+    "checks": [
+      "build-wheels",
+      "wheel-review-resources",
+      "install-wheels",
+      "installed-quality-cli"
+    ],
+    "isolation": "Python -I with one integrated non-editable wheel in --target; reuse current locked third-party dependencies"
+  },
+  "source_only_copy": {
+    "recorded_at": "2026-10-19T07:44:47.330168+00:00",
+    "exit_code": 0,
+    "directory": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\final-source-check",
+    "success": true,
+    "package_origin": "E:\\File-Document\\SE\\hw2\\Workflow\\outputs\\final-source-check\\Workflow\\src\\test_workflow\\__init__.py",
+    "source_audit": {
+      "unchanged": false,
+      "verified": true,
+      "files": 57,
+      "patches": [
+        "src/testgen_agent/tools/_pytest_results.py",
+        "src/testgen_agent/config.py",
+        "src/testgen_agent/models.py",
+        "src/testgen_agent/tools/test_runner.py",
+        "src/testgen_agent/tools/coverage_runner.py",
+        ".env.example"
+      ],
+      "layout": "integrated"
+    },
+    "cases": [
+      {
+        "task_status": "completed",
+        "rounds": 2,
+        "selected_round": 2,
+        "quality_status": "disabled",
+        "pytest_processes": 2,
+        "external_requests": 0,
+        "exported_quality_approved": null
+      },
+      {
+        "task_status": "completed",
+        "rounds": 2,
+        "selected_round": 2,
+        "quality_status": "passed",
+        "pytest_processes": 2,
+        "external_requests": 0,
+        "exported_quality_approved": true
+      }
+    ],
+    "isolation": "Python -I; copied source only, no .env/.git/.venv/outputs; current locked third-party dependencies"
+  },
+  "html_replay": {
+    "success": true,
+    "self_contained": true,
+    "missing_local_report_link_hidden": true,
+    "replay_seconds": 45,
+    "final_verdict": "approve",
+    "selected_round": 2
+  },
+  "provenance": {
+    "unchanged": false,
+    "verified": true,
+    "files": 57,
+    "patches": [
+      "src/testgen_agent/tools/_pytest_results.py",
+      "src/testgen_agent/config.py",
+      "src/testgen_agent/models.py",
+      "src/testgen_agent/tools/test_runner.py",
+      "src/testgen_agent/tools/coverage_runner.py",
+      ".env.example"
+    ],
+    "layout": "integrated"
+  },
+  "checks": {
+    "dependencies": {
+      "exit_code": 0
+    },
+    "diff": {
+      "exit_code": 0
+    },
+    "python_syntax": {
+      "parsed_files": 111,
+      "success": true
+    },
+    "runtime_unchanged": {
+      "src_changed": false,
+      "tests_changed": false
+    },
+    "document_links": {
+      "success": true,
+      "local_links_checked": 45,
+      "scope": "current root/docs/evaluation Markdown; original AgentDev metadata are archival"
+    },
+    "credential_scan": {
+      "success": true,
+      "files_scanned": 298,
+      "actual_credentials_found": 0,
+      "env_tracked": false
+    }
+  },
+  "external_model_requests": 0,
+  "real_model_quality_effectiveness_evaluated": false,
+  "limitations": [
+    "single-process sequential execution; no parallel scheduler or visual workflow editor",
+    "no crash resume or message replay",
+    "wheel/source isolation reuse current locked third-party dependencies",
+    "real quality-review model effectiveness not evaluated in this run",
+    "no submission upload, push, video or archive created"
+  ],
+  "cleanup": "evaluation/cleanup.json",
+  "junit": "evaluation/final-tests.xml",
+  "source_manifest": "evaluation/source-manifest.sha256",
+  "archive_created": false
+}

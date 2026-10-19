@@ -71,7 +71,7 @@ def main():
         "node_records": [{key: node[key] for key in ("node", "round", "context", "result", "committed")} for node in summary["node_invocations"]]}
     payload = json.dumps(trace, ensure_ascii=False, indent=2) + "\n"
     atomic_write(directory / "demo-trace.json", payload)
-    atomic_write(ROOT / "evaluation/quality-review-s9-demo.json", payload)
+    atomic_write(ROOT / "evaluation/quality-demo-trace.json", payload)
     render_demo(trace, directory)
     print(f"Demo: {ROOT / 'evaluation/quality-review-demo.html'}")
     print(f"Evidence: {directory}; two real pytest runs, 2 -> 3 passing tests, selected round 2, zero model requests.")

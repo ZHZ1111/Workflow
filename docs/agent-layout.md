@@ -95,15 +95,15 @@ test_workflow.agents.test_generation.core.tools._pytest_results
 - `evaluation/vendor_patches.json` 保留迁移前已登记的功能补丁。
 - `evaluation/agentdev_layout.json` 记录每个来源文件的新位置、迁移前哈希、迁移后哈希及改动说明；同时记录 UTF-8/LF 规范化摘要，允许 Git 在不同系统转换换行而不误报源码修改。
 - `scripts/vendor_audit.py` 继续为历史调用提供同名函数，现在能够验证整合后的路径及哈希。
-- `scripts/prepare_p0.py` 改为检查当前来源审计；旧快照捕获脚本保存在 `docs/agentdev/prepare_snapshot.py`，不再用它重建独立 vendor 工程。
+- 旧快照捕获脚本保存在 `docs/agentdev/prepare_snapshot.py`，仅作来源记录，不用于重建独立 vendor 工程；当前审计入口为 `scripts/vendor_audit.py`。
 
 原测试仅调整包导入、替换工具的模块路径和样例位置，保留原测试行为。它们已经属于根 `tests` 树，不要再把 `tests/agentdev` 作为第二个全量参数重复收集。
 
-历史阶段文档、JSON、JUnit 和输出产物保留当时的路径与运行事实，不为目录迁移改写过去的证据。阅读旧记录时按上表定位当前实现；当前安装与回归命令以 README 为准。
+少量历史 JSON 保留当时的路径与运行事实，不为目录迁移改写过去的证据；重复阶段文档和旧 JUnit 在交付整理时清理。阅读旧记录时按上表定位当前实现；当前安装与回归命令以 README 为准。
 
 ## 数据保留
 
-旧 vendor 下忽略的缓存、构建文件和运行输出迁入 `outputs/agent-layout-backup/vendor/`。根目录旧构建缓存也保存到该备份区域，避免陈旧的 `.py` Agent 文件混入新 wheel。原始输入、现有 `.env` 和已有任务输出未修改。
+迁移时曾把旧缓存和构建文件放入 `outputs/agent-layout-backup/`。迁移已提交并通过验证后，交付清理移除可删除的备份与构建缓存；文件权限阻止删除的缓存不纳入提交包。原始输入、现有 `.env` 和已有任务输出保留。
 
 目录整合不改变 Workflow 的顺序执行、反馈控制和质量开关；“并列放置”描述代码目录，不表示将三个 Agent 改为同时执行。
 
